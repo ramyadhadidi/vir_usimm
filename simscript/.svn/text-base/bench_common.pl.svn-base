@@ -1,0 +1,58 @@
+#!/usr/bin/perl -w
+
+#******************************************************************************
+# Benchmark Sets
+# ************************************************************
+
+%SUITES = ();
+
+
+$SUITES{'testA'}      = 
+'input/1channel.cfg input/black input/black input/black input/black
+input/1channel.cfg input/comm1 input/comm1 input/comm1 input/comm1';
+
+$SUITES{'testA_name'}      = 
+'black-1ch
+comm1-1ch';
+
+$SUITES{'refresh18'}   =
+'input/1channel.cfg input/black input/black input/black input/black
+input/1channel.cfg input/comm1 input/comm1 input/comm1 input/comm1
+input/1channel.cfg input/comm2 input/comm2 input/comm2 input/comm2
+input/1channel.cfg input/face input/face input/face input/face 
+input/1channel.cfg input/ferret input/ferret input/ferret input/ferret
+input/1channel.cfg input/fluid input/fluid input/fluid input/fluid
+input/1channel.cfg input/freq input/freq input/freq input/freq
+input/1channel.cfg input/stream input/stream input/stream input/stream
+input/1channel.cfg input/swapt input/swapt input/swapt input/swapt
+input/4channel.cfg input/black input/black input/black input/black
+input/4channel.cfg input/comm1 input/comm1 input/comm1 input/comm1
+input/4channel.cfg input/comm2 input/comm2 input/comm2 input/comm2
+input/4channel.cfg input/face input/face input/face input/face 
+input/4channel.cfg input/ferret input/ferret input/ferret input/ferret
+input/4channel.cfg input/fluid input/fluid input/fluid input/fluid
+input/4channel.cfg input/freq input/freq input/freq input/freq
+input/4channel.cfg input/stream input/stream input/stream input/stream
+input/4channel.cfg input/swapt input/swapt input/swapt input/swapt';
+
+
+$SUITES{'refresh18_name'}  =
+'black-1ch
+comm1-1ch
+comm2-1ch
+face-1ch
+fluid-1ch
+ferret-1ch
+freq-1ch
+stream-1ch
+swapt-1ch
+black-4ch
+comm1-4ch
+comm2-4ch
+face-4ch
+ferret-4ch
+fluid-4ch
+freq-4ch
+stream-4ch
+swapt-4ch';
+ 
