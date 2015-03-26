@@ -381,18 +381,19 @@ int main(int argc, char * argv[])
       while ((num_ret < MAX_RETIRE) && ROB[numc].inflight) {
         /* Keep retiring until retire width is consumed or ROB is empty. */
         if (ROB[numc].comptime[ROB[numc].head] < CYCLE_VAL) {  
-	  /* Keep retiring instructions if they are done. */
-	  ROB[numc].head = (ROB[numc].head + 1) % ROBSIZE;
-	  ROB[numc].inflight--;
-	  committed[numc]++;
-	  num_ret++;
+      	  /* Keep retiring instructions if they are done. */
+      	  ROB[numc].head = (ROB[numc].head + 1) % ROBSIZE;
+      	  ROB[numc].inflight--;
+      	  committed[numc]++;
+      	  num_ret++;
         }
-	else  /* Instruction not complete.  Stop retirement for this core. */
-	  break;
-      }  /* End of while loop that is retiring instruction for one core. */
+        else  /* Instruction not complete.  Stop retirement for this core. */
+          break;
+          }  /* End of while loop that is retiring instruction for one core. */
     }  /* End of for loop that is retiring instructions for all cores. */
 
 
+    /* Memory System Porcess */
     if(CYCLE_VAL%PROCESSOR_CLK_MULTIPLIER == 0)
     { 
       /* Execute function to find ready instructions. */
@@ -400,13 +401,14 @@ int main(int argc, char * argv[])
 
       /* Execute user-provided function to select ready instructions for issue. */
       /* Based on this selection, update DRAM data structures and set 
-	 instruction completion times. */
+	     instruction completion times. */
       for(int c=0; c < NUM_CHANNELS; c++)
-      {
-	schedule(c);
-	gather_stats(c);	
-      }
-    }
+        {
+      	schedule(c);
+      	gather_stats(c);	
+        }
+    } /* Memory System Porcess done*/
+
 
     /* For each core, bring in new instructions from the trace file to
        fill up the ROB. */
@@ -423,158 +425,155 @@ int main(int argc, char * argv[])
     for (numc = 0; numc < NUMCORES; numc++) {
       if (!ROB[numc].tracedone) { /* Try to fetch if EOF has not been encountered. */
         num_fetch = 0;
-        while ((num_fetch < MAX_FETCH) && (ROB[numc].inflight != ROBSIZE) && (!writeqfull)) {
-          /* Keep fetching until fetch width or ROB capacity or WriteQ are fully consumed. */
-	  /* Read the corresponding trace file and populate the tail of the ROB data structure. */
-	  /* If Memop, then populate read/write queue.  Set up completion time. */
+      while ((num_fetch < MAX_FETCH) && (ROB[numc].inflight != ROBSIZE) && (!writeqfull)) {
+      /* Keep fetching until fetch width or ROB capacity or WriteQ are fully consumed. */
+  	  /* Read the corresponding trace file and populate the tail of the ROB data structure. */
+  	  /* If Memop, then populate read/write queue.  Set up completion time. */
 
-	  if (nonmemops[numc]) {  /* Have some non-memory-ops to consume. */
-	    ROB[numc].optype[ROB[numc].tail] = 'N';
-	    ROB[numc].comptime[ROB[numc].tail] = CYCLE_VAL+PIPELINEDEPTH;
-	    nonmemops[numc]--;
-	    ROB[numc].tail = (ROB[numc].tail +1) % ROBSIZE;
-	    ROB[numc].inflight++;
-	    fetched[numc]++;
-	    num_fetch++;
-	  }
-	  else { /* Done consuming non-memory-ops.  Must now consume the memory rd or wr. */
-	      if (opertype[numc] == 'R') {
-	          if(RANDOM_TABLE_ENABLE)
-		  {
-		    addr_randomize(addr,numc); //Randomize the address
-		  }
-		  ROB[numc].mem_address[ROB[numc].tail] = addr[numc];
-	          ROB[numc].optype[ROB[numc].tail] = opertype[numc];
-	          ROB[numc].comptime[ROB[numc].tail] = CYCLE_VAL + BIGNUM;
-	          ROB[numc].instrpc[ROB[numc].tail] = instrpc[numc];
-		  long long int wb_addr = 0;
-                  long long int wb_inst_addr = 0;
-                  LINE_STATE* currLine = CacheIsWriteback(L3Cache, numc, instrpc[numc], addr[numc], ACCESS_LOAD);
-                  if(currLine != NULL){
-                     wb_addr = currLine->phy_addr;
-                     wb_inst_addr = currLine->PC;
-                  }
-                  int L3Hit = LookupAndFillCache(L3Cache, numc, instrpc[numc], addr[numc], ACCESS_LOAD);
-		
-		  // Check to see if the read is for buffered data in write queue - 
-		  // return constant latency if match in WQ
-		  // add in read queue otherwise
-		  int lat = read_matches_write_or_read_queue(addr[numc]);
-		  if(L3Hit){
-                     ROB[numc].comptime[ROB[numc].tail] = CYCLE_VAL+L3_LATENCY+PIPELINEDEPTH;                          
-                  }else{
-                  if(currLine != NULL){
-                     insert_write(wb_addr, CYCLE_VAL, numc, ROB[numc].tail); 
-                     //   fprintf(stdout, "  @%lld WB\n", CYCLE_VAL);
-                  }
-		  // Check to see if the read is for buffered data in write queue - 
-		  // return constant latency if match in WQ
-		  // add in read queue otherwise
+  	  if (nonmemops[numc]) {  /* Have some non-memory-ops to consume. */
+  	    ROB[numc].optype[ROB[numc].tail] = 'N';
+  	    ROB[numc].comptime[ROB[numc].tail] = CYCLE_VAL+PIPELINEDEPTH;
+  	    nonmemops[numc]--;
+  	    ROB[numc].tail = (ROB[numc].tail +1) % ROBSIZE;
+  	    ROB[numc].inflight++;
+  	    fetched[numc]++;
+  	    num_fetch++;
+  	  }
+      else { /* Done consuming non-memory-ops.  Must now consume the memory rd or wr. */
+        if (opertype[numc] == 'R') {
+          if(RANDOM_TABLE_ENABLE)
+            addr_randomize(addr,numc); //Randomize the address
+          ROB[numc].mem_address[ROB[numc].tail] = addr[numc];
+          ROB[numc].optype[ROB[numc].tail] = opertype[numc];
+          ROB[numc].comptime[ROB[numc].tail] = CYCLE_VAL + BIGNUM;
+          ROB[numc].instrpc[ROB[numc].tail] = instrpc[numc];
+          long long int wb_addr = 0;
+          long long int wb_inst_addr = 0;
+          LINE_STATE* currLine = CacheIsWriteback(L3Cache, numc, instrpc[numc], addr[numc], ACCESS_LOAD);
+          if(currLine != NULL){
+             wb_addr = currLine->phy_addr;
+             wb_inst_addr = currLine->PC;
+          }
+          int L3Hit = LookupAndFillCache(L3Cache, numc, instrpc[numc], addr[numc], ACCESS_LOAD);
 
-		  if(lat) {
-			ROB[numc].comptime[ROB[numc].tail] = CYCLE_VAL+lat+PIPELINEDEPTH;
-		  }
-		  else {
-			insert_read(addr[numc], CYCLE_VAL, numc, ROB[numc].tail, instrpc[numc]);
-		  }
-	      }
-	      }else {  /* This must be a 'W'.  We are confirming that while reading the trace. */
-	        if (opertype[numc] == 'W') {
+          // Check to see if the read is for buffered data in write queue - 
+          // return constant latency if match in WQ
+          // add in read queue otherwise
+          int lat = read_matches_write_or_read_queue(addr[numc]);
+          if(L3Hit)
+            ROB[numc].comptime[ROB[numc].tail] = CYCLE_VAL+L3_LATENCY+PIPELINEDEPTH;
+          else  {
+            if(currLine != NULL){
+               insert_write(wb_addr, CYCLE_VAL, numc, ROB[numc].tail); 
+               //   fprintf(stdout, "  @%lld WB\n", CYCLE_VAL);
+            }
+          // Check to see if the read is for buffered data in write queue - 
+          // return constant latency if match in WQ
+          // add in read queue otherwise
+
+          if(lat) 
+            ROB[numc].comptime[ROB[numc].tail] = CYCLE_VAL+lat+PIPELINEDEPTH;
+          else 
+            insert_read(addr[numc], CYCLE_VAL, numc, ROB[numc].tail, instrpc[numc]);
+        }
+      }
+
+      else {  /* This must be a 'W'.  We are confirming that while reading the trace. */
+        if (opertype[numc] == 'W') {
 		      if(RANDOM_TABLE_ENABLE)
-		      {
-        		      addr_randomize(addr,numc); //Randomize the address
-		      }
+        		addr_randomize(addr,numc); //Randomize the address
 		      ROB[numc].mem_address[ROB[numc].tail] = addr[numc];
 		      ROB[numc].optype[ROB[numc].tail] = opertype[numc];
 		      ROB[numc].comptime[ROB[numc].tail] = CYCLE_VAL+PIPELINEDEPTH;
 		      /* Also, add this to the write queue. */
-                      long long int wb_addr = 0;
-                      long long int wb_inst_addr = 0;
-                      LINE_STATE* currLine = CacheIsWriteback(L3Cache, numc, instrpc[numc], addr[numc], ACCESS_LOAD);
-                      if(currLine != NULL){
-	                      wb_addr = currLine->phy_addr;
-        	              wb_inst_addr = currLine->PC;
-                      }
-                      int L3Hit = LookupAndFillCache(L3Cache, numc, instrpc[numc], addr[numc], ACCESS_STORE);
-                      if(L3Hit){
-                      }else{
-				if(currLine != NULL){
-                             		insert_write(wb_addr, CYCLE_VAL, numc, ROB[numc].tail); 
-                                //   fprintf(stdout, "  @%lld WB\n", CYCLE_VAL);
-                                }
-                                if(!write_exists_in_write_queue(addr[numc])){
-                   		        insert_write(addr[numc], CYCLE_VAL, numc, ROB[numc].tail);
-                                }
-                                }
+          long long int wb_addr = 0;
+          long long int wb_inst_addr = 0;
+          LINE_STATE* currLine = CacheIsWriteback(L3Cache, numc, instrpc[numc], addr[numc], ACCESS_LOAD);
+          if(currLine != NULL){
+            wb_addr = currLine->phy_addr;
+            wb_inst_addr = currLine->PC;
+          }
+          int L3Hit = LookupAndFillCache(L3Cache, numc, instrpc[numc], addr[numc], ACCESS_STORE);
+          if(L3Hit){}
+          else{
+				    if(currLine != NULL){
+           		insert_write(wb_addr, CYCLE_VAL, numc, ROB[numc].tail); 
+              //   fprintf(stdout, "  @%lld WB\n", CYCLE_VAL);
+              }
+              if(!write_exists_in_write_queue(addr[numc]))
+                insert_write(addr[numc], CYCLE_VAL, numc, ROB[numc].tail);
+            }
 		      for(int c=0; c<NUM_CHANNELS; c++){
-			if(write_queue_length[c] == WQ_CAPACITY)
-			{
-			  writeqfull = 1;
-			  break;
-			}
+      			if(write_queue_length[c] == WQ_CAPACITY)
+      			{
+      			  writeqfull = 1;
+      			  break;
+      			}
 		      }
-		}
-		else {
-		  printf("Panic.  Poor trace format. \n");
-		  return -1;
-		}
-	      }
-	      ROB[numc].tail = (ROB[numc].tail +1) % ROBSIZE;
-	      ROB[numc].inflight++;
-	      fetched[numc]++;
-	      num_fetch++;
+		  }
 
-	      /* Done consuming one line of the trace file.  Read in the next. */
-	      if (fgets(newstr,MAXTRACELINESIZE,tif[numc])) {
-		inst_comp++;
-	        if (sscanf(newstr,"%d %c",&nonmemops[numc],&opertype[numc]) > 0) {
-		  if (opertype[numc] == 'R') {
-		    if (sscanf(newstr,"%d %c %Lx %Lx",&nonmemops[numc],&opertype[numc],&addr[numc],&instrpc[numc]) < 1) {
-		      printf("Panic.  Poor trace format.\n");
-		      return -4;
-		    }
-		  }
-		  else {
-		    if (opertype[numc] == 'W') {
-		      if (sscanf(newstr,"%d %c %Lx",&nonmemops[numc],&opertype[numc],&addr[numc]) < 1) {
-		        printf("Panic.  Poor trace format.\n");
-		        return -3;
-		      }
-		    }
-		    else {
-		      printf("Panic.  Poor trace format.\n");
-		      return -2;
-		    }
-		  }
-		}
-		else {
-		  printf("Panic.  Poor trace format.\n");
-		  return -1;
-		}
-		//Insert the OS here to do a Virtual to Physical Translation since we are using a virtual address trace
-                phy_addr=os_v2p_lineaddr(os,addr[numc],numc);
-                addr[numc]=phy_addr;	
-	      }
-	      else {
-	        if (ROB[numc].inflight == 0) {
-	          num_done++;
-	          if (!time_done[numc]) time_done[numc] = CYCLE_VAL;
-	        }
-	        ROB[numc].tracedone=1;
-	        break;  /* Break out of the while loop fetching instructions. */
-	      }
+  		  else {
+    		  printf("Panic.  Poor trace format. \n");
+    		  return -1;
+  	   	}
+      }
+
+      ROB[numc].tail = (ROB[numc].tail +1) % ROBSIZE;
+      ROB[numc].inflight++;
+      fetched[numc]++;
+      num_fetch++;
+
+      /* Done consuming one line of the trace file.  Read in the next. */
+      if (fgets(newstr,MAXTRACELINESIZE,tif[numc])) {
+		    inst_comp++;
+        if (sscanf(newstr,"%d %c",&nonmemops[numc],&opertype[numc]) > 0) {
+    		  if (opertype[numc] == 'R') {
+    		    if (sscanf(newstr,"%d %c %Lx %Lx",&nonmemops[numc],&opertype[numc],&addr[numc],&instrpc[numc]) < 1) {
+    		      printf("Panic.  Poor trace format.\n");
+    		      return -4;
+    		    }
+    		  }
+    		  else {
+    		    if (opertype[numc] == 'W') {
+    		      if (sscanf(newstr,"%d %c %Lx",&nonmemops[numc],&opertype[numc],&addr[numc]) < 1) {
+    		        printf("Panic.  Poor trace format.\n");
+    		        return -3;
+    		      }
+    		    }
+    		    else {
+    		      printf("Panic.  Poor trace format.\n");
+    		      return -2;
+    		    }
+    		  }
+  		  }
+    		else {
+    		  printf("Panic.  Poor trace format.\n");
+    		  return -1;
+    		}
+  		  //Insert the OS here to do a Virtual to Physical Translation since we are using a virtual address trace
+        phy_addr=os_v2p_lineaddr(os,addr[numc],numc);
+        addr[numc]=phy_addr;	
+      }
+      else {
+        if (ROB[numc].inflight == 0) {
+          num_done++;
+          if (!time_done[numc]) time_done[numc] = CYCLE_VAL;
+        }
+        ROB[numc].tracedone=1;
+        break;  /* Break out of the while loop fetching instructions. */
+      }
 	      
 	  }  /* Done consuming the next rd or wr. */
 
-	} /* One iteration of the fetch while loop done. */
-      } /* Closing brace for if(trace not done). */
+	 } /* One iteration of the fetch while loop done. */
+  } /* Closing brace for if(trace not done). */
       else { /* Input trace is done.  Check to see if all inflight instrs have finished. */
         if (ROB[numc].inflight == 0) {
-	  num_done++;
-	  if (!time_done[numc]) time_done[numc] = CYCLE_VAL;
-	}
+      	  num_done++;
+      	  if (!time_done[numc]) time_done[numc] = CYCLE_VAL;
+      	}
       }
-    } /* End of for loop that goes through all cores. */
+  } /* End of for loop that goes through all cores. */
 
 
     if (num_done == NUMCORES) {
