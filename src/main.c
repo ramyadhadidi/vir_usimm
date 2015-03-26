@@ -444,7 +444,8 @@ int main(int argc, char * argv[])
       else { /* Done consuming non-memory-ops.  Must now consume the memory rd or wr. */
         if (opertype[numc] == 'R') {
           // Translation
-          phy_addr=os_v2p_lineaddr(os,addr[numc],numc);
+          uns delay;
+          phy_addr=os_v2p_lineaddr_tlb(os,addr[numc],numc,&delay);
           addr[numc]=phy_addr;
           // Translation Done
           ROB[numc].mem_address[ROB[numc].tail] = addr[numc];
@@ -485,7 +486,8 @@ int main(int argc, char * argv[])
       else {  /* This must be a 'W'.  We are confirming that while reading the trace. */
         if (opertype[numc] == 'W') {
 		      // Translation
-          phy_addr=os_v2p_lineaddr(os,addr[numc],numc);
+          uns delay;
+          phy_addr=os_v2p_lineaddr_tlb(os,addr[numc],numc,&delay);
           addr[numc]=phy_addr;
           // Translation Done
 		      ROB[numc].mem_address[ROB[numc].tail] = addr[numc];

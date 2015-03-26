@@ -34,6 +34,10 @@ OS *os_new(uns num_pages, uns num_threads)
 
     printf("Initialized OS for %u pages\n", num_pages);
 
+    //TLB
+    os->tlb = (TLB *) calloc(1,sizeof (TLB));
+    os->tlb->num_entries = 0;
+
     return os;
 }
 
@@ -82,7 +86,7 @@ uns os_vpn_to_pfn(OS *os, uns vpn, uns tid, Flag *hit)
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 
-uns    os_get_victim_from_ipt(OS *os)
+uns os_get_victim_from_ipt(OS *os)
 {
     PageTable *pt = os->pt;
     InvPageTable *ipt = os->ipt;
@@ -147,12 +151,33 @@ void os_print_stats(OS *os)
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 
-Addr os_v2p_lineaddr(OS *os, Addr lineaddr, uns tid){
+Addr os_v2p_lineaddr(OS *os, Addr lineaddr, uns tid, uns* delay){
   uns vpn = lineaddr/os->lines_in_page;
   uns lineid = lineaddr%os->lines_in_page;
   Flag pagehit;
   uns pfn = os_vpn_to_pfn(os, vpn, tid, &pagehit);
   Addr retval = (pfn*os->lines_in_page)+lineid;
   retval=retval<<6; //As the cache line is 64 bytes
+
+  //Delay
+  *delay = 0;
   return retval;
+}
+
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+//TLB
+Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
+    //Search TLB
+    //Hit:  return address with 1 cycle delay
+    //      update TLB
+    
+
+    //Miss:
+    //      update TLB
+    //      send memory read request
+    //          hit: done
+    //          miss: add hdd access time
+
+    os_v2p_lineaddr(os, lineaddr, tid, delay);
 }
