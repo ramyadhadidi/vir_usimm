@@ -314,6 +314,8 @@ int main(int argc, char * argv[])
   for(int i=0; i<NUMCORES; i++)
   {
 	  ROB[i].comptime = (long long int*)malloc(sizeof(long long int)*ROBSIZE);
+    for (int j=0; j<ROBSIZE; j++)
+      ROB[i].comptime[j] = 0;
 	  ROB[i].mem_address = (long long int*)malloc(sizeof(long long int)*ROBSIZE);
 	  ROB[i].instrpc = (long long int*)malloc(sizeof(long long int)*ROBSIZE);
 	  ROB[i].optype = (int*)malloc(sizeof(int)*ROBSIZE);
@@ -330,48 +332,47 @@ int main(int argc, char * argv[])
   /* Must start by reading one line of each trace file. */
   for(numc=0; numc<NUMCORES; numc++)
   {
-	      if (fgets(newstr,MAXTRACELINESIZE,tif[numc])) {
-		inst_comp++;
-	        if (sscanf(newstr,"%d %c",&nonmemops[numc],&opertype[numc]) > 0) {
-		  if (opertype[numc] == 'R') {
-		    if (sscanf(newstr,"%d %c %Lx %Lx",&nonmemops[numc],&opertype[numc],&addr[numc],&instrpc[numc]) < 1) {
-		      printf("Panic.  Poor trace format.\n");
-		      return -4;
-		    }
-		  }
-		  else {
-		    if (opertype[numc] == 'W') {
-		      if (sscanf(newstr,"%d %c %Lx",&nonmemops[numc],&opertype[numc],&addr[numc]) < 1) {
-		        printf("Panic.  Poor trace format.\n");
-		        return -3;
-		      }
-		    }
-		    else {
-		      printf("Panic.  Poor trace format.\n");
-		      return -2;
-		    }
-		  }
-		}
-		else {
-		  printf("Panic.  Poor trace format.\n");
-		  return -1;
-		}
-		 //Insert the OS here to do a Virtual to Physical Translation since we are using a virtual address trace
-                phy_addr=os_v2p_lineaddr(os,addr[numc],numc);
-                addr[numc]=phy_addr;
-	      }
-	      else {
-	        if (ROB[numc].inflight == 0) {
-	          num_done++;
-	          if (!time_done[numc]) time_done[numc] = 1;
-	        }
-	        ROB[numc].tracedone=1;
-	      }
+    if (fgets(newstr,MAXTRACELINESIZE,tif[numc])) {
+		  inst_comp++;
+      if (sscanf(newstr,"%d %c",&nonmemops[numc],&opertype[numc]) > 0) {
+  		  if (opertype[numc] == 'R') {
+  		    if (sscanf(newstr,"%d %c %Lx %Lx",&nonmemops[numc],&opertype[numc],&addr[numc],&instrpc[numc]) < 1) {
+  		      printf("Panic.  Poor trace format.\n");
+  		      return -4;
+  		    }
+  		  }
+  		  else {
+  		    if (opertype[numc] == 'W') {
+  		      if (sscanf(newstr,"%d %c %Lx",&nonmemops[numc],&opertype[numc],&addr[numc]) < 1) {
+  		        printf("Panic.  Poor trace format.\n");
+  		        return -3;
+  		      }
+  		    }
+  		    else {
+  		      printf("Panic.  Poor trace format.\n");
+  		      return -2;
+  		    }
+  		  }
+      }
+      else {
+        printf("Panic.  Poor trace format.\n");
+        return -1;
+      }
+    }
+    else {
+      if (ROB[numc].inflight == 0) {
+        num_done++;
+        if (!time_done[numc]) time_done[numc] = 1;
+      }
+      ROB[numc].tracedone=1;
+    }
   }
 
 /**************Initialize the random value table*************************/
   addr_rand_init(NUMCORES);
 /************************************************************************/
+
+//====================================================================================
   printf("Starting simulation.\n");
   while (!expt_done) {
 
@@ -382,6 +383,7 @@ int main(int argc, char * argv[])
         /* Keep retiring until retire width is consumed or ROB is empty. */
         if (ROB[numc].comptime[ROB[numc].head] < CYCLE_VAL) {  
       	  /* Keep retiring instructions if they are done. */
+          ROB[numc].comptime[ROB[numc].head] = 0;
       	  ROB[numc].head = (ROB[numc].head + 1) % ROBSIZE;
       	  ROB[numc].inflight--;
       	  committed[numc]++;
@@ -441,8 +443,10 @@ int main(int argc, char * argv[])
   	  }
       else { /* Done consuming non-memory-ops.  Must now consume the memory rd or wr. */
         if (opertype[numc] == 'R') {
-          if(RANDOM_TABLE_ENABLE)
-            addr_randomize(addr,numc); //Randomize the address
+          // Translation
+          phy_addr=os_v2p_lineaddr(os,addr[numc],numc);
+          addr[numc]=phy_addr;
+          // Translation Done
           ROB[numc].mem_address[ROB[numc].tail] = addr[numc];
           ROB[numc].optype[ROB[numc].tail] = opertype[numc];
           ROB[numc].comptime[ROB[numc].tail] = CYCLE_VAL + BIGNUM;
@@ -480,8 +484,10 @@ int main(int argc, char * argv[])
 
       else {  /* This must be a 'W'.  We are confirming that while reading the trace. */
         if (opertype[numc] == 'W') {
-		      if(RANDOM_TABLE_ENABLE)
-        		addr_randomize(addr,numc); //Randomize the address
+		      // Translation
+          phy_addr=os_v2p_lineaddr(os,addr[numc],numc);
+          addr[numc]=phy_addr;
+          // Translation Done
 		      ROB[numc].mem_address[ROB[numc].tail] = addr[numc];
 		      ROB[numc].optype[ROB[numc].tail] = opertype[numc];
 		      ROB[numc].comptime[ROB[numc].tail] = CYCLE_VAL+PIPELINEDEPTH;
@@ -550,9 +556,6 @@ int main(int argc, char * argv[])
     		  printf("Panic.  Poor trace format.\n");
     		  return -1;
     		}
-  		  //Insert the OS here to do a Virtual to Physical Translation since we are using a virtual address trace
-        phy_addr=os_v2p_lineaddr(os,addr[numc],numc);
-        addr[numc]=phy_addr;	
       }
       else {
         if (ROB[numc].inflight == 0) {
@@ -600,7 +603,7 @@ int main(int argc, char * argv[])
 	}
     }
   }
-
+//====================================================================================
 
   /* Code to make sure that the write queue drain time is included in
      the execution time of the thread that finishes last. */
