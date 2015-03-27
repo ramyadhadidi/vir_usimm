@@ -6,7 +6,14 @@
 
 #include "params.h"
 #include "os.h"
+#include "memory_controller.h"
+#include "processor.h"
 
+// ROB Structure, used to release stall on instructions 
+// when the read request completes
+extern struct robstructure * ROB;
+extern long long int CYCLE_VAL;
+extern long long int BIGNUM;
 
 ////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////
@@ -151,33 +158,122 @@ void os_print_stats(OS *os)
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 
-Addr os_v2p_lineaddr(OS *os, Addr lineaddr, uns tid, uns* delay){
+Addr os_v2p_lineaddr(OS *os, Addr lineaddr, uns tid, Flag* pagehit, uns* delay){
   uns vpn = lineaddr/os->lines_in_page;
   uns lineid = lineaddr%os->lines_in_page;
-  Flag pagehit;
-  uns pfn = os_vpn_to_pfn(os, vpn, tid, &pagehit);
+  uns pfn = os_vpn_to_pfn(os, vpn, tid, pagehit);
   Addr retval = (pfn*os->lines_in_page)+lineid;
   retval=retval<<6; //As the cache line is 64 bytes
 
   //Delay
   *delay = 0;
+
   return retval;
 }
 
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 //TLB
+
+uns os_v2p_lineaddr_pfn(OS *os, Addr lineaddr, uns tid, Flag* pagehit, uns* delay) {
+  uns vpn = lineaddr/os->lines_in_page;
+  uns lineid = lineaddr%os->lines_in_page;
+  uns pfn = os_vpn_to_pfn(os, vpn, tid, pagehit);
+
+  //Delay
+  *delay = 0;
+
+  return pfn;
+}
+
+
 Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
+    uns vpn = lineaddr/os->lines_in_page;
+    uns lineid = lineaddr%os->lines_in_page;
+
     //Search TLB
-    //Hit:  return address with 1 cycle delay
-    //      update TLB
-    
+    int row;
+    int32 pfn_tlb_search = os_tlb_search(os, vpn, tid, &row);
+
+    //Hit:  update TLB (LRU position)
+    //      return address with 1 cycle delay
+    if (pfn_tlb_search != -1) {
+        assert(pfn_tlb_search > 0);
+        //update LRU
+        for (int i=0; i<os->tlb->num_entries; i++) {
+            uns LRU = os->tlb->entries[row].LRU_position;
+            if(os->tlb->entries[i].LRU_position < LRU )
+               os->tlb->entries[i].LRU_position++; 
+        }
+        os->tlb->entries[row].LRU_position = 0;
+
+        //return address with 1 cycle delay
+        *delay = 1;
+        Addr retval = (pfn_tlb_search*os->lines_in_page)+lineid;
+        retval=retval<<6;
+        return retval;
+    }
+
 
     //Miss:
     //      update TLB
     //      send memory read request
     //          hit: done
     //          miss: add hdd access time
+    Flag pagehit;
+    uns pfn = os_v2p_lineaddr_pfn(os, lineaddr, tid, &pagehit, delay);
 
-    os_v2p_lineaddr(os, lineaddr, tid, delay);
+    // update TLB: insert new element
+    for (int i=0; i<os->tlb->num_entries; i++)
+            os->tlb->entries[i].LRU_position++;
+
+    if (os->tlb->num_entries < TLB_SIZE) {
+        //TLB is still empty
+        os->tlb->entries[os->tlb->num_entries].LRU_position = 0;
+        os->tlb->entries[os->tlb->num_entries].tid = tid;
+        os->tlb->entries[os->tlb->num_entries].pair.vpn = vpn;
+        os->tlb->entries[os->tlb->num_entries].pair.pfn = pfn;
+
+        os->tlb->num_entries++;
+    }
+    else {
+        //TLB is full - kickout oldest entry
+        int oldest;
+        for (int i=0; i<os->tlb->num_entries; i++)
+            if(os->tlb->entries[i].LRU_position == os->tlb->num_entries) {
+                oldest = i;
+                break;
+            }
+        os->tlb->entries[oldest].LRU_position = 0;
+        os->tlb->entries[oldest].tid = tid;
+        os->tlb->entries[oldest].pair.vpn = vpn;
+        os->tlb->entries[oldest].pair.pfn = pfn;
+    }
+
+    // send memory read request
+    ROB[tid].mem_address[ROB[tid].tail] = PTBR + vpn;
+    ROB[tid].optype[ROB[tid].tail] = 'R';
+    ROB[tid].comptime[ROB[tid].tail] = CYCLE_VAL + BIGNUM;
+    ROB[tid].instrpc[ROB[tid].tail] = 0;
+
+    insert_read(PTBR + vpn, CYCLE_VAL, tid, ROB[tid].tail, 0);
+
+    ROB[tid].tail = (ROB[tid].tail +1) % ROBSIZE;
+    ROB[tid].inflight++;
+
+    // Page fault! add hdd access time
+    if (!pagehit) {}
+}
+
+int32 os_tlb_search(OS *os, uns vpn, uns tid, int* row) {
+    for (int i=0; i<os->tlb->num_entries; i++) {
+        if (tid == os->tlb->entries[i].tid)
+            if (vpn == os->tlb->entries[i].pair.vpn) {
+                *row = i;
+                return os->tlb->entries[i].pair.pfn;
+            }
+    }
+
+    //not found
+    return -1;
 }

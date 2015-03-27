@@ -7,6 +7,7 @@
 #define OS_MAX_THREADS 16
 
 #define TLB_SIZE 128
+#define PTBR 12350895924177429912
 
 
 typedef struct OS                OS;
@@ -71,8 +72,9 @@ struct TLB {
 	uns num_entries;
 };
 
-
+uns os_v2p_lineaddr_pfn(OS *os, Addr lineaddr, uns tid, Flag* pagehit, uns* delay);
 Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay);
+int32 os_tlb_search(OS *os, uns vpn, uns tid, int* row);
 //////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 
@@ -98,7 +100,7 @@ uns     os_vpn_to_pfn(OS *os, uns vpn, uns tid, Flag *hit);
 void    os_print_stats(OS *os);
 
 uns     os_get_victim_from_ipt(OS *os);
-Addr    os_v2p_lineaddr(OS *os, Addr lineaddr, uns tid, uns* delay);
+Addr    os_v2p_lineaddr(OS *os, Addr lineaddr, uns tid, Flag* pagehit, uns* delay);
 
 //////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////
