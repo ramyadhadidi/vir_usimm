@@ -445,7 +445,9 @@ int main(int argc, char * argv[])
         if (opertype[numc] == 'R') {
           // Translation
           uns delay;
+          Flag pagehit;
           phy_addr=os_v2p_lineaddr_tlb(os,addr[numc],numc,&delay);
+          //phy_addr=os_v2p_lineaddr(os,addr[numc],numc,&pagehit,&delay);
           addr[numc]=phy_addr;
           // Translation Done
           ROB[numc].mem_address[ROB[numc].tail] = addr[numc];
@@ -487,12 +489,14 @@ int main(int argc, char * argv[])
         if (opertype[numc] == 'W') {
 		      // Translation
           uns delay;
+          Flag pagehit;
           phy_addr=os_v2p_lineaddr_tlb(os,addr[numc],numc,&delay);
+          //phy_addr=os_v2p_lineaddr(os,addr[numc],numc,&pagehit,&delay);
           addr[numc]=phy_addr;
           // Translation Done
 		      ROB[numc].mem_address[ROB[numc].tail] = addr[numc];
 		      ROB[numc].optype[ROB[numc].tail] = opertype[numc];
-		      ROB[numc].comptime[ROB[numc].tail] = CYCLE_VAL+PIPELINEDEPTH;
+		      ROB[numc].comptime[ROB[numc].tail] = CYCLE_VAL+PIPELINEDEPTH+delay;
 		      /* Also, add this to the write queue. */
           long long int wb_addr = 0;
           long long int wb_inst_addr = 0;
@@ -684,6 +688,10 @@ int main(int argc, char * argv[])
 	  printf("Total system power = %f W # Sum of the previous three lines\n", 10 + core_power + total_system_power/1000);
 	  printf("Energy Delay product (EDP) = %2.9f J.s\n", (10 + core_power + total_system_power/1000)*(float)((double)CYCLE_VAL/(double)3200000000) * (float)((double)CYCLE_VAL/(double)3200000000));
 	}
+
+
+  printf ("\n#-------------------------------------- Our Stat ----------------------------------------------\n");
+  os_print_stats(os);
 /*free_rand(NUMCORES);
 free(ROB);
 for(int i = 0; i < NUMCORES; i++){

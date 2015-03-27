@@ -2,7 +2,7 @@
 
 require ( "./bench_common.pl");
 
-$trace_dir = "/nethome/pnair6/HMC_USIMM/usimm_closed_page/";
+$trace_dir = "/home/ramyad/workspace/usimm_closed_page/";
 
 
 #####################################

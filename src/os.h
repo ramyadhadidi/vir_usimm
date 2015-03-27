@@ -6,8 +6,9 @@
 
 #define OS_MAX_THREADS 16
 
-#define TLB_SIZE 128
-#define PTBR 12350895924177429912
+#define TLB_SIZE 1024
+//#define PTBR 12350895924177429912
+#define PTBR 0
 
 
 typedef struct OS                OS;
@@ -70,6 +71,10 @@ struct TLB {
 	TLBEntry entries[TLB_SIZE];
 
 	uns num_entries;
+  uns64 TLB_access;
+  uns64 TLB_hit;
+  uns64 TLB_miss;
+  uns64 TLB_eviction;
 };
 
 uns os_v2p_lineaddr_pfn(OS *os, Addr lineaddr, uns tid, Flag* pagehit, uns* delay);

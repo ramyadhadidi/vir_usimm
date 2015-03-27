@@ -44,6 +44,11 @@ OS *os_new(uns num_pages, uns num_threads)
     //TLB
     os->tlb = (TLB *) calloc(1,sizeof (TLB));
     os->tlb->num_entries = 0;
+    os->tlb->TLB_access = 0;
+    os->tlb->TLB_hit = 0;
+    os->tlb->TLB_miss = 0;
+    os->tlb->TLB_eviction = 0;
+    printf("Initialized TLB for %u entires\n", TLB_SIZE);
 
     return os;
 }
@@ -147,10 +152,13 @@ void os_print_stats(OS *os)
     char header[256];
     sprintf(header, "OS");
     
-    printf("\n\n");
-    printf("\n%s_PAGE_MISS       \t : %llu",  header, os->pt->miss_count);
-    printf("\n%s_PAGE_EVICTS     \t : %llu",  header, os->pt->total_evicts);
-    printf("\n%s_FOOTPRINT       \t : %llu",  header, (os->pt->miss_count*OS_PAGESIZE)/(1024*1024));
+    printf("%s_PAGE_MISS        \t : %llu",  header, os->pt->miss_count);
+    printf("\n%s_PAGE_EVICTS    \t : %llu",  header, os->pt->total_evicts);
+    printf("\n%s_FOOTPRINT      \t : %llu",  header, (os->pt->miss_count*OS_PAGESIZE)/(1024*1024));
+    printf("\n%s_TLB_ACCESS     \t : %llu", header , os->tlb->TLB_access);
+    printf("\n%s_TLB_HIT        \t : %llu", header , os->tlb->TLB_hit);
+    printf("\n%s_TLB_MISS       \t : %llu", header , os->tlb->TLB_miss);
+    printf("\n%s_TLB_EVICTION   \t : %llu", header , os->tlb->TLB_eviction);
     printf("\n");
 
 }
@@ -190,14 +198,17 @@ uns os_v2p_lineaddr_pfn(OS *os, Addr lineaddr, uns tid, Flag* pagehit, uns* dela
 Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
     uns vpn = lineaddr/os->lines_in_page;
     uns lineid = lineaddr%os->lines_in_page;
+    *delay = 0;
 
     //Search TLB
+    os->tlb->TLB_access++;
     int row;
     int32 pfn_tlb_search = os_tlb_search(os, vpn, tid, &row);
 
     //Hit:  update TLB (LRU position)
     //      return address with 1 cycle delay
     if (pfn_tlb_search != -1) {
+        os->tlb->TLB_hit++;
         assert(pfn_tlb_search > 0);
         //update LRU
         for (int i=0; i<os->tlb->num_entries; i++) {
@@ -220,6 +231,7 @@ Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
     //      send memory read request
     //          hit: done
     //          miss: add hdd access time
+    os->tlb->TLB_miss++;
     Flag pagehit;
     uns pfn = os_v2p_lineaddr_pfn(os, lineaddr, tid, &pagehit, delay);
 
@@ -238,6 +250,7 @@ Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
     }
     else {
         //TLB is full - kickout oldest entry
+        os->tlb->TLB_eviction++;
         int oldest;
         for (int i=0; i<os->tlb->num_entries; i++)
             if(os->tlb->entries[i].LRU_position == os->tlb->num_entries) {
