@@ -1,2 +1,4 @@
 *.o
 input/PARSEC/
+trace_generation/graph*/
+trace_generation/pin*/
