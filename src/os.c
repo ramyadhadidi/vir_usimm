@@ -1,25 +1,4 @@
-#include <assert.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <math.h>
-
-#include "params.h"
 #include "os.h"
-#include "memory_controller.h"
-#include "processor.h"
-//#include "cache.h"
-
-// ROB Structure, used to release stall on instructions 
-// when the read request completes
-extern struct robstructure * ROB;
-extern long long int CYCLE_VAL;
-extern long long int BIGNUM;
-//extern LLCache *L3Cache;
-
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
-
 
 OS *os_new(uns num_pages, uns num_threads)
 {

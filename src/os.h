@@ -4,15 +4,32 @@
 #include "global_types.h"
 #include "hash_lib.h"
 
+#include <assert.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <math.h>
+
+#include "params.h"
+#include "memory_controller.h"
+#include "processor.h"
+#include "cache.h"
+
 #define OS_MAX_THREADS 16
 
 #define L3_LATENCY 10
-#define HDD_LATENCY 100000
+#define HDD_LATENCY 1
 
 #define TLB_SIZE 1024
 #define PTBR 123508959
 //#define PTBR 0
 
+
+// ROB Structure, used to release stall on instructions 
+// when the read request completes
+extern struct robstructure * ROB;
+extern long long int CYCLE_VAL;
+extern long long int BIGNUM;
 
 typedef struct OS                OS;
 typedef struct InvPageTableEntry InvPageTableEntry;
