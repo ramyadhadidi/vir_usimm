@@ -378,6 +378,7 @@ int main(int argc, char * argv[])
     }
   }
 
+
 /**************Initialize the random value table*************************/
   addr_rand_init(NUMCORES);
 /************************************************************************/
@@ -572,7 +573,6 @@ int main(int argc, char * argv[])
         if (opertype[numc] == 'W') {
 		      // Translation
           uns delay_translation;
-          Flag pagehit;
           phy_addr=os_v2p_lineaddr_tlb(os,addr[numc],numc,&delay_translation);
           //phy_addr=os_v2p_lineaddr(os,addr[numc],numc,&pagehit,&delay_translation);
           addr[numc]=phy_addr;

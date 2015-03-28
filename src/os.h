@@ -103,7 +103,7 @@ struct TLB {
 
 uns os_v2p_lineaddr_pfn(OS *os, Addr lineaddr, uns tid, Flag* pagehit, uns* delay);
 Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay);
-int32 os_tlb_search(OS *os, uns vpn, uns tid, int* row);
+int64 os_tlb_search(OS *os, uns64 vpn, uns tid, int* row);
 //////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 
@@ -125,7 +125,7 @@ struct OS {
 ///////////////////////////////////////////////////////////////////////////
 
 OS*     os_new(uns num_pages, uns num_threads);
-uns     os_vpn_to_pfn(OS *os, uns vpn, uns tid, Flag *hit);
+uns     os_vpn_to_pfn(OS *os, uns64 vpn, uns tid, Flag *hit);
 void    os_print_stats(OS *os);
 
 uns     os_get_victim_from_ipt(OS *os);

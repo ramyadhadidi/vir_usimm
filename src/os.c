@@ -40,7 +40,7 @@ OS *os_new(uns num_pages, uns num_threads)
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 
-uns os_vpn_to_pfn(OS *os, uns vpn, uns tid, Flag *hit)
+uns os_vpn_to_pfn(OS *os, uns64 vpn, uns tid, Flag *hit)
 {
     Flag first_access;
     PageTable *pt = os->pt;
@@ -49,8 +49,9 @@ uns os_vpn_to_pfn(OS *os, uns vpn, uns tid, Flag *hit)
     InvPageTableEntry *ipte;
     *hit = TRUE;
 
-    assert(vpn>>28 == 0);
-    vpn = (tid<<28)+vpn; // embed tid information in high bits
+    //28
+    assert(vpn>>42 == 0);
+    vpn = (tid<<48)+vpn; // embed tid information in high bits
     
     if( pt->last_xlation[tid].vpn == vpn ){
 	return pt->last_xlation[tid].pfn;
@@ -171,9 +172,9 @@ Addr os_v2p_lineaddr(OS *os, Addr lineaddr, uns tid, Flag* pagehit, uns* delay){
 //TLB
 
 uns os_v2p_lineaddr_pfn(OS *os, Addr lineaddr, uns tid, Flag* pagehit, uns* delay) {
-  uns vpn = lineaddr/os->lines_in_page;
-  uns lineid = lineaddr%os->lines_in_page;
-  uns pfn = os_vpn_to_pfn(os, vpn, tid, pagehit);
+  uns64 vpn = lineaddr/os->lines_in_page;
+  uns64 lineid = lineaddr%os->lines_in_page;
+  uns64 pfn = os_vpn_to_pfn(os, vpn, tid, pagehit);
 
   //Delay
   *delay = 0;
@@ -183,14 +184,14 @@ uns os_v2p_lineaddr_pfn(OS *os, Addr lineaddr, uns tid, Flag* pagehit, uns* dela
 
 
 Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
-    uns vpn = lineaddr/os->lines_in_page;
-    uns lineid = lineaddr%os->lines_in_page;
+    uns64 vpn = lineaddr/os->lines_in_page;
+    uns64 lineid = lineaddr%os->lines_in_page;
     *delay = 0;
 
     //Search TLB
     os->tlb->TLB_access++;
     int row;
-    int32 pfn_tlb_search = os_tlb_search(os, vpn, tid, &row);
+    int64 pfn_tlb_search = os_tlb_search(os, vpn, tid, &row);
 
     //Hit:  update TLB (LRU position)
     //      return address with 1 cycle delay
@@ -225,7 +226,7 @@ Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
     // Update TLB
     os->tlb->TLB_miss++;
     Flag pagehit;
-    uns pfn = os_v2p_lineaddr_pfn(os, lineaddr, tid, &pagehit, delay);
+    uns64 pfn = os_v2p_lineaddr_pfn(os, lineaddr, tid, &pagehit, delay);
 
     // update TLB: insert new element
     for (int i=0; i<os->tlb->num_entries; i++)
@@ -293,7 +294,7 @@ Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
 
 }
 
-int32 os_tlb_search(OS *os, uns vpn, uns tid, int* row) {
+int64 os_tlb_search(OS *os, uns64 vpn, uns tid, int* row) {
     for (int i=0; i<os->tlb->num_entries; i++) {
         if (tid == os->tlb->entries[i].tid)
             if (vpn == os->tlb->entries[i].pair.vpn) {
