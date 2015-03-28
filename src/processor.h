@@ -11,6 +11,10 @@ struct robstructure
   int * optype;
   long long int * instrpc;
   int tracedone;
+
+  long long int * fellow_inst;
+  long long int * fellow_mem_address;
+  int * fellow_optype;
 } ;
 
 #endif //__PROCESSOR_H__

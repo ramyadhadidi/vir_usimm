@@ -8,12 +8,14 @@
 #include "os.h"
 #include "memory_controller.h"
 #include "processor.h"
+//#include "cache.h"
 
 // ROB Structure, used to release stall on instructions 
 // when the read request completes
 extern struct robstructure * ROB;
 extern long long int CYCLE_VAL;
 extern long long int BIGNUM;
+//extern LLCache *L3Cache;
 
 ////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////
@@ -218,7 +220,7 @@ Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
         }
         os->tlb->entries[row].LRU_position = 0;
 
-        //return address with 1 cycle delay
+        //return address with 2 cycle delay
         *delay = 2;
         Addr retval = (pfn_tlb_search*os->lines_in_page)+lineid;
         retval=retval<<6;
@@ -268,11 +270,17 @@ Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
         os->tlb->entries[oldest].pair.pfn = pfn;
     }
 
-    // L3 hit
+    // Check L3
+    //int L3Hit = LookupAndFillCache(L3Cache, tid, 0, PTBR + vpn, ACCESS_LOAD);
 
+    // L3 hit
+    //if (L3Hit) {
+
+    //}
 
     // L3 miss
     // send memory read request
+    
     ROB[tid].mem_address[ROB[tid].tail] = PTBR + vpn;
     ROB[tid].optype[ROB[tid].tail] = 'R';
     ROB[tid].comptime[ROB[tid].tail] = CYCLE_VAL + BIGNUM;
@@ -280,13 +288,18 @@ Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
 
     *delay = L3_LATENCY + 2;
 
+    // Page fault! add hdd access time
+    if (!pagehit)
+        *delay += HDD_LATENCY;
+
     insert_read(PTBR + vpn, CYCLE_VAL, tid, ROB[tid].tail, 0, 1, *delay);
 
-    ROB[tid].tail = (ROB[tid].tail +1) % ROBSIZE;
-    ROB[tid].inflight++;
+    ROB[tid].fellow_inst[ROB[tid].tail] = 1;
 
-    // Page fault! add hdd access time
-    if (!pagehit) {}
+    // Tail will be updated in main code
+
+    return pfn;
+
 }
 
 int32 os_tlb_search(OS *os, uns vpn, uns tid, int* row) {

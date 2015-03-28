@@ -20,7 +20,7 @@
 #define RANDOM_TABLE_ENABLE 0
 //Notify if it uses virtual or physical address
 #define USE_PHY_ADDR 0
-long long int BIGNUM = 1000000;
+long long int BIGNUM = 100000000;
 //Stall Loggers
 long long int robf_stalls=0;
 long long int wrqf_stalls=0;
@@ -318,6 +318,13 @@ int main(int argc, char * argv[])
 	  ROB[i].mem_address = (long long int*)malloc(sizeof(long long int)*ROBSIZE);
 	  ROB[i].instrpc = (long long int*)malloc(sizeof(long long int)*ROBSIZE);
 	  ROB[i].optype = (int*)malloc(sizeof(int)*ROBSIZE);
+
+    // For supporting address translation
+    ROB[i].fellow_inst = (long long int *)malloc(sizeof(long long int)*ROBSIZE);
+    for (int j=0; j<ROBSIZE; j++)
+      ROB[i].fellow_inst[j] = 0;
+    ROB[i].fellow_mem_address = (long long int*)malloc(sizeof(long long int)*ROBSIZE);
+    ROB[i].fellow_optype = (int*)malloc(sizeof(int)*ROBSIZE);
   }
 
   //Cache
@@ -387,6 +394,69 @@ int main(int argc, char * argv[])
         if (ROB[numc].comptime[ROB[numc].head] < CYCLE_VAL) {  
       	  /* Keep retiring instructions if they are done. */
           ROB[numc].comptime[ROB[numc].head] = 0;
+
+          // Process fellow instructions
+          if (ROB[numc].fellow_inst[ROB[numc].head]) {
+            ROB[numc].fellow_inst[ROB[numc].head] = 0;
+
+            ROB[numc].mem_address[ROB[numc].head] = ROB[numc].fellow_mem_address[ROB[numc].head];
+            ROB[numc].optype[ROB[numc].head] = ROB[numc].fellow_optype[ROB[numc].head];
+            ROB[numc].comptime[ROB[numc].head] = CYCLE_VAL + BIGNUM;
+            ROB[numc].instrpc[ROB[numc].head] = 0;
+
+            if (ROB[numc].optype[ROB[numc].head] == 'R') {
+              long long int wb_addr = 0;
+              long long int wb_inst_addr = 0;
+              LINE_STATE* currLine = CacheIsWriteback(L3Cache, numc, 0, ROB[numc].mem_address[ROB[numc].head], ACCESS_LOAD);
+              if(currLine != NULL){
+                 wb_addr = currLine->phy_addr;
+                 wb_inst_addr = currLine->PC;
+              }
+              int L3Hit = LookupAndFillCache(L3Cache, numc, 0, ROB[numc].mem_address[ROB[numc].head], ACCESS_LOAD);
+              int lat = read_matches_write_or_read_queue(ROB[numc].fellow_mem_address[ROB[numc].head]);
+              if(L3Hit)
+                ROB[numc].comptime[ROB[numc].head] = CYCLE_VAL+L3_LATENCY+PIPELINEDEPTH;
+              else  {
+                if(currLine != NULL)
+                   insert_write(wb_addr, CYCLE_VAL, numc, ROB[numc].head); 
+                if(lat) 
+                  ROB[numc].comptime[ROB[numc].head] = CYCLE_VAL+lat+PIPELINEDEPTH;
+                //Need to insert memory read. If We don't need translation
+                else
+                  insert_read(ROB[numc].mem_address[ROB[numc].head], CYCLE_VAL, numc, ROB[numc].head, 0, 0, 0);
+              }
+            }
+
+            else if (ROB[numc].optype[ROB[numc].head] == 'W') {
+              ROB[numc].comptime[ROB[numc].head] = PIPELINEDEPTH + CYCLE_VAL;
+              long long int wb_addr = 0;
+              long long int wb_inst_addr = 0;
+              LINE_STATE* currLine = CacheIsWriteback(L3Cache, numc, 0, ROB[numc].mem_address[ROB[numc].head], ACCESS_LOAD);
+              if(currLine != NULL){
+                wb_addr = currLine->phy_addr;
+                wb_inst_addr = currLine->PC;
+              }
+              int L3Hit = LookupAndFillCache(L3Cache, numc, 0, ROB[numc].mem_address[ROB[numc].head], ACCESS_STORE);
+              if(L3Hit) {}
+              else {
+                if(currLine != NULL) 
+                  insert_write(wb_addr, CYCLE_VAL, numc, ROB[numc].head); 
+                if(!write_exists_in_write_queue(addr[numc])) 
+                  insert_write(ROB[numc].mem_address[ROB[numc].head], CYCLE_VAL, numc, ROB[numc].head);
+              }
+              for(int c=0; c<NUM_CHANNELS; c++) {
+                if(write_queue_length[c] == WQ_CAPACITY) {
+                  writeqfull = 1;
+                  break;
+                }
+              }
+            }
+
+            // No need to move the head
+            continue;
+          }
+
+          // Move head
       	  ROB[numc].head = (ROB[numc].head + 1) % ROBSIZE;
       	  ROB[numc].inflight--;
       	  committed[numc]++;
@@ -453,40 +523,50 @@ int main(int argc, char * argv[])
           //phy_addr=os_v2p_lineaddr(os,addr[numc],numc,&pagehit,&delay_translation);
           addr[numc]=phy_addr;
           // Translation Done
-          ROB[numc].mem_address[ROB[numc].tail] = addr[numc];
-          ROB[numc].optype[ROB[numc].tail] = opertype[numc];
-          ROB[numc].comptime[ROB[numc].tail] = CYCLE_VAL + BIGNUM;
-          ROB[numc].instrpc[ROB[numc].tail] = instrpc[numc];
-          long long int wb_addr = 0;
-          long long int wb_inst_addr = 0;
-          LINE_STATE* currLine = CacheIsWriteback(L3Cache, numc, instrpc[numc], addr[numc], ACCESS_LOAD);
-          if(currLine != NULL){
-             wb_addr = currLine->phy_addr;
-             wb_inst_addr = currLine->PC;
+          // If doesn't need translation process as usual
+          if (!ROB[numc].fellow_inst[ROB[numc].tail]) {
+            ROB[numc].mem_address[ROB[numc].tail] = addr[numc];
+            ROB[numc].optype[ROB[numc].tail] = opertype[numc];
+            ROB[numc].comptime[ROB[numc].tail] = CYCLE_VAL + BIGNUM;
+            ROB[numc].instrpc[ROB[numc].tail] = instrpc[numc];
           }
-          int L3Hit = LookupAndFillCache(L3Cache, numc, instrpc[numc], addr[numc], ACCESS_LOAD);
-
-          // Check to see if the read is for buffered data in write queue - 
-          // return constant latency if match in WQ
-          // add in read queue otherwise
-          int lat = read_matches_write_or_read_queue(addr[numc]);
-          if(L3Hit)
-            ROB[numc].comptime[ROB[numc].tail] = CYCLE_VAL+L3_LATENCY+PIPELINEDEPTH+delay_translation;
-          else  {
+          // else insert the instruction to fellow inst
+          else {
+            ROB[numc].fellow_mem_address[ROB[numc].tail] = addr[numc];
+            ROB[numc].fellow_optype[ROB[numc].tail] = opertype[numc];
+          }
+          // if we don't need translation continue, else we need to process these after translation
+          if (!ROB[numc].fellow_inst[ROB[numc].tail]) {
+            long long int wb_addr = 0;
+            long long int wb_inst_addr = 0;
+            LINE_STATE* currLine = CacheIsWriteback(L3Cache, numc, instrpc[numc], addr[numc], ACCESS_LOAD);
             if(currLine != NULL){
-               insert_write(wb_addr, CYCLE_VAL, numc, ROB[numc].tail); 
-               //   fprintf(stdout, "  @%lld WB\n", CYCLE_VAL);
+               wb_addr = currLine->phy_addr;
+               wb_inst_addr = currLine->PC;
             }
-          // Check to see if the read is for buffered data in write queue - 
-          // return constant latency if match in WQ
-          // add in read queue otherwise
+            int L3Hit = LookupAndFillCache(L3Cache, numc, instrpc[numc], addr[numc], ACCESS_LOAD);
 
-          if(lat) 
-            ROB[numc].comptime[ROB[numc].tail] = CYCLE_VAL+lat+PIPELINEDEPTH+delay_translation;
-          else 
-            insert_read(addr[numc], CYCLE_VAL, numc, ROB[numc].tail, instrpc[numc], 0, 0);
+            // Check to see if the read is for buffered data in write queue - 
+            // return constant latency if match in WQ
+            // add in read queue otherwise
+            int lat = read_matches_write_or_read_queue(addr[numc]);
+            if(L3Hit)
+              ROB[numc].comptime[ROB[numc].tail] = CYCLE_VAL+L3_LATENCY+PIPELINEDEPTH+delay_translation;
+            else  {
+              if(currLine != NULL)
+                 insert_write(wb_addr, CYCLE_VAL, numc, ROB[numc].tail); 
+              // Check to see if the read is for buffered data in write queue - 
+              // return constant latency if match in WQ
+              // add in read queue otherwise
+
+              if(lat) 
+                ROB[numc].comptime[ROB[numc].tail] = CYCLE_VAL+lat+PIPELINEDEPTH+delay_translation;
+              //Need to insert memory read. If We don't need translation
+              else
+                insert_read(addr[numc], CYCLE_VAL, numc, ROB[numc].tail, instrpc[numc], 0, 0);
+            }
+          }
         }
-      }
 
       else {  /* This must be a 'W'.  We are confirming that while reading the trace. */
         if (opertype[numc] == 'W') {
@@ -497,34 +577,43 @@ int main(int argc, char * argv[])
           //phy_addr=os_v2p_lineaddr(os,addr[numc],numc,&pagehit,&delay_translation);
           addr[numc]=phy_addr;
           // Translation Done
-		      ROB[numc].mem_address[ROB[numc].tail] = addr[numc];
-		      ROB[numc].optype[ROB[numc].tail] = opertype[numc];
-		      ROB[numc].comptime[ROB[numc].tail] = CYCLE_VAL+PIPELINEDEPTH+delay_translation;
-		      /* Also, add this to the write queue. */
-          long long int wb_addr = 0;
-          long long int wb_inst_addr = 0;
-          LINE_STATE* currLine = CacheIsWriteback(L3Cache, numc, instrpc[numc], addr[numc], ACCESS_LOAD);
-          if(currLine != NULL){
-            wb_addr = currLine->phy_addr;
-            wb_inst_addr = currLine->PC;
+          // If doesn't need translation process as usual
+          if (!ROB[numc].fellow_inst[ROB[numc].tail]) {
+            ROB[numc].mem_address[ROB[numc].tail] = addr[numc];
+            ROB[numc].optype[ROB[numc].tail] = opertype[numc];
+            ROB[numc].comptime[ROB[numc].tail] = CYCLE_VAL+PIPELINEDEPTH+delay_translation;
+            ROB[numc].instrpc[ROB[numc].tail] = instrpc[numc];
           }
-          int L3Hit = LookupAndFillCache(L3Cache, numc, instrpc[numc], addr[numc], ACCESS_STORE);
-          if(L3Hit){}
-          else{
-				    if(currLine != NULL){
-           		insert_write(wb_addr, CYCLE_VAL, numc, ROB[numc].tail); 
-              //   fprintf(stdout, "  @%lld WB\n", CYCLE_VAL);
-              }
-              if(!write_exists_in_write_queue(addr[numc]))
+          // else insert the instruction to fellow inst
+          else {
+            ROB[numc].fellow_mem_address[ROB[numc].tail] = addr[numc];
+            ROB[numc].fellow_optype[ROB[numc].tail] = opertype[numc];
+          }
+          // if we don't need translation continue, else we need to process these after translation
+          if (!ROB[numc].fellow_inst[ROB[numc].tail]) {
+  		      /* Also, add this to the write queue. */
+            long long int wb_addr = 0;
+            long long int wb_inst_addr = 0;
+            LINE_STATE* currLine = CacheIsWriteback(L3Cache, numc, instrpc[numc], addr[numc], ACCESS_LOAD);
+            if(currLine != NULL){
+              wb_addr = currLine->phy_addr;
+              wb_inst_addr = currLine->PC;
+            }
+            int L3Hit = LookupAndFillCache(L3Cache, numc, instrpc[numc], addr[numc], ACCESS_STORE);
+            if(L3Hit) {}
+            else {
+  				    if(currLine != NULL) 
+             		insert_write(wb_addr, CYCLE_VAL, numc, ROB[numc].tail); 
+              if(!write_exists_in_write_queue(addr[numc])) 
                 insert_write(addr[numc], CYCLE_VAL, numc, ROB[numc].tail);
             }
-		      for(int c=0; c<NUM_CHANNELS; c++){
-      			if(write_queue_length[c] == WQ_CAPACITY)
-      			{
-      			  writeqfull = 1;
-      			  break;
-      			}
-		      }
+  		      for(int c=0; c<NUM_CHANNELS; c++) {
+        			if(write_queue_length[c] == WQ_CAPACITY) {
+        			  writeqfull = 1;
+        			  break;
+        			}
+  		      }
+          }
 		  }
 
   		  else {

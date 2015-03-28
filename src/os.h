@@ -7,9 +7,10 @@
 #define OS_MAX_THREADS 16
 
 #define L3_LATENCY 10
+#define HDD_LATENCY 100000
 
 #define TLB_SIZE 1024
-#define PTBR 12350895924
+#define PTBR 123508959
 //#define PTBR 0
 
 
