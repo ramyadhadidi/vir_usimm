@@ -29,6 +29,7 @@ OS *os_new(uns num_pages, uns num_threads)
     os->tlb->TLB_hit = 0;
     os->tlb->TLB_miss = 0;
     os->tlb->TLB_eviction = 0;
+    os->tlb->TLB_L3_hit = 0;
     printf("Initialized TLB for %u entires\n", TLB_SIZE);
 
     return os;
@@ -140,6 +141,7 @@ void os_print_stats(OS *os)
     printf("\n%s_TLB_HIT        \t : %llu", header , os->tlb->TLB_hit);
     printf("\n%s_TLB_MISS       \t : %llu", header , os->tlb->TLB_miss);
     printf("\n%s_TLB_EVICTION   \t : %llu", header , os->tlb->TLB_eviction);
+    printf("\n%s_TLB_L3_Hit     \t : %llu", header , os->tlb->TLB_L3_hit);
     printf("\n");
 
 }
@@ -250,12 +252,16 @@ Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
     }
 
     // Check L3
-    //int L3Hit = LookupAndFillCache(L3Cache, tid, 0, PTBR + vpn, ACCESS_LOAD);
+    int L3Hit = LookupAndFillCache(L3Cache, tid, 0, PTBR + vpn, ACCESS_LOAD);
 
     // L3 hit
-    //if (L3Hit) {
-
-    //}
+    if (L3Hit) {
+        os->tlb->TLB_L3_hit++;
+        *delay = L3_LATENCY + 2;
+        Addr retval = (pfn*os->lines_in_page)+lineid;
+        retval=retval<<6;
+        return retval;
+    }
 
     // L3 miss
     // send memory read request

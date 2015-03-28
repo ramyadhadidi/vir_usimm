@@ -1,10 +1,12 @@
 #ifndef CACHE_H
 #define CACHE_H
 
-
-#include "utils.h"
 #include <stdlib.h>
 #include <stdbool.h>
+#include <assert.h>
+#include <stdio.h>
+#include <string.h>
+#include "utils.h"
 
 #define IS_STORE(X)  (X == ACCESS_STORE || X == ACCESS_WRITEBACK);
 

@@ -2,7 +2,7 @@
 OUT = usimm
 BINDIR = ../bin
 OBJDIR = ../obj
-OBJS = $(OBJDIR)/main.o $(OBJDIR)/malloc_lib.o $(OBJDIR)/hash_lib.o $(OBJDIR)/os.o $(OBJDIR)/memory_controller.o $(OBJDIR)/scheduler.o 
+OBJS = $(OBJDIR)/main.o $(OBJDIR)/malloc_lib.o $(OBJDIR)/hash_lib.o $(OBJDIR)/os.o $(OBJDIR)/memory_controller.o $(OBJDIR)/scheduler.o $(OBJDIR)/cache.o
 CC = gcc
 DEBUG = -g
 CFLAGS = -std=c99 -c $(DEBUG)
@@ -25,7 +25,11 @@ $(OBJDIR)/os.o: os.c params.h global_types.h os.h hash_lib.h
 	$(CC) $(CFLAGS) os.c -o $(OBJDIR)/os.o
 	chmod 777 $(OBJDIR)/os.o
 
-$(OBJDIR)/main.o: main.c processor.h configfile.h memory_controller.h scheduler.h params.h cache.h 
+$(OBJDIR)/cache.o: cache.c cache.h
+	$(CC) $(CFLAGS) cache.c -o $(OBJDIR)/cache.o
+	chmod 777 $(OBJDIR)/cache.o
+
+$(OBJDIR)/main.o: main.c processor.h configfile.h memory_controller.h scheduler.h params.h cache.h
 	$(CC) $(CFLAGS) main.c -o $(OBJDIR)/main.o
 	chmod 777 $(OBJDIR)/main.o
 

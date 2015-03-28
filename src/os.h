@@ -30,6 +30,7 @@
 extern struct robstructure * ROB;
 extern long long int CYCLE_VAL;
 extern long long int BIGNUM;
+extern LLCache *L3Cache;
 
 typedef struct OS                OS;
 typedef struct InvPageTableEntry InvPageTableEntry;
@@ -95,6 +96,7 @@ struct TLB {
   uns64 TLB_hit;
   uns64 TLB_miss;
   uns64 TLB_eviction;
+  uns64 TLB_L3_hit;
 };
 
 uns os_v2p_lineaddr_pfn(OS *os, Addr lineaddr, uns tid, Flag* pagehit, uns* delay);
