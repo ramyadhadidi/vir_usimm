@@ -228,9 +228,14 @@ Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
 
     //Miss:
     //      update TLB
-    //      send memory read request
-    //          hit: done
-    //          miss: add hdd access time
+    //      see if we hit in L3
+    //          hit L3: constant L3 access
+    //          miss L3:
+    //              send memory read request
+    //              hit: done
+    //              miss: add hdd access time
+
+    // Update TLB
     os->tlb->TLB_miss++;
     Flag pagehit;
     uns pfn = os_v2p_lineaddr_pfn(os, lineaddr, tid, &pagehit, delay);
@@ -263,6 +268,10 @@ Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
         os->tlb->entries[oldest].pair.pfn = pfn;
     }
 
+    // L3 hit
+
+
+    // L3 miss
     // send memory read request
     ROB[tid].mem_address[ROB[tid].tail] = PTBR + vpn;
     ROB[tid].optype[ROB[tid].tail] = 'R';

@@ -320,13 +320,17 @@ int main(int argc, char * argv[])
 	  ROB[i].instrpc = (long long int*)malloc(sizeof(long long int)*ROBSIZE);
 	  ROB[i].optype = (int*)malloc(sizeof(int)*ROBSIZE);
   }
-  CACHE_SIZE = 1024*4096;//4MB LLC (SHARED)
 
+  //Cache
+  CACHE_SIZE = 1024*4096;//4MB LLC (SHARED)
   construct_cache(L3Cache, CACHE_SIZE, 8, NUMCORES, 64);
+
+  // Page Table
   os_pages = 2097152;
+  os = os_new(os_pages,NUMCORES);
+
   init_memory_controller_vars();
   init_scheduler_vars();
-  os = os_new(os_pages,NUMCORES);
   /* Done initializing. */
 
   /* Must start by reading one line of each trace file. */
@@ -444,10 +448,10 @@ int main(int argc, char * argv[])
       else { /* Done consuming non-memory-ops.  Must now consume the memory rd or wr. */
         if (opertype[numc] == 'R') {
           // Translation
-          uns delay;
+          uns delay_translation;
           Flag pagehit;
-          phy_addr=os_v2p_lineaddr_tlb(os,addr[numc],numc,&delay);
-          //phy_addr=os_v2p_lineaddr(os,addr[numc],numc,&pagehit,&delay);
+          phy_addr=os_v2p_lineaddr_tlb(os,addr[numc],numc,&delay_translation);
+          //phy_addr=os_v2p_lineaddr(os,addr[numc],numc,&pagehit,&delay_translation);
           addr[numc]=phy_addr;
           // Translation Done
           ROB[numc].mem_address[ROB[numc].tail] = addr[numc];
@@ -468,7 +472,7 @@ int main(int argc, char * argv[])
           // add in read queue otherwise
           int lat = read_matches_write_or_read_queue(addr[numc]);
           if(L3Hit)
-            ROB[numc].comptime[ROB[numc].tail] = CYCLE_VAL+L3_LATENCY+PIPELINEDEPTH;
+            ROB[numc].comptime[ROB[numc].tail] = CYCLE_VAL+L3_LATENCY+PIPELINEDEPTH+delay_translation;
           else  {
             if(currLine != NULL){
                insert_write(wb_addr, CYCLE_VAL, numc, ROB[numc].tail); 
@@ -479,7 +483,7 @@ int main(int argc, char * argv[])
           // add in read queue otherwise
 
           if(lat) 
-            ROB[numc].comptime[ROB[numc].tail] = CYCLE_VAL+lat+PIPELINEDEPTH;
+            ROB[numc].comptime[ROB[numc].tail] = CYCLE_VAL+lat+PIPELINEDEPTH+delay_translation;
           else 
             insert_read(addr[numc], CYCLE_VAL, numc, ROB[numc].tail, instrpc[numc]);
         }

@@ -7,8 +7,8 @@
 #define OS_MAX_THREADS 16
 
 #define TLB_SIZE 1024
-//#define PTBR 12350895924177429912
-#define PTBR 0
+#define PTBR 12350895924
+//#define PTBR 0
 
 
 typedef struct OS                OS;
