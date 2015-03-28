@@ -30,6 +30,8 @@ OS *os_new(uns num_pages, uns num_threads)
     os->tlb->TLB_miss = 0;
     os->tlb->TLB_eviction = 0;
     os->tlb->TLB_L3_hit = 0;
+    os->tlb->TLB_Memory_Access = 0;
+    os->tlb->TLB_HDD_Access = 0;
     printf("Initialized TLB for %u entires\n", TLB_SIZE);
 
     return os;
@@ -134,14 +136,16 @@ void os_print_stats(OS *os)
     char header[256];
     sprintf(header, "OS");
     
-    printf("%s_PAGE_MISS        \t : %llu",  header, os->pt->miss_count);
-    printf("\n%s_PAGE_EVICTS    \t : %llu",  header, os->pt->total_evicts);
-    printf("\n%s_FOOTPRINT      \t : %llu",  header, (os->pt->miss_count*OS_PAGESIZE)/(1024*1024));
-    printf("\n%s_TLB_ACCESS     \t : %llu", header , os->tlb->TLB_access);
-    printf("\n%s_TLB_HIT        \t : %llu", header , os->tlb->TLB_hit);
-    printf("\n%s_TLB_MISS       \t : %llu", header , os->tlb->TLB_miss);
-    printf("\n%s_TLB_EVICTION   \t : %llu", header , os->tlb->TLB_eviction);
-    printf("\n%s_TLB_L3_Hit     \t : %llu", header , os->tlb->TLB_L3_hit);
+    printf("%s_PAGE_MISS            \t : %llu",  header, os->pt->miss_count);
+    printf("\n%s_PAGE_EVICTS        \t : %llu",  header, os->pt->total_evicts);
+    printf("\n%s_FOOTPRINT          \t : %llu",  header, (os->pt->miss_count*OS_PAGESIZE)/(1024*1024));
+    printf("\n%s_TLB_ACCESS         \t : %llu", header , os->tlb->TLB_access);
+    printf("\n%s_TLB_HIT            \t : %llu", header , os->tlb->TLB_hit);
+    printf("\n%s_TLB_MISS           \t : %llu", header , os->tlb->TLB_miss);
+    printf("\n%s_TLB_EVICTION       \t : %llu", header , os->tlb->TLB_eviction);
+    printf("\n%s_TLB_L3_Hit         \t : %llu", header , os->tlb->TLB_L3_hit);
+    printf("\n%s_TLB_Memory_Access  \t : %llu", header , os->tlb->TLB_Memory_Access);
+    printf("\n%s_TLB_HDD_Access     \t : %llu", header , os->tlb->TLB_HDD_Access);
     printf("\n");
 
 }
@@ -265,7 +269,7 @@ Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
 
     // L3 miss
     // send memory read request
-    
+    os->tlb->TLB_Memory_Access++;
     ROB[tid].mem_address[ROB[tid].tail] = PTBR + vpn;
     ROB[tid].optype[ROB[tid].tail] = 'R';
     ROB[tid].comptime[ROB[tid].tail] = CYCLE_VAL + BIGNUM;
@@ -274,8 +278,10 @@ Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
     *delay = L3_LATENCY + 2;
 
     // Page fault! add hdd access time
-    if (!pagehit)
+    if (!pagehit) {
+        os->tlb->TLB_HDD_Access++;
         *delay += HDD_LATENCY;
+    }
 
     insert_read(PTBR + vpn, CYCLE_VAL, tid, ROB[tid].tail, 0, 1, *delay);
 

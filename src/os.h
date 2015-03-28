@@ -97,6 +97,8 @@ struct TLB {
   uns64 TLB_miss;
   uns64 TLB_eviction;
   uns64 TLB_L3_hit;
+  uns64 TLB_Memory_Access;
+  uns64 TLB_HDD_Access;
 };
 
 uns os_v2p_lineaddr_pfn(OS *os, Addr lineaddr, uns tid, Flag* pagehit, uns* delay);
