@@ -6,6 +6,8 @@
 
 #define OS_MAX_THREADS 16
 
+#define L3_LATENCY 10
+
 #define TLB_SIZE 1024
 #define PTBR 12350895924
 //#define PTBR 0

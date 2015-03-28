@@ -247,7 +247,7 @@ dram_address_t * calc_dram_addr(long long int physical_address)
 
 // Function to create a new request node to be inserted into the read
 // or write queue.
-void * init_new_node(long long int physical_address, long long int arrival_time, optype_t type, int thread_id, int instruction_id, long long int instruction_pc)
+void * init_new_node(long long int physical_address, long long int arrival_time, optype_t type, int thread_id, int instruction_id, long long int instruction_pc, unsigned int apply_delay, unsigned int delay)
 {
 	request_t * new_node = NULL;
 
@@ -296,6 +296,10 @@ void * init_new_node(long long int physical_address, long long int arrival_time,
 		new_node->dram_addr.bank = this_node_addr->bank;
 		new_node->dram_addr.row = this_node_addr->row;
 		new_node->dram_addr.column = this_node_addr->column;
+
+		// TLB
+		new_node->apply_delay = apply_delay;
+		new_node->delay = delay;
 
 		free(this_node_addr);
 
@@ -369,7 +373,7 @@ int write_exists_in_write_queue(long long int physical_address)
 }
 
 // Insert a new read to the read queue
-request_t * insert_read(long long int physical_address, long long int arrival_time, int thread_id, int instruction_id, long long int instruction_pc)
+request_t * insert_read(long long int physical_address, long long int arrival_time, int thread_id, int instruction_id, long long int instruction_pc, unsigned int apply_delay, unsigned int delay)
 {
 
 	optype_t this_op = READ;
@@ -381,7 +385,7 @@ request_t * insert_read(long long int physical_address, long long int arrival_ti
 
 	stats_reads_seen[channel] ++;
 
-	request_t * new_node = init_new_node(physical_address, arrival_time, this_op, thread_id, instruction_id, instruction_pc);
+	request_t * new_node = init_new_node(physical_address, arrival_time, this_op, thread_id, instruction_id, instruction_pc, apply_delay, delay);
 
 	LL_APPEND(read_queue_head[channel], new_node);
 
@@ -403,7 +407,10 @@ request_t * insert_write(long long int physical_address, long long int arrival_t
 
 	stats_writes_seen[channel] ++;
 
-	request_t * new_node = init_new_node(physical_address, arrival_time, this_op, thread_id, instruction_id, 0);
+	unsigned int apply_delay = 0;
+	unsigned int delay = 0;
+
+	request_t * new_node = init_new_node(physical_address, arrival_time, this_op, thread_id, instruction_id, 0, apply_delay, delay);
 
 	LL_APPEND(write_queue_head[channel], new_node);
 
@@ -764,7 +771,7 @@ int issue_request_command(request_t * request)
 			request->request_served = 1;
 
 			// update the ROB with the completion time
-			ROB[request->thread_id].comptime[request->instruction_id] = request->completion_time+PIPELINEDEPTH;
+			ROB[request->thread_id].comptime[request->instruction_id] = request->completion_time+PIPELINEDEPTH + (request->apply_delay ? request->delay : 0);
 
 			stats_reads_completed[channel] ++;
 			stats_average_read_latency[channel] = ((stats_reads_completed[channel]-1)*stats_average_read_latency[channel] + request->latency)/stats_reads_completed[channel];

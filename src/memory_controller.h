@@ -49,6 +49,10 @@ typedef struct req
   long long int instruction_pc; // phy address of instruction that generated this request (valid only for reads)
   void * user_ptr; // user_specified data
   struct req * next;
+
+  // For supporting Delay for TLB search
+  unsigned int apply_delay;
+  unsigned int delay;
 } request_t;
 
 // Bankstates
@@ -220,7 +224,7 @@ int read_matches_write_or_read_queue(long long int physical_address);
 int write_exists_in_write_queue(long long int physical_address);
 
 // enqueue a read into the corresponding read queue (returns ptr to new node)
-request_t* insert_read(long long int physical_address, long long int arrival_cycle, int thread_id, int instruction_id, long long int instruction_pc);
+request_t* insert_read(long long int physical_address, long long int arrival_cycle, int thread_id, int instruction_id, long long int instruction_pc, unsigned int apply_delay, unsigned int delay);
 
 // enqueue a write into the corresponding write queue (returns ptr to new_node)
 request_t* insert_write(long long int physical_address, long long int arrival_time, int thread_id, int instruction_id);

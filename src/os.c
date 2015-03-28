@@ -219,7 +219,7 @@ Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
         os->tlb->entries[row].LRU_position = 0;
 
         //return address with 1 cycle delay
-        *delay = 1;
+        *delay = 2;
         Addr retval = (pfn_tlb_search*os->lines_in_page)+lineid;
         retval=retval<<6;
         return retval;
@@ -278,7 +278,9 @@ Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
     ROB[tid].comptime[ROB[tid].tail] = CYCLE_VAL + BIGNUM;
     ROB[tid].instrpc[ROB[tid].tail] = 0;
 
-    insert_read(PTBR + vpn, CYCLE_VAL, tid, ROB[tid].tail, 0);
+    *delay = L3_LATENCY + 2;
+
+    insert_read(PTBR + vpn, CYCLE_VAL, tid, ROB[tid].tail, 0, 1, *delay);
 
     ROB[tid].tail = (ROB[tid].tail +1) % ROBSIZE;
     ROB[tid].inflight++;

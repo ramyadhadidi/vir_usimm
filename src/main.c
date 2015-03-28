@@ -12,7 +12,6 @@
 #include "cache.h"
 #include "global_types.h"
 #include "os.h"
-#define L3_LATENCY 10
 
 #define MAXTRACELINESIZE 64
 //Set this for table length of randomizer
@@ -485,22 +484,22 @@ int main(int argc, char * argv[])
           if(lat) 
             ROB[numc].comptime[ROB[numc].tail] = CYCLE_VAL+lat+PIPELINEDEPTH+delay_translation;
           else 
-            insert_read(addr[numc], CYCLE_VAL, numc, ROB[numc].tail, instrpc[numc]);
+            insert_read(addr[numc], CYCLE_VAL, numc, ROB[numc].tail, instrpc[numc], 0, 0);
         }
       }
 
       else {  /* This must be a 'W'.  We are confirming that while reading the trace. */
         if (opertype[numc] == 'W') {
 		      // Translation
-          uns delay;
+          uns delay_translation;
           Flag pagehit;
-          phy_addr=os_v2p_lineaddr_tlb(os,addr[numc],numc,&delay);
-          //phy_addr=os_v2p_lineaddr(os,addr[numc],numc,&pagehit,&delay);
+          phy_addr=os_v2p_lineaddr_tlb(os,addr[numc],numc,&delay_translation);
+          //phy_addr=os_v2p_lineaddr(os,addr[numc],numc,&pagehit,&delay_translation);
           addr[numc]=phy_addr;
           // Translation Done
 		      ROB[numc].mem_address[ROB[numc].tail] = addr[numc];
 		      ROB[numc].optype[ROB[numc].tail] = opertype[numc];
-		      ROB[numc].comptime[ROB[numc].tail] = CYCLE_VAL+PIPELINEDEPTH+delay;
+		      ROB[numc].comptime[ROB[numc].tail] = CYCLE_VAL+PIPELINEDEPTH+delay_translation;
 		      /* Also, add this to the write queue. */
           long long int wb_addr = 0;
           long long int wb_inst_addr = 0;
