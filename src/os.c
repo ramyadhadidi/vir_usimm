@@ -192,13 +192,14 @@ Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
     os->tlb->TLB_access++;
     int row;
     int found;
-    uns64 pfn_tlb_search = os_tlb_search(os, vpn, tid, &row, &found);
+    uns pfn_tlb_search = os_tlb_search(os, vpn, tid, &row, &found);
 
     //Hit:  update TLB (LRU position)
     //      return address with 1 cycle delay
     if (found) {
         os->tlb->TLB_hit++;
-        assert(pfn_tlb_search > 0);
+        //printf("%llu\n",pfn_tlb_search);
+        assert(pfn_tlb_search >= 0);
         //update LRU
         for (int i=0; i<os->tlb->num_entries; i++) {
             uns LRU = os->tlb->entries[row].LRU_position;
@@ -295,7 +296,7 @@ Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
 
 }
 
-uns64 os_tlb_search(OS *os, uns64 vpn, uns tid, int* row, int *found) {
+uns os_tlb_search(OS *os, uns64 vpn, uns tid, int* row, int *found) {
     for (int i=0; i<os->tlb->num_entries; i++) {
         if (tid == os->tlb->entries[i].tid)
             if (vpn == os->tlb->entries[i].pair.vpn) {
