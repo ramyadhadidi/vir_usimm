@@ -5,7 +5,7 @@
 #define MAX_NUM_RANKS 16
 #define MAX_NUM_BANKS 32
 
-//#define DEDICATED_CHANNEL_TRANSLATION
+#define DEDICATED_CHANNEL_TRANSLATION
 
 // Moved here from main.c 
 long long int *committed; // total committed instructions in each core

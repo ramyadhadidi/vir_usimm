@@ -134,6 +134,9 @@ void init_memory_controller_vars()
 		stats_page_hits[i]=0;
 		stats_read_row_hit_rate[i]=0;
 	}
+    #ifdef DEDICATED_CHANNEL_TRANSLATION
+    printf("**Dedicated Channel for Translation is ON\n");
+    #endif
 }
 
 /********************************************************/
