@@ -3,4 +3,4 @@ input/PARSEC/
 trace_generation/graph*/
 trace_generation/pin*/
 trace_generation/*.out
-obj/
+obj/*.o

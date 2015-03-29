@@ -50,9 +50,12 @@ typedef struct req
   void * user_ptr; // user_specified data
   struct req * next;
 
-  // For supporting Delay for TLB search
+  // For supporting constant delay for TLB search
   unsigned int apply_delay;
   unsigned int delay;
+
+  // For PIM vs CPU
+  unsigned int CPU_request;
 } request_t;
 
 // Bankstates
@@ -218,16 +221,16 @@ int issue_refresh_command(int channel, int rank);
 int issue_autoprecharge(int channel, int rank, int bank);
 
 // find if there is a matching write request
-int read_matches_write_or_read_queue(long long int physical_address);
+int read_matches_write_or_read_queue(long long int physical_address, unsigned int CPU_request);
 
 // find if there is a matching request in the write queue
-int write_exists_in_write_queue(long long int physical_address);
+int write_exists_in_write_queue(long long int physical_address, unsigned int CPU_request);
 
 // enqueue a read into the corresponding read queue (returns ptr to new node)
-request_t* insert_read(long long int physical_address, long long int arrival_cycle, int thread_id, int instruction_id, long long int instruction_pc, unsigned int apply_delay, unsigned int delay);
+request_t* insert_read(long long int physical_address, long long int arrival_cycle, int thread_id, int instruction_id, long long int instruction_pc, unsigned int apply_delay, unsigned int delay, unsigned int CPU_request);
 
 // enqueue a write into the corresponding write queue (returns ptr to new_node)
-request_t* insert_write(long long int physical_address, long long int arrival_time, int thread_id, int instruction_id);
+request_t* insert_write(long long int physical_address, long long int arrival_time, int thread_id, int instruction_id, unsigned int CPU_request);
 
 // update stats counters
 void gather_stats(int channel);

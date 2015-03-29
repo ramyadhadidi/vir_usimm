@@ -5,7 +5,7 @@ OBJDIR = ../obj
 OBJS = $(OBJDIR)/main.o $(OBJDIR)/malloc_lib.o $(OBJDIR)/hash_lib.o $(OBJDIR)/os.o $(OBJDIR)/memory_controller.o $(OBJDIR)/scheduler.o $(OBJDIR)/cache.o
 CC = gcc
 DEBUG = -g
-CFLAGS = -std=c99 -c $(DEBUG)
+CFLAGS = -std=c99 -c -g $(DEBUG)
 LFLAGS = -Wall $(DEBUG)
 
 

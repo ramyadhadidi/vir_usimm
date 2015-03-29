@@ -414,17 +414,17 @@ int main(int argc, char * argv[])
                  wb_inst_addr = currLine->PC;
               }
               int L3Hit = LookupAndFillCache(L3Cache, numc, 0, ROB[numc].mem_address[ROB[numc].head], ACCESS_LOAD);
-              int lat = read_matches_write_or_read_queue(ROB[numc].fellow_mem_address[ROB[numc].head]);
+              int lat = read_matches_write_or_read_queue(ROB[numc].fellow_mem_address[ROB[numc].head], 0);
               if(L3Hit)
                 ROB[numc].comptime[ROB[numc].head] = CYCLE_VAL+L3_LATENCY+PIPELINEDEPTH;
               else  {
                 if(currLine != NULL)
-                   insert_write(wb_addr, CYCLE_VAL, numc, ROB[numc].head); 
+                   insert_write(wb_addr, CYCLE_VAL, numc, ROB[numc].head, 0); 
                 if(lat) 
                   ROB[numc].comptime[ROB[numc].head] = CYCLE_VAL+lat+PIPELINEDEPTH;
                 //Need to insert memory read. If We don't need translation
                 else
-                  insert_read(ROB[numc].mem_address[ROB[numc].head], CYCLE_VAL, numc, ROB[numc].head, 0, 0, 0);
+                  insert_read(ROB[numc].mem_address[ROB[numc].head], CYCLE_VAL, numc, ROB[numc].head, 0, 0, 0, 0);
               }
             }
 
@@ -441,9 +441,9 @@ int main(int argc, char * argv[])
               if(L3Hit) {}
               else {
                 if(currLine != NULL) 
-                  insert_write(wb_addr, CYCLE_VAL, numc, ROB[numc].head); 
-                if(!write_exists_in_write_queue(addr[numc])) 
-                  insert_write(ROB[numc].mem_address[ROB[numc].head], CYCLE_VAL, numc, ROB[numc].head);
+                  insert_write(wb_addr, CYCLE_VAL, numc, ROB[numc].head, 0); 
+                if(!write_exists_in_write_queue(addr[numc], 0)) 
+                  insert_write(ROB[numc].mem_address[ROB[numc].head], CYCLE_VAL, numc, ROB[numc].head, 0);
               }
               for(int c=0; c<NUM_CHANNELS; c++) {
                 if(write_queue_length[c] == WQ_CAPACITY) {
@@ -550,12 +550,12 @@ int main(int argc, char * argv[])
             // Check to see if the read is for buffered data in write queue - 
             // return constant latency if match in WQ
             // add in read queue otherwise
-            int lat = read_matches_write_or_read_queue(addr[numc]);
+            int lat = read_matches_write_or_read_queue(addr[numc], 0);
             if(L3Hit)
               ROB[numc].comptime[ROB[numc].tail] = CYCLE_VAL+L3_LATENCY+PIPELINEDEPTH+delay_translation;
             else  {
               if(currLine != NULL)
-                 insert_write(wb_addr, CYCLE_VAL, numc, ROB[numc].tail); 
+                 insert_write(wb_addr, CYCLE_VAL, numc, ROB[numc].tail, 0); 
               // Check to see if the read is for buffered data in write queue - 
               // return constant latency if match in WQ
               // add in read queue otherwise
@@ -564,7 +564,7 @@ int main(int argc, char * argv[])
                 ROB[numc].comptime[ROB[numc].tail] = CYCLE_VAL+lat+PIPELINEDEPTH+delay_translation;
               //Need to insert memory read. If We don't need translation
               else
-                insert_read(addr[numc], CYCLE_VAL, numc, ROB[numc].tail, instrpc[numc], 0, 0);
+                insert_read(addr[numc], CYCLE_VAL, numc, ROB[numc].tail, instrpc[numc], 0, 0, 0);
             }
           }
         }
@@ -603,9 +603,9 @@ int main(int argc, char * argv[])
             if(L3Hit) {}
             else {
   				    if(currLine != NULL) 
-             		insert_write(wb_addr, CYCLE_VAL, numc, ROB[numc].tail); 
-              if(!write_exists_in_write_queue(addr[numc])) 
-                insert_write(addr[numc], CYCLE_VAL, numc, ROB[numc].tail);
+             		insert_write(wb_addr, CYCLE_VAL, numc, ROB[numc].tail, 0); 
+              if(!write_exists_in_write_queue(addr[numc], 0)) 
+                insert_write(addr[numc], CYCLE_VAL, numc, ROB[numc].tail, 0);
             }
   		      for(int c=0; c<NUM_CHANNELS; c++) {
         			if(write_queue_length[c] == WQ_CAPACITY) {

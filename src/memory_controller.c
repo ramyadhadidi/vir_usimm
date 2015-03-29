@@ -156,7 +156,7 @@ unsigned int log_base2(unsigned int new_value)
 // constituent channel, rank, bank, row and column ids. 
 // Note : To prevent memory leaks, call free() on the pointer returned
 // by this function after you have used the return value.
-dram_address_t * calc_dram_addr(long long int physical_address)
+dram_address_t * calc_dram_addr(long long int physical_address, unsigned int CPU_request)
 {
 
 
@@ -242,12 +242,25 @@ dram_address_t * calc_dram_addr(long long int physical_address)
 		temp_a  = input_a << rowBitWidth;
 		this_a->row = temp_a ^ temp_b;			// strip out the row number
 	}
+
+	int ch_old = this_a->channel;
+	//CPU_request
+	if (CPU_request) {
+		this_a->channel = 0;
+	}
+	else
+		if (this_a->channel == 0) {
+			//this_a->channel = (rand() % (NUM_CHANNELS-1)) + 1;
+			this_a->channel = 1;
+		}
+	//printf("req->%d, ch%d->ch%d\n", CPU_request,ch_old,this_a->channel);
+
 	return(this_a);
 }
 
 // Function to create a new request node to be inserted into the read
 // or write queue.
-void * init_new_node(long long int physical_address, long long int arrival_time, optype_t type, int thread_id, int instruction_id, long long int instruction_pc, unsigned int apply_delay, unsigned int delay)
+void * init_new_node(long long int physical_address, long long int arrival_time, optype_t type, int thread_id, int instruction_id, long long int instruction_pc, unsigned int apply_delay, unsigned int delay, unsigned int CPU_request)
 {
 	request_t * new_node = NULL;
 
@@ -288,7 +301,7 @@ void * init_new_node(long long int physical_address, long long int arrival_time,
 
 		new_node->next = NULL;
 
-		dram_address_t * this_node_addr = calc_dram_addr(physical_address);
+		dram_address_t * this_node_addr = calc_dram_addr(physical_address, CPU_request);
 
 		new_node->dram_addr.actual_address = physical_address;
 		new_node->dram_addr.channel = this_node_addr->channel;
@@ -300,6 +313,8 @@ void * init_new_node(long long int physical_address, long long int arrival_time,
 		// TLB
 		new_node->apply_delay = apply_delay;
 		new_node->delay = delay;
+
+		new_node->CPU_request = CPU_request;		
 
 		free(this_node_addr);
 
@@ -317,10 +332,10 @@ void * init_new_node(long long int physical_address, long long int arrival_time,
 // serviced when the original request completes.
 
 #define RQ_LOOKUP_LATENCY 1
-int read_matches_write_or_read_queue(long long int physical_address)
+int read_matches_write_or_read_queue(long long int physical_address, unsigned int CPU_request)
 {
 	//get channel info
-	dram_address_t * this_addr = calc_dram_addr(physical_address);
+	dram_address_t * this_addr = calc_dram_addr(physical_address, CPU_request);
 	int channel = this_addr->channel;
 	free(this_addr);
 
@@ -350,10 +365,10 @@ int read_matches_write_or_read_queue(long long int physical_address)
 }
 
 // Function to merge writes to the same address
-int write_exists_in_write_queue(long long int physical_address)
+int write_exists_in_write_queue(long long int physical_address, unsigned int CPU_request)
 {
 	//get channel info
-	dram_address_t * this_addr = calc_dram_addr(physical_address);
+	dram_address_t * this_addr = calc_dram_addr(physical_address, CPU_request);
 	int channel = this_addr->channel;
 	free(this_addr);
 	
@@ -373,19 +388,19 @@ int write_exists_in_write_queue(long long int physical_address)
 }
 
 // Insert a new read to the read queue
-request_t * insert_read(long long int physical_address, long long int arrival_time, int thread_id, int instruction_id, long long int instruction_pc, unsigned int apply_delay, unsigned int delay)
+request_t * insert_read(long long int physical_address, long long int arrival_time, int thread_id, int instruction_id, long long int instruction_pc, unsigned int apply_delay, unsigned int delay, unsigned int CPU_request)
 {
 
 	optype_t this_op = READ;
 
 	//get channel info
-	dram_address_t * this_addr = calc_dram_addr(physical_address);
+	dram_address_t * this_addr = calc_dram_addr(physical_address, CPU_request);
 	int channel = this_addr->channel;
 	free(this_addr);
 
 	stats_reads_seen[channel] ++;
 
-	request_t * new_node = init_new_node(physical_address, arrival_time, this_op, thread_id, instruction_id, instruction_pc, apply_delay, delay);
+	request_t * new_node = init_new_node(physical_address, arrival_time, this_op, thread_id, instruction_id, instruction_pc, apply_delay, delay, CPU_request);
 
 	LL_APPEND(read_queue_head[channel], new_node);
 
@@ -397,11 +412,11 @@ request_t * insert_read(long long int physical_address, long long int arrival_ti
 }
 
 // Insert a new write to the write queue
-request_t * insert_write(long long int physical_address, long long int arrival_time, int thread_id, int instruction_id)
+request_t * insert_write(long long int physical_address, long long int arrival_time, int thread_id, int instruction_id, unsigned int CPU_request)
 {
 	optype_t this_op = WRITE;
 
-	dram_address_t * this_addr = calc_dram_addr(physical_address);
+	dram_address_t * this_addr = calc_dram_addr(physical_address, CPU_request);
 	int channel = this_addr->channel;
 	free(this_addr);
 
@@ -410,7 +425,7 @@ request_t * insert_write(long long int physical_address, long long int arrival_t
 	unsigned int apply_delay = 0;
 	unsigned int delay = 0;
 
-	request_t * new_node = init_new_node(physical_address, arrival_time, this_op, thread_id, instruction_id, 0, apply_delay, delay);
+	request_t * new_node = init_new_node(physical_address, arrival_time, this_op, thread_id, instruction_id, 0, apply_delay, delay, CPU_request);
 
 	LL_APPEND(write_queue_head[channel], new_node);
 

@@ -286,7 +286,7 @@ Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
         *delay += HDD_LATENCY;
     }
 
-    insert_read(PTBR + vpn, CYCLE_VAL, tid, ROB[tid].tail, 0, 1, *delay);
+    insert_read(PTBR + vpn, CYCLE_VAL, tid, ROB[tid].tail, 0, 1, *delay, 1);
 
     ROB[tid].fellow_inst[ROB[tid].tail] = 1;
 
