@@ -50,8 +50,8 @@ uns os_vpn_to_pfn(OS *os, uns64 vpn, uns tid, Flag *hit)
     *hit = TRUE;
 
     //28
-    assert(vpn>>42 == 0);
-    vpn = (tid<<48)+vpn; // embed tid information in high bits
+    assert(vpn>>28 == 0);
+    vpn = (tid<<28)+vpn; // embed tid information in high bits
     
     if( pt->last_xlation[tid].vpn == vpn ){
 	return pt->last_xlation[tid].pfn;
