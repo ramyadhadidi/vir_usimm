@@ -58,6 +58,8 @@ typedef struct req
 
   // For PIM vs CPU
   unsigned int CPU_request;
+  unsigned int CPU_request_no_dram;
+
 } request_t;
 
 // Bankstates
@@ -229,10 +231,10 @@ int read_matches_write_or_read_queue(long long int physical_address, unsigned in
 int write_exists_in_write_queue(long long int physical_address, unsigned int CPU_request);
 
 // enqueue a read into the corresponding read queue (returns ptr to new node)
-request_t* insert_read(long long int physical_address, long long int arrival_cycle, int thread_id, int instruction_id, long long int instruction_pc, unsigned int apply_delay, unsigned int delay, unsigned int CPU_request);
+request_t* insert_read(long long int physical_address, long long int arrival_cycle, int thread_id, int instruction_id, long long int instruction_pc, unsigned int apply_delay, unsigned int delay, unsigned int CPU_request, unsigned int CPU_request_no_dram);
 
 // enqueue a write into the corresponding write queue (returns ptr to new_node)
-request_t* insert_write(long long int physical_address, long long int arrival_time, int thread_id, int instruction_id, unsigned int CPU_request);
+request_t* insert_write(long long int physical_address, long long int arrival_time, int thread_id, int instruction_id, unsigned int CPU_request, unsigned int CPU_request_no_dram);
 
 // update stats counters
 void gather_stats(int channel);

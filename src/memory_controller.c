@@ -265,7 +265,7 @@ dram_address_t * calc_dram_addr(long long int physical_address, unsigned int CPU
 
 // Function to create a new request node to be inserted into the read
 // or write queue.
-void * init_new_node(long long int physical_address, long long int arrival_time, optype_t type, int thread_id, int instruction_id, long long int instruction_pc, unsigned int apply_delay, unsigned int delay, unsigned int CPU_request)
+void * init_new_node(long long int physical_address, long long int arrival_time, optype_t type, int thread_id, int instruction_id, long long int instruction_pc, unsigned int apply_delay, unsigned int delay, unsigned int CPU_request, unsigned int CPU_request_no_dram)
 {
 	request_t * new_node = NULL;
 
@@ -319,7 +319,8 @@ void * init_new_node(long long int physical_address, long long int arrival_time,
 		new_node->apply_delay = apply_delay;
 		new_node->delay = delay;
 
-		new_node->CPU_request = CPU_request;		
+		new_node->CPU_request = CPU_request;	
+		new_node->CPU_request_no_dram	= CPU_request_no_dram;
 
 		free(this_node_addr);
 
@@ -393,12 +394,12 @@ int write_exists_in_write_queue(long long int physical_address, unsigned int CPU
 }
 
 // Insert a new read to the read queue
-request_t * insert_read(long long int physical_address, long long int arrival_time, int thread_id, int instruction_id, long long int instruction_pc, unsigned int apply_delay, unsigned int delay, unsigned int CPU_request)
+request_t * insert_read(long long int physical_address, long long int arrival_time, int thread_id, int instruction_id, long long int instruction_pc, unsigned int apply_delay, unsigned int delay, unsigned int CPU_request, unsigned int CPU_request_no_dram)
 {
 
 	optype_t this_op = READ;
 	
-	request_t * new_node = init_new_node(physical_address, arrival_time, this_op, thread_id, instruction_id, instruction_pc, apply_delay, delay, CPU_request);
+	request_t * new_node = init_new_node(physical_address, arrival_time, this_op, thread_id, instruction_id, instruction_pc, apply_delay, delay, CPU_request, CPU_request_no_dram);
 
 	int channel = new_node->dram_addr.channel;
 
@@ -414,14 +415,14 @@ request_t * insert_read(long long int physical_address, long long int arrival_ti
 }
 
 // Insert a new write to the write queue
-request_t * insert_write(long long int physical_address, long long int arrival_time, int thread_id, int instruction_id, unsigned int CPU_request)
+request_t * insert_write(long long int physical_address, long long int arrival_time, int thread_id, int instruction_id, unsigned int CPU_request, unsigned int CPU_request_no_dram)
 {
 	optype_t this_op = WRITE;
 
 	unsigned int apply_delay = 0;
 	unsigned int delay = 0;
 
-	request_t * new_node = init_new_node(physical_address, arrival_time, this_op, thread_id, instruction_id, 0, apply_delay, delay, CPU_request);
+	request_t * new_node = init_new_node(physical_address, arrival_time, this_op, thread_id, instruction_id, 0, apply_delay, delay, CPU_request, CPU_request_no_dram);
 
 	int channel = new_node->dram_addr.channel;
 
@@ -780,7 +781,7 @@ int issue_request_command(request_t * request)
 
 			// set the completion time of this read request
 			// in the ROB and the controller queue.
-			request->completion_time = CYCLE_VAL+ T_CAS + T_DATA_TRANS ;
+			request->completion_time = CYCLE_VAL+ T_CAS + T_DATA_TRANS + PIPELINEDEPTH;
 			request->latency = request->completion_time - request->arrival_time;
 			request->dispatch_time = CYCLE_VAL;
 			request->request_served = 1;
@@ -789,7 +790,9 @@ int issue_request_command(request_t * request)
 			//printf("now:%llu\n", CYCLE_VAL);
 			//printf("arr:%llu\n", request->arrival_time);
 			//printf("per:%llu\n", ROB[request->thread_id].comptime[request->instruction_id]);
-			ROB[request->thread_id].comptime[request->instruction_id] = request->completion_time+PIPELINEDEPTH + (request->apply_delay==1 ? request->delay : 0);
+			if (request->CPU_request_no_dram)
+				request->completion_time = CYCLE_VAL + 5;
+			ROB[request->thread_id].comptime[request->instruction_id] = request->completion_time + (request->apply_delay ? request->delay : 0);
 			//printf("aft:%llu %llu\n\n", ROB[request->thread_id].comptime[request->instruction_id], (request->apply_delay==1 ? request->delay : 0));
 
 			stats_reads_completed[channel] ++;

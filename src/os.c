@@ -188,6 +188,11 @@ Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
     uns64 lineid = lineaddr%os->lines_in_page;
     *delay = 0;
 
+    // If dedicated channel for PIM to CPU each translation need to communicate with CPU
+    #ifdef DEDICATED_CHANNEL_TRANSLATION
+    insert_read(PTBR + vpn, CYCLE_VAL, tid, ROB[tid].tail, 0, 1, *delay, 1, 1);
+    #endif
+
     //Search TLB
     os->tlb->TLB_access++;
     int row;
@@ -286,7 +291,10 @@ Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
         *delay += HDD_LATENCY;
     }
 
-    insert_read(PTBR + vpn, CYCLE_VAL, tid, ROB[tid].tail, 0, 1, *delay, 1);
+    // Still we cannot insert two memory request for a single ROB slot
+    #ifndef DEDICATED_CHANNEL_TRANSLATION
+    insert_read(PTBR + vpn, CYCLE_VAL, tid, ROB[tid].tail, 0, 1, *delay, 1, 0);
+    #endif
 
     ROB[tid].fellow_inst[ROB[tid].tail] = 1;
 
