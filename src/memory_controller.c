@@ -243,6 +243,7 @@ dram_address_t * calc_dram_addr(long long int physical_address, unsigned int CPU
 		this_a->row = temp_a ^ temp_b;			// strip out the row number
 	}
 
+	#ifdef DEDICATED_CHANNEL_TRANSLATION
 	int ch_old = this_a->channel;
 	//CPU_request
 	if (CPU_request) {
@@ -250,10 +251,11 @@ dram_address_t * calc_dram_addr(long long int physical_address, unsigned int CPU
 	}
 	else
 		if (this_a->channel == 0) {
-			//this_a->channel = (rand() % (NUM_CHANNELS-1)) + 1;
-			this_a->channel = 1;
+			this_a->channel = (rand() % (NUM_CHANNELS-1)) + 1;
+			//this_a->channel = 1;
 		}
 	//printf("req->%d, ch%d->ch%d\n", CPU_request,ch_old,this_a->channel);
+	#endif
 
 	return(this_a);
 }
@@ -392,15 +394,12 @@ request_t * insert_read(long long int physical_address, long long int arrival_ti
 {
 
 	optype_t this_op = READ;
+	
+	request_t * new_node = init_new_node(physical_address, arrival_time, this_op, thread_id, instruction_id, instruction_pc, apply_delay, delay, CPU_request);
 
-	//get channel info
-	dram_address_t * this_addr = calc_dram_addr(physical_address, CPU_request);
-	int channel = this_addr->channel;
-	free(this_addr);
+	int channel = new_node->dram_addr.channel;
 
 	stats_reads_seen[channel] ++;
-
-	request_t * new_node = init_new_node(physical_address, arrival_time, this_op, thread_id, instruction_id, instruction_pc, apply_delay, delay, CPU_request);
 
 	LL_APPEND(read_queue_head[channel], new_node);
 
@@ -416,16 +415,14 @@ request_t * insert_write(long long int physical_address, long long int arrival_t
 {
 	optype_t this_op = WRITE;
 
-	dram_address_t * this_addr = calc_dram_addr(physical_address, CPU_request);
-	int channel = this_addr->channel;
-	free(this_addr);
-
-	stats_writes_seen[channel] ++;
-
 	unsigned int apply_delay = 0;
 	unsigned int delay = 0;
 
 	request_t * new_node = init_new_node(physical_address, arrival_time, this_op, thread_id, instruction_id, 0, apply_delay, delay, CPU_request);
+
+	int channel = new_node->dram_addr.channel;
+
+	stats_writes_seen[channel] ++;
 
 	LL_APPEND(write_queue_head[channel], new_node);
 

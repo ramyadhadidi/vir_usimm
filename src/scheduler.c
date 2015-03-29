@@ -3,32 +3,12 @@
 #include "utils.h"
 
 #include "memory_controller.h"
-#include "params.h"
-
-/* A basic FCFS policy augmented with a not-so-clever close-page policy.
-   If the memory controller is unable to issue a command this cycle, find
-   a bank that recently serviced a column-rd/wr and close it (precharge it). */
-
 
 extern long long int CYCLE_VAL;
-
-/* A data structure to see if a bank is a candidate for precharge. */
-int recent_colacc[MAX_NUM_CHANNELS][MAX_NUM_RANKS][MAX_NUM_BANKS];
-
-/* Keeping track of how many preemptive precharges are performed. */
-long long int num_aggr_precharge = 0;
 
 void init_scheduler_vars()
 {
 	// initialize all scheduler variables here
-	int i, j, k;
-	for (i=0; i<MAX_NUM_CHANNELS; i++) {
-	  for (j=0; j<MAX_NUM_RANKS; j++) {
-	    for (k=0; k<MAX_NUM_BANKS; k++) {
-	      recent_colacc[i][j][k] = 0;
-	    }
-	  }
-	}
 
 	return;
 }
@@ -45,7 +25,7 @@ int drain_writes[MAX_NUM_CHANNELS];
 /* Each cycle it is possible to issue a valid command from the read or write queues
    OR
    a valid precharge command to any bank (issue_precharge_command())
-   OR
+   OR 
    a valid precharge_all bank command to a rank (issue_all_bank_precharge_command())
    OR
    a power_down command (issue_powerdown_command()), programmed either for fast or slow exit mode
@@ -62,12 +42,10 @@ int drain_writes[MAX_NUM_CHANNELS];
    Before issuing a command it is important to check if it is issuable. For the RD/WR queue resident commands, checking the "command_issuable" flag is necessary. To check if the other commands (mentioned above) can be issued, it is important to check one of the following functions: is_precharge_allowed, is_all_bank_precharge_allowed, is_powerdown_fast_allowed, is_powerdown_slow_allowed, is_powerup_allowed, is_refresh_allowed, is_autoprecharge_allowed, is_activate_allowed.
    */
 
-
 void schedule(int channel)
 {
 	request_t * rd_ptr = NULL;
 	request_t * wr_ptr = NULL;
-	int i, j;
 
 
 	// if in write drain mode, keep draining writes until the
@@ -102,21 +80,11 @@ void schedule(int channel)
 		{
 			if(wr_ptr->command_issuable)
 			{
-				/* Before issuing the command, see if this bank is now a candidate for closure (if it just did a column-rd/wr).
-				   If the bank just did an activate or precharge, it is not a candidate for closure. */
-				if (wr_ptr->next_command == COL_WRITE_CMD) {
-				  recent_colacc[channel][wr_ptr->dram_addr.rank][wr_ptr->dram_addr.bank] = 1;
-				}
-				if (wr_ptr->next_command == ACT_CMD) {
-				  recent_colacc[channel][wr_ptr->dram_addr.rank][wr_ptr->dram_addr.bank] = 0;
-				}
-				if (wr_ptr->next_command == PRE_CMD) {
-				  recent_colacc[channel][wr_ptr->dram_addr.rank][wr_ptr->dram_addr.bank] = 0;
-				}
 				issue_request_command(wr_ptr);
 				break;
 			}
 		}
+		return;
 	}
 
 	// Draining Reads
@@ -129,45 +97,16 @@ void schedule(int channel)
 		{
 			if(rd_ptr->command_issuable)
 			{
-				/* Before issuing the command, see if this bank is now a candidate for closure (if it just did a column-rd/wr).
-				   If the bank just did an activate or precharge, it is not a candidate for closure. */
-				if (rd_ptr->next_command == COL_READ_CMD) {
-				  recent_colacc[channel][rd_ptr->dram_addr.rank][rd_ptr->dram_addr.bank] = 1;
-				}
-				if (rd_ptr->next_command == ACT_CMD) {
-				  recent_colacc[channel][rd_ptr->dram_addr.rank][rd_ptr->dram_addr.bank] = 0;
-				}
-				if (rd_ptr->next_command == PRE_CMD) {
-				  recent_colacc[channel][rd_ptr->dram_addr.rank][rd_ptr->dram_addr.bank] = 0;
-				}
 				issue_request_command(rd_ptr);
 				break;
 			}
 		}
+		return;
 	}
-
-	/* If a command hasn't yet been issued to this channel in this cycle, issue a precharge. */
-	if (!command_issued_current_cycle[channel]) {
-	  for (i=0; i<NUM_RANKS; i++) {
-	    for (j=0; j<NUM_BANKS; j++) {  /* For all banks on the channel.. */
-	      if (recent_colacc[channel][i][j]) {  /* See if this bank is a candidate. */
-	        if (is_precharge_allowed(channel,i,j)) {  /* See if precharge is doable. */
-		  if (issue_precharge_command(channel,i,j)) {
-		    num_aggr_precharge++;
-		    recent_colacc[channel][i][j] = 0;
-		  }
-		}
-	      }
-	    }
-	  }
-	}
-
-
 }
 
 void scheduler_stats()
 {
   /* Nothing to print for now. */
-  printf("Number of aggressive precharges: %lld\n", num_aggr_precharge);
 }
 
