@@ -103,7 +103,7 @@ struct TLB {
 
 uns os_v2p_lineaddr_pfn(OS *os, Addr lineaddr, uns tid, Flag* pagehit, uns* delay);
 Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay);
-int64 os_tlb_search(OS *os, uns64 vpn, uns tid, int* row);
+uns64 os_tlb_search(OS *os, uns64 vpn, uns tid, int* row, int *found);
 //////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 
