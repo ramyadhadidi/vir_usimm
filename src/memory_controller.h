@@ -5,6 +5,7 @@
 #define MAX_NUM_RANKS 16
 #define MAX_NUM_BANKS 32
 
+#define PIM_CPU_BUS_LATENCY 50
 #define DEDICATED_CHANNEL_TRANSLATION
 
 // Moved here from main.c 
