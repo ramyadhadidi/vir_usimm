@@ -325,6 +325,21 @@ int main(int argc, char * argv[])
       ROB[i].fellow_inst[j] = 0;
     ROB[i].fellow_mem_address = (long long int*)malloc(sizeof(long long int)*ROBSIZE);
     ROB[i].fellow_optype = (int*)malloc(sizeof(int)*ROBSIZE);
+
+    // For supporting ROB stat
+    ROB[i].active = (int *)malloc(sizeof(int)*ROBSIZE);
+    for (int j=0; j<ROBSIZE; j++)
+      ROB[i].active[j] = 0;
+    ROB[i].waiting_cycles = (unsigned int *)malloc(sizeof(unsigned int)*ROBSIZE);
+    for (int j=0; j<ROBSIZE; j++)
+      ROB[i].waiting_cycles[j] = 0;
+
+    ROB[i].total_N_ops = 0;
+    ROB[i].total_R_ops = 0;
+    ROB[i].total_W_ops = 0;
+    ROB[i].total_waiting_N_ops = 0;
+    ROB[i].total_waiting_R_ops = 0;
+    ROB[i].total_waiting_W_ops = 0;
   }
 
   //Cache
@@ -453,11 +468,27 @@ int main(int argc, char * argv[])
               }
             }
 
-            // No need to move the head
+            // No need to move the head since there was a fellow instruction
             continue;
           }
 
+          // waiting_cycle stat reset and calc
+          if (ROB[numc].optype[ROB[numc].head] == 'R') {
+            ROB[numc].total_R_ops++;
+            ROB[numc].total_waiting_R_ops += ROB[numc].waiting_cycles[ROB[numc].head];
+          }
+          if (ROB[numc].optype[ROB[numc].head] == 'W') {
+            ROB[numc].total_W_ops++;
+            ROB[numc].total_waiting_W_ops += ROB[numc].waiting_cycles[ROB[numc].head];
+          }
+          if (ROB[numc].optype[ROB[numc].head] == 'N') {
+            ROB[numc].total_N_ops++;
+            ROB[numc].total_waiting_N_ops += ROB[numc].waiting_cycles[ROB[numc].head];
+          }
+          ROB[numc].waiting_cycles[ROB[numc].head] = 0;
+
           // Move head
+          ROB[numc].active[ROB[numc].head] = 0;
       	  ROB[numc].head = (ROB[numc].head + 1) % ROBSIZE;
       	  ROB[numc].inflight--;
       	  committed[numc]++;
@@ -465,7 +496,13 @@ int main(int argc, char * argv[])
         }
         else  /* Instruction not complete.  Stop retirement for this core. */
           break;
-          }  /* End of while loop that is retiring instruction for one core. */
+      }  /* End of while loop that is retiring instruction for one core. */
+      
+      // updating waiting cycles_stat
+      for (int i=0; i<ROBSIZE; i++)
+        if (ROB[numc].active[i])
+          ROB[numc].waiting_cycles[i]++;
+
     }  /* End of for loop that is retiring instructions for all cores. */
 
 
@@ -509,6 +546,7 @@ int main(int argc, char * argv[])
   	  if (nonmemops[numc]) {  /* Have some non-memory-ops to consume. */
   	    ROB[numc].optype[ROB[numc].tail] = 'N';
   	    ROB[numc].comptime[ROB[numc].tail] = CYCLE_VAL+PIPELINEDEPTH;
+        ROB[numc].active[ROB[numc].tail] = 1;
   	    nonmemops[numc]--;
   	    ROB[numc].tail = (ROB[numc].tail +1) % ROBSIZE;
   	    ROB[numc].inflight++;
@@ -622,6 +660,7 @@ int main(int argc, char * argv[])
   	   	}
       }
 
+      ROB[numc].active[ROB[numc].tail] = 1;
       ROB[numc].tail = (ROB[numc].tail +1) % ROBSIZE;
       ROB[numc].inflight++;
       fetched[numc]++;
@@ -692,13 +731,11 @@ int main(int argc, char * argv[])
     //}
 
     CYCLE_VAL++;  /* Advance the simulation cycle. */
-    if(inst_comp%1000000==0)
-    {
-	printf(".");
-	if(inst_comp%200000000==0)
-	{
-		printf(" - 2BLN\n");
-	}
+    // Print heartbeat
+    if(inst_comp%1000000==0) {
+      printf(".");
+      if(inst_comp%200000000==0)
+		    printf(" - 2BLN\n");
     }
   }
 //====================================================================================
@@ -725,24 +762,43 @@ int main(int argc, char * argv[])
     core_power = core_power/2.0 ;
   }
 
-  printf("Done with loop. Printing stats.\n");
+  printf("\nDone with loop. Printing stats.\n\n\n");
   printf("Cycles %lld\n", CYCLE_VAL);
   total_time_done = 0;
 
+  printf ("\n-------------------------------------- ROB Stats ----------------------------------------------\n");
   for (numc=0; numc < NUMCORES; numc++) {
     printf("Done: Core %d: Fetched %lld : Committed %lld : At time : %lld\n", numc, fetched[numc], committed[numc], time_done[numc]);
     total_time_done += time_done[numc];
     total_inst_fetched = total_inst_fetched + fetched[numc];
   }
   printf("\nUSIMM_CYCLES          \t : %lld\n",total_time_done);
-  printf("\nUSIMM_INST            \t : %lld\n",total_inst_fetched);
-  printf("\nUSIMM_ROBF_STALLS     \t : %lld\n",robf_stalls);
-  printf("\nUSIMM_ROBN_STALLS     \t : %lld\n",robn_stalls);
-  printf("\nUSIMM_WRQF_STALLS     \t : %lld\n",wrqf_stalls);
-  printf("\nUSIMM_WRQN_STALLS     \t : %lld\n",wrqn_stalls);
+  printf("USIMM_INST            \t : %lld\n",total_inst_fetched);
+  printf("USIMM_ROBF_STALLS     \t : %lld\n",robf_stalls);
+  printf("USIMM_ROBN_STALLS     \t : %lld\n",robn_stalls);
+  printf("USIMM_WRQF_STALLS     \t : %lld\n",wrqf_stalls);
+  printf("USIMM_WRQN_STALLS     \t : %lld\n",wrqn_stalls);
   printf("Num reads merged: %lld\n",num_read_merge);
   printf("Num writes merged: %lld\n",num_write_merge);
+
+  printf("\n");
+  printf("==========================================================\n");
+  printf("==========            ROB Timing               ===========\n");
+  printf("==========================================================\n");
+  for (numc=0; numc < NUMCORES; numc++) {
+    printf("Core %d\n", numc);
+    printf("\tTotal N ops:\t   %u\n", ROB[numc].total_N_ops);
+    printf("\tTotal R ops:\t   %u\n", ROB[numc].total_R_ops);
+    printf("\tTotal W ops:\t   %u\n", ROB[numc].total_W_ops);
+    printf("\tWaiting N ops:\t\t %u\n", ROB[numc].total_waiting_N_ops);
+    printf("\tWaiting R ops:\t\t %u\n", ROB[numc].total_waiting_R_ops);
+    printf("\tWaiting W ops:\t\t %u\n", ROB[numc].total_waiting_W_ops);
+    printf("\tAvg Waiting N:\t\t %f\n", (float)ROB[numc].total_waiting_N_ops / ROB[numc].total_N_ops);
+    printf("\tAvg Waiting R:\t\t %f\n", (float)ROB[numc].total_waiting_R_ops / ROB[numc].total_R_ops);
+    printf("\tAvg Waiting W:\t\t %f\n", (float)ROB[numc].total_waiting_W_ops / ROB[numc].total_W_ops);
+  }
   //printf("Num reads colliding with refresh: %d\n", read_collide_refresh);//There is no support for this information as of now
+
   /* Print all other memory system stats. */
   scheduler_stats();
   print_cache_stats(L3Cache);

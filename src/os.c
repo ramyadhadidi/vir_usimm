@@ -137,7 +137,7 @@ void os_print_stats(OS *os)
     char header[256];
     sprintf(header, "OS");
     
-    printf("%s_PAGE_MISS            \t : %llu",  header, os->pt->miss_count);
+    printf("%s_PAGE_MISS        \t : %llu",  header, os->pt->miss_count);
     printf("\n%s_PAGE_EVICTS        \t : %llu",  header, os->pt->total_evicts);
     printf("\n%s_FOOTPRINT          \t : %llu",  header, (os->pt->miss_count*OS_PAGESIZE)/(1024*1024));
     printf("\n%s_TLB_ACCESS         \t : %llu", header , os->tlb->TLB_access);

@@ -15,7 +15,16 @@ struct robstructure
   long long int * fellow_inst;
   long long int * fellow_mem_address;
   int * fellow_optype;
-} ;
+
+  int * active;
+  unsigned int * waiting_cycles;
+  unsigned int total_N_ops;
+  unsigned int total_R_ops;
+  unsigned int total_W_ops;
+  unsigned int total_waiting_N_ops;
+  unsigned int total_waiting_R_ops;
+  unsigned int total_waiting_W_ops;
+};
 
 #endif //__PROCESSOR_H__
 
