@@ -188,11 +188,6 @@ Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
     uns64 lineid = lineaddr%os->lines_in_page;
     *delay = 0;
 
-    // If dedicated channel for PIM to CPU each translation need to communicate with CPU
-    #ifdef DEDICATED_CHANNEL_TRANSLATION
-    insert_read(PTBR + vpn, CYCLE_VAL, tid, ROB[tid].tail, 0, 1, *delay, 1, 1);
-    #endif
-
     //Search TLB
     os->tlb->TLB_access++;
     int row;
@@ -212,6 +207,11 @@ Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
                os->tlb->entries[i].LRU_position++; 
         }
         os->tlb->entries[row].LRU_position = 0;
+
+        // If dedicated channel for PIM to CPU each translation need to communicate with CPU
+        #ifdef DEDICATED_CHANNEL_TRANSLATION
+        insert_read(PTBR + vpn, CYCLE_VAL, tid, ROB[tid].tail, 0, 1, *delay, 1, 1);
+        #endif
 
         //return address with 2 cycle delay
         *delay = 2;
@@ -269,6 +269,12 @@ Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
     // L3 hit
     if (L3Hit) {
         os->tlb->TLB_L3_hit++;
+
+        // If dedicated channel for PIM to CPU each translation need to communicate with CPU
+        #ifdef DEDICATED_CHANNEL_TRANSLATION
+        insert_read(PTBR + vpn, CYCLE_VAL, tid, ROB[tid].tail, 0, 1, *delay, 1, 1);
+        #endif
+
         *delay = L3_LATENCY + 2;
         Addr retval = (pfn*os->lines_in_page)+lineid;
         retval=retval<<6;
@@ -291,10 +297,7 @@ Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
         *delay += HDD_LATENCY;
     }
 
-    // Still we cannot insert two memory request for a single ROB slot
-    #ifndef DEDICATED_CHANNEL_TRANSLATION
     insert_read(PTBR + vpn, CYCLE_VAL, tid, ROB[tid].tail, 0, 1, *delay, 1, 0);
-    #endif
 
     ROB[tid].fellow_inst[ROB[tid].tail] = 1;
 
