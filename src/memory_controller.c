@@ -319,7 +319,7 @@ void * init_new_node(long long int physical_address, long long int arrival_time,
 		new_node->apply_delay = apply_delay;
 		new_node->delay = delay;
 
-		printf("3:%d\n", CPU_request_no_dram);
+		//printf("3:%d\n", CPU_request_no_dram);
 		new_node->CPU_request = CPU_request;	
 		new_node->CPU_request_no_dram	= CPU_request_no_dram;
 
@@ -400,7 +400,7 @@ request_t * insert_read(long long int physical_address, long long int arrival_ti
 
 	optype_t this_op = READ;
 	
-	printf("1:%d\n", CPU_request_no_dram);
+	//printf("1:%d\n", CPU_request_no_dram);
 	request_t * new_node = init_new_node(physical_address, arrival_time, this_op, thread_id, instruction_id, instruction_pc, apply_delay, delay, CPU_request, CPU_request_no_dram);
 
 	int channel = new_node->dram_addr.channel;
@@ -424,7 +424,7 @@ request_t * insert_write(long long int physical_address, long long int arrival_t
 	unsigned int apply_delay = 0;
 	unsigned int delay = 0;
 
-	printf("2:%d\n", CPU_request_no_dram);
+	//printf("2:%d\n", CPU_request_no_dram);
 	request_t * new_node = init_new_node(physical_address, arrival_time, this_op, thread_id, instruction_id, 0, apply_delay, delay, CPU_request, CPU_request_no_dram);
 
 	int channel = new_node->dram_addr.channel;
