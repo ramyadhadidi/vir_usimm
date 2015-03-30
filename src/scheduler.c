@@ -100,10 +100,11 @@ void schedule(int channel)
 		{
 			if(rd_ptr->command_issuable)
 			{
+				#ifdef DEDICATED_CHANNEL_TRANSLATION
 				if (rd_ptr->CPU_request_no_dram) {
 					rd_ptr->completion_time = CYCLE_VAL + PIM_CPU_BUS_LATENCY;
 					ROB[rd_ptr->thread_id].comptime[rd_ptr->instruction_id] = rd_ptr->completion_time + (rd_ptr->apply_delay ? rd_ptr->delay : 0);
-					//printf("cycle %llu arrived\tcycle %llu: comptime set to %llu\tDiff:%llu\n", rd_ptr->arrival_time, CYCLE_VAL, rd_ptr->completion_time, CYCLE_VAL-rd_ptr->arrival_time);
+					//printf("cycle %llu arrived in ch%d\tcycle %llu: comptime set to %llu\tDiff:%llu\n", rd_ptr->arrival_time, rd_ptr->dram_addr.channel ,CYCLE_VAL, rd_ptr->completion_time, CYCLE_VAL-rd_ptr->arrival_time);
 					rd_ptr->request_served=1;
 					break;
 				}
@@ -111,6 +112,10 @@ void schedule(int channel)
 					issue_request_command(rd_ptr);
 					break;
 				}
+				#else
+				issue_request_command(rd_ptr);
+				break;
+				#endif
 			}
 		}
 		return;
