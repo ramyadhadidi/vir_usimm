@@ -3,7 +3,10 @@
 #include "utils.h"
 
 #include "memory_controller.h"
+#include "processor.h"
 
+extern long long int CYCLE_VAL;
+extern struct robstructure * ROB;
 extern long long int CYCLE_VAL;
 
 void init_scheduler_vars()
@@ -97,8 +100,17 @@ void schedule(int channel)
 		{
 			if(rd_ptr->command_issuable)
 			{
-				issue_request_command(rd_ptr);
-				break;
+				if (rd_ptr->CPU_request_no_dram) {
+					rd_ptr->completion_time = CYCLE_VAL + PIM_CPU_BUS_LATENCY;
+					ROB[rd_ptr->thread_id].comptime[rd_ptr->instruction_id] = rd_ptr->completion_time + (rd_ptr->apply_delay ? rd_ptr->delay : 0);
+					//printf("cycle %llu arrived\tcycle %llu: comptime set to %llu\tDiff:%llu\n", rd_ptr->arrival_time, CYCLE_VAL, rd_ptr->completion_time, CYCLE_VAL-rd_ptr->arrival_time);
+					rd_ptr->request_served=1;
+					break;
+				}
+				else {
+					issue_request_command(rd_ptr);
+					break;
+				}
 			}
 		}
 		return;

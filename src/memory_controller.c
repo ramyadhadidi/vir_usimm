@@ -649,7 +649,7 @@ void clean_queues(int channel)
 	{
 		if(rd_ptr->request_served == 1)
 		{
-			assert(rd_ptr->next_command == COL_READ_CMD);
+			//assert(rd_ptr->next_command == COL_READ_CMD);
 
 			assert(rd_ptr->completion_time != -100);
 
@@ -790,8 +790,10 @@ int issue_request_command(request_t * request)
 			//printf("now:%llu\n", CYCLE_VAL);
 			//printf("arr:%llu\n", request->arrival_time);
 			//printf("per:%llu\n", ROB[request->thread_id].comptime[request->instruction_id]);
-			if (request->CPU_request_no_dram)
+			if (request->CPU_request_no_dram) {
 				request->completion_time = CYCLE_VAL + PIM_CPU_BUS_LATENCY;
+				printf("You are fucked up\n");
+			}
 			ROB[request->thread_id].comptime[request->instruction_id] = request->completion_time + (request->apply_delay ? request->delay : 0);
 			//printf("aft:%llu %llu\n\n", ROB[request->thread_id].comptime[request->instruction_id], (request->apply_delay==1 ? request->delay : 0));
 
