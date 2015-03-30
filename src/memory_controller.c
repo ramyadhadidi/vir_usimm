@@ -134,9 +134,6 @@ void init_memory_controller_vars()
 		stats_page_hits[i]=0;
 		stats_read_row_hit_rate[i]=0;
 	}
-    #ifdef DEDICATED_CHANNEL_TRANSLATION
-    printf("**Dedicated Channel for Translation is ON\n");
-    #endif
 }
 
 /********************************************************/
@@ -246,19 +243,19 @@ dram_address_t * calc_dram_addr(long long int physical_address, unsigned int CPU
 		this_a->row = temp_a ^ temp_b;			// strip out the row number
 	}
 
-	#ifdef DEDICATED_CHANNEL_TRANSLATION
-	int ch_old = this_a->channel;
-	//CPU_request
-	if (CPU_request) {
-		this_a->channel = 0;
-	}
-	else
-		if (this_a->channel == 0) {
-			this_a->channel = (rand() % (NUM_CHANNELS-1)) + 1;
-			//this_a->channel = 1;
+	if (DEDICATED_CH) {
+		int ch_old = this_a->channel;
+		//CPU_request
+		if (CPU_request) {
+			this_a->channel = 0;
 		}
-	//printf("req->%d, ch%d->ch%d\n", CPU_request,ch_old,this_a->channel);
-	#endif
+		else
+			if (this_a->channel == 0) {
+				this_a->channel = (rand() % (NUM_CHANNELS-1)) + 1;
+				//this_a->channel = 1;
+			}
+		//printf("req->%d, ch%d->ch%d\n", CPU_request,ch_old,this_a->channel);
+	}
 
 	return(this_a);
 }

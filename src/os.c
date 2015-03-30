@@ -212,15 +212,16 @@ Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
         *delay = 2;
 
         // If dedicated channel for PIM to CPU each translation need to communicate with CPU
-        #ifdef DEDICATED_CHANNEL_TRANSLATION
-        ROB[tid].mem_address[ROB[tid].tail] = PTBR + vpn;
-        ROB[tid].optype[ROB[tid].tail] = 'R';
-        ROB[tid].comptime[ROB[tid].tail] = CYCLE_VAL + BIGNUM;
-        ROB[tid].instrpc[ROB[tid].tail] = 0;
-        insert_read(PTBR + vpn, CYCLE_VAL, tid, ROB[tid].tail, 0, 1, *delay, 1, 1);
-        ROB[tid].fellow_inst[ROB[tid].tail] = 1;
-        // Tail will be updated in main code
-        #endif
+        if (DEDICATED_CH) {
+            ROB[tid].mem_address[ROB[tid].tail] = PTBR + vpn;
+            ROB[tid].optype[ROB[tid].tail] = 'R';
+            ROB[tid].comptime[ROB[tid].tail] = CYCLE_VAL + BIGNUM;
+            ROB[tid].instrpc[ROB[tid].tail] = 0;
+            insert_read(PTBR + vpn, CYCLE_VAL, tid, ROB[tid].tail, 0, 1, *delay, 1, 1);
+            ROB[tid].fellow_inst[ROB[tid].tail] = 1;
+            // Tail will be updated in main code
+        }
+        
 
         Addr retval = (pfn_tlb_search*os->lines_in_page)+lineid;
         retval=retval<<6;
@@ -279,15 +280,15 @@ Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
         *delay = L3_LATENCY + 2;
 
         // If dedicated channel for PIM to CPU each translation need to communicate with CPU
-        #ifdef DEDICATED_CHANNEL_TRANSLATION
-        ROB[tid].mem_address[ROB[tid].tail] = PTBR + vpn;
-        ROB[tid].optype[ROB[tid].tail] = 'R';
-        ROB[tid].comptime[ROB[tid].tail] = CYCLE_VAL + BIGNUM;
-        ROB[tid].instrpc[ROB[tid].tail] = 0;
-        insert_read(PTBR + vpn, CYCLE_VAL, tid, ROB[tid].tail, 0, 1, *delay, 1, 1);
-        ROB[tid].fellow_inst[ROB[tid].tail] = 1;
-        // Tail will be updated in main code
-        #endif
+        if (DEDICATED_CH) {
+            ROB[tid].mem_address[ROB[tid].tail] = PTBR + vpn;
+            ROB[tid].optype[ROB[tid].tail] = 'R';
+            ROB[tid].comptime[ROB[tid].tail] = CYCLE_VAL + BIGNUM;
+            ROB[tid].instrpc[ROB[tid].tail] = 0;
+            insert_read(PTBR + vpn, CYCLE_VAL, tid, ROB[tid].tail, 0, 1, *delay, 1, 1);
+            ROB[tid].fellow_inst[ROB[tid].tail] = 1;
+            // Tail will be updated in main code
+        }
 
         Addr retval = (pfn*os->lines_in_page)+lineid;
         retval=retval<<6;

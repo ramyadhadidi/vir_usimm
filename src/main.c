@@ -135,7 +135,7 @@ int free_rand(int numcores)
 }
 
 int expt_done=0;  
-int config_param=0;
+int DEDICATED_CH=0;
 long long int CYCLE_VAL=0;
 
 long long int get_current_cycle()
@@ -206,7 +206,9 @@ int main(int argc, char * argv[])
     return -3;
   }
 
-  config_param = atoi(argv[1]);
+  DEDICATED_CH = atoi(argv[1]);
+  if (DEDICATED_CH)
+    printf("**Dedicated Channel for Translation is ON\n");
 
 
   config_file = fopen(argv[2], "r");

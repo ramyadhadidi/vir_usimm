@@ -31,6 +31,7 @@ extern struct robstructure * ROB;
 extern long long int CYCLE_VAL;
 extern long long int BIGNUM;
 extern LLCache *L3Cache;
+extern int DEDICATED_CH;
 
 typedef struct OS                OS;
 typedef struct InvPageTableEntry InvPageTableEntry;

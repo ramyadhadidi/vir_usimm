@@ -6,7 +6,7 @@
 #define MAX_NUM_BANKS 32
 
 #define PIM_CPU_BUS_LATENCY 100
-//#define DEDICATED_CHANNEL_TRANSLATION
+extern int DEDICATED_CH;
 
 // Moved here from main.c 
 long long int *committed; // total committed instructions in each core
