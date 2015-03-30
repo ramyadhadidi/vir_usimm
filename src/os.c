@@ -208,13 +208,14 @@ Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
         }
         os->tlb->entries[row].LRU_position = 0;
 
+        //return address with 2 cycle delay
+        *delay = 2;
+
         // If dedicated channel for PIM to CPU each translation need to communicate with CPU
         #ifdef DEDICATED_CHANNEL_TRANSLATION
         insert_read(PTBR + vpn, CYCLE_VAL, tid, ROB[tid].tail, 0, 1, *delay, 1, 1);
         #endif
 
-        //return address with 2 cycle delay
-        *delay = 2;
         Addr retval = (pfn_tlb_search*os->lines_in_page)+lineid;
         retval=retval<<6;
         return retval;
@@ -269,13 +270,13 @@ Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
     // L3 hit
     if (L3Hit) {
         os->tlb->TLB_L3_hit++;
-
+        *delay = L3_LATENCY + 2;
+        
         // If dedicated channel for PIM to CPU each translation need to communicate with CPU
         #ifdef DEDICATED_CHANNEL_TRANSLATION
         insert_read(PTBR + vpn, CYCLE_VAL, tid, ROB[tid].tail, 0, 1, *delay, 1, 1);
         #endif
 
-        *delay = L3_LATENCY + 2;
         Addr retval = (pfn*os->lines_in_page)+lineid;
         retval=retval<<6;
         return retval;
