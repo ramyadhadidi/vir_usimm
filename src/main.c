@@ -29,120 +29,10 @@ long long int wrqn_stalls=0;
 
 long int **rand_table;
 
-int addr_rand_init(int numcores)
-{
-int i=0;
-int jj=0;
-long int kk=0;
-long int temp=0;
-long int rand_value=0;
-
-//Generate Table
-  rand_table=(long int **)malloc(sizeof(long int*)*numcores);
-  for(i=0; i<numcores ; i++)
-  {
-    rand_table[i]=(long int *)malloc(sizeof(long int)*MAX_TABLE_LEN);
-  }
-  
-  //Initialize all values
-  for(jj=0; jj<numcores;jj++)
-  {
-    for(kk=0; kk<MAX_TABLE_LEN; kk++)
-    {
-      rand_table[jj][kk]=kk;
-    }
-  }
-  
-  //Generate Random Values and Swap
-  for(jj=0; jj<numcores; jj++)
-  {
-    for(kk=0; kk<MAX_TABLE_LEN; kk++)
-    {
-      rand_value=rand()%MAX_TABLE_LEN;
-      temp = rand_table[jj][kk];
-      rand_table[jj][kk]=rand_table[jj][rand_value];
-      rand_table[jj][rand_value]=temp;
-    }
-  }
-  
-  //Random Table Ready
-  return 1;
-}
-
-int addr_randomize(long long int *addr, int numc)
-{
-  long long int addr_temp=0;
-  long int addr_last_bits=0;
-  unsigned int offset=0;
-  unsigned int columns=0;
-  unsigned int channels=0;
-  unsigned int tablelen=0;
-  long int temp=0;
-  //Apply the random addresses to a total of MAX_TABLE_LEN bits with the last bank bit as the LSB
-  if(ADDRESS_MAPPING==1)
-  {
-  offset=log_base2(CACHE_LINE_SIZE);
-  columns=log_base2(NUM_COLUMNS);
-  channels=log_base2(NUM_CHANNELS);
-  tablelen=log_base2(MAX_TABLE_LEN);
-  temp=1<<(offset+columns+channels);
-  temp=temp-1;
-  addr_last_bits=addr[numc] & temp;
-  addr_temp=addr[numc]>>(offset+columns+channels);
-  temp=1<<tablelen;
-  temp=temp-1;
-  addr_temp=addr_temp & temp; //Extracting the next MAX_TABLE_LEN bits only
-  addr_temp=rand_table[numc][addr_temp]; //Extracted the random address
-  addr[numc]=addr[numc] >> (offset+columns+channels+tablelen);
-  addr[numc]=addr[numc] << tablelen;
-  addr[numc]=addr[numc] | addr_temp; //appended the MAX_TABLE_LEN bits now
-  addr[numc]=addr[numc] << (offset+columns+channels);
-  addr[numc]=addr[numc] | addr_last_bits; //new address
-  }
-  else
-  {
-  offset=log_base2(CACHE_LINE_SIZE);
-  columns=log_base2(NUM_COLUMNS);
-  channels=log_base2(NUM_CHANNELS);
-  tablelen=log_base2(MAX_TABLE_LEN);
-  temp=1<<(offset+channels);
-  temp=temp-1;
-  addr_last_bits=addr[numc] & temp;
-  addr_temp=addr[numc]>>(offset+channels);
-  temp=1<<tablelen;
-  temp=temp-1;
-  addr_temp=addr_temp & temp; //Extracting the next MAX_TABLE_LEN bits only
-  addr_temp=rand_table[numc][addr_temp]; //Extracted the random address
-  addr[numc]=addr[numc] >> (offset+channels+tablelen);
-  addr[numc]=addr[numc] << tablelen;
-  addr[numc]=addr[numc] | addr_temp; //appended the MAX_TABLE_LEN bits now
-  addr[numc]=addr[numc] << (offset+channels);
-  addr[numc]=addr[numc] | addr_last_bits; //new address
-  }
-  return 1; //New address is generated
-}
-
-//Free up used memory
-int free_rand(int numcores)
-{
-  int i;
-  for(i=0; i<numcores ; i++)
-  {
-    free(rand_table[i]);
-  }
-  free(rand_table);
-  return 1;
-}
-
 int expt_done=0;  
 int DEDICATED_CH=0;
 int DEDICATED_CH_NUM=0;
 long long int CYCLE_VAL=0;
-
-long long int get_current_cycle()
-{
-  return CYCLE_VAL;
-}
 
 struct robstructure *ROB;
 LLCache *L3Cache;
@@ -160,6 +50,102 @@ int *prefixtable;
 long long int *time_done;
 long long int total_time_done;
 float core_power=0;
+
+int addr_rand_init(int numcores) {
+  int i=0;
+  int jj=0;
+  long int kk=0;
+  long int temp=0;
+  long int rand_value=0;
+
+  //Generate Table
+  rand_table=(long int **)malloc(sizeof(long int*)*numcores);
+  for(i=0; i<numcores ; i++) {
+    rand_table[i]=(long int *)malloc(sizeof(long int)*MAX_TABLE_LEN);
+  }
+  
+  //Initialize all values
+  for(jj=0; jj<numcores;jj++) {
+    for(kk=0; kk<MAX_TABLE_LEN; kk++) {
+      rand_table[jj][kk]=kk;
+    }
+  }
+
+  //Generate Random Values and Swap
+  for(jj=0; jj<numcores; jj++) {
+    for(kk=0; kk<MAX_TABLE_LEN; kk++) {
+      rand_value=rand()%MAX_TABLE_LEN;
+      temp = rand_table[jj][kk];
+      rand_table[jj][kk]=rand_table[jj][rand_value];
+      rand_table[jj][rand_value]=temp;
+    }
+  }
+  
+  //Random Table Ready
+  return 1;
+}
+
+int addr_randomize(long long int *addr, int numc) {
+  long long int addr_temp=0;
+  long int addr_last_bits=0;
+  unsigned int offset=0;
+  unsigned int columns=0;
+  unsigned int channels=0;
+  unsigned int tablelen=0;
+  long int temp=0;
+
+  //Apply the random addresses to a total of MAX_TABLE_LEN bits with the last bank bit as the LSB
+  if(ADDRESS_MAPPING==1) {
+    offset=log_base2(CACHE_LINE_SIZE);
+    columns=log_base2(NUM_COLUMNS);
+    channels=log_base2(NUM_CHANNELS);
+    tablelen=log_base2(MAX_TABLE_LEN);
+    temp=1<<(offset+columns+channels);
+    temp=temp-1;
+    addr_last_bits=addr[numc] & temp;
+    addr_temp=addr[numc]>>(offset+columns+channels);
+    temp=1<<tablelen;
+    temp=temp-1;
+    addr_temp=addr_temp & temp; //Extracting the next MAX_TABLE_LEN bits only
+    addr_temp=rand_table[numc][addr_temp]; //Extracted the random address
+    addr[numc]=addr[numc] >> (offset+columns+channels+tablelen);
+    addr[numc]=addr[numc] << tablelen;
+    addr[numc]=addr[numc] | addr_temp; //appended the MAX_TABLE_LEN bits now
+    addr[numc]=addr[numc] << (offset+columns+channels);
+    addr[numc]=addr[numc] | addr_last_bits; //new address
+  }
+
+  else {
+    offset=log_base2(CACHE_LINE_SIZE);
+    columns=log_base2(NUM_COLUMNS);
+    channels=log_base2(NUM_CHANNELS);
+    tablelen=log_base2(MAX_TABLE_LEN);
+    temp=1<<(offset+channels);
+    temp=temp-1;
+    addr_last_bits=addr[numc] & temp;
+    addr_temp=addr[numc]>>(offset+channels);
+    temp=1<<tablelen;
+    temp=temp-1;
+    addr_temp=addr_temp & temp; //Extracting the next MAX_TABLE_LEN bits only
+    addr_temp=rand_table[numc][addr_temp]; //Extracted the random address
+    addr[numc]=addr[numc] >> (offset+channels+tablelen);
+    addr[numc]=addr[numc] << tablelen;
+    addr[numc]=addr[numc] | addr_temp; //appended the MAX_TABLE_LEN bits now
+    addr[numc]=addr[numc] << (offset+channels);
+    addr[numc]=addr[numc] | addr_last_bits; //new address
+  }
+
+  return 1; //New address is generated
+}
+
+//Free up used memory
+int free_rand(int numcores) {
+  int i;
+  for(i=0; i<numcores ; i++) 
+    free(rand_table[i]);
+  free(rand_table);
+  return 1;
+}
 
 int main(int argc, char * argv[])
 {
