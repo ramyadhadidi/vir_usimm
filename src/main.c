@@ -136,6 +136,7 @@ int free_rand(int numcores)
 
 int expt_done=0;  
 int DEDICATED_CH=0;
+int DEDICATED_CH_NUM=0;
 long long int CYCLE_VAL=0;
 
 long long int get_current_cycle()
@@ -201,8 +202,8 @@ int main(int argc, char * argv[])
   printf("Initializing.\n");
   // added by choucc 
   // add an argument for refreshing selection
-  if (argc < 4) {
-    printf("Need at least one input configuration file and one trace file as argument.  Quitting.\n");
+  if (argc < 5) {
+    printf("Bad # inputs\nDedicated channel (1/0) | # of Dedicated channel | Config file | Trace file for each core.\nQuitting.\n");
     return -3;
   }
 
@@ -210,14 +211,22 @@ int main(int argc, char * argv[])
   if (DEDICATED_CH)
     printf("**Dedicated Channel for Translation is ON\n");
 
+  DEDICATED_CH_NUM = atoi(argv[2]);
+  if (DEDICATED_CH)
+    printf("**# Dedicated Channel for Translation is %d\n", DEDICATED_CH_NUM);
+  if (DEDICATED_CH && DEDICATED_CH_NUM==0) {
+    printf("With Dedicated channel on, number of them cannot be zero\n");
+    return -4;
+  }
 
-  config_file = fopen(argv[2], "r");
+
+  config_file = fopen(argv[3], "r");
   if (!config_file) {
     printf("Missing system configuration file.  Quitting. \n");
     return -4;
   }
 
-  NUMCORES = argc-3;
+  NUMCORES = argc-4;
   L3Cache = (LLCache*)malloc(sizeof(LLCache));
 
   ROB = (struct robstructure *)malloc(sizeof(struct robstructure)*NUMCORES);
@@ -234,7 +243,7 @@ int main(int argc, char * argv[])
   // added by choucc 
   // add an argument for refreshing selection
   for (numc=0; numc < NUMCORES; numc++) {
-     tif[numc] = fopen(argv[numc+3], "r");
+     tif[numc] = fopen(argv[numc+4], "r");
      if (!tif[numc]) {
        printf("Missing input trace file %d.  Quitting. \n",numc);
        return -5;
