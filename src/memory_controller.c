@@ -248,14 +248,15 @@ dram_address_t * calc_dram_addr(long long int physical_address, unsigned int CPU
 		int ch_old = this_a->channel;
 		//CPU_request
 		if (CPU_request) {
-			this_a->channel = rand() & DEDICATED_CH_NUM;
+			this_a->channel = rand() % DEDICATED_CH_NUM;
 		}
 		else
 			if (this_a->channel == 0) {
 				this_a->channel = (rand() % (NUM_CHANNELS-DEDICATED_CH_NUM)) + DEDICATED_CH_NUM;
 				//this_a->channel = 1;
 			}
-		//printf("req->%d, ch%d->ch%d\n", CPU_request,ch_old,this_a->channel);
+		//if (CPU_request)
+		//	printf("req->%d, ch%d->ch%d\n", CPU_request, ch_old, this_a->channel);
 	}
 
 	return(this_a);
