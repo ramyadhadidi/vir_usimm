@@ -25,7 +25,9 @@ OS *os_new(uns num_pages, uns num_threads)
     //TLB
     os->tlb = (TLB *) calloc(1,sizeof (TLB));
     os->tlb->num_entries = 0;
+    os->tlb->last_vpn = 0;
     os->tlb->TLB_access = 0;
+    os->tlb->TLB_same_page_hit = 0;
     os->tlb->TLB_hit = 0;
     os->tlb->TLB_miss = 0;
     os->tlb->TLB_eviction = 0;
@@ -141,6 +143,7 @@ void os_print_stats(OS *os)
     printf("\n%s_PAGE_EVICTS        \t : %llu",  header, os->pt->total_evicts);
     printf("\n%s_FOOTPRINT          \t : %llu",  header, (os->pt->miss_count*OS_PAGESIZE)/(1024*1024));
     printf("\n%s_TLB_ACCESS         \t : %llu", header , os->tlb->TLB_access);
+    printf("\n%s_TLB_SAME_PAGE      \t : %llu", header , os->tlb->TLB_same_page_hit);
     printf("\n%s_TLB_HIT            \t : %llu", header , os->tlb->TLB_hit);
     printf("\n%s_TLB_MISS           \t : %llu", header , os->tlb->TLB_miss);
     printf("\n%s_TLB_EVICTION       \t : %llu", header , os->tlb->TLB_eviction);
@@ -212,7 +215,8 @@ Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
         *delay = 2;
 
         // If dedicated channel for PIM to CPU each translation need to communicate with CPU
-        if (DEDICATED_CH) {
+        // Do not send translate request if it is on the same page
+        if (DEDICATED_CH && os->tlb->last_vpn != vpn) {
             ROB[tid].mem_address[ROB[tid].tail] = PTBR + vpn;
             ROB[tid].optype[ROB[tid].tail] = 'R';
             ROB[tid].comptime[ROB[tid].tail] = CYCLE_VAL + BIGNUM;
@@ -221,13 +225,17 @@ Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
             ROB[tid].fellow_inst[ROB[tid].tail] = 1;
             // Tail will be updated in main code
         }
+        if (DEDICATED_CH && os->tlb->last_vpn == vpn)
+           os->tlb->TLB_same_page_hit++; 
+
+        os->tlb->last_vpn = vpn;
         
 
         Addr retval = (pfn_tlb_search*os->lines_in_page)+lineid;
         retval=retval<<6;
         return retval;
     }
-
+    os->tlb->last_vpn = vpn;
 
     //Miss:
     //      update TLB

@@ -93,7 +93,10 @@ struct TLB {
 	TLBEntry entries[TLB_SIZE];
 
 	uns num_entries;
+  uns last_vpn;
+
   uns64 TLB_access;
+  uns64 TLB_same_page_hit;
   uns64 TLB_hit;
   uns64 TLB_miss;
   uns64 TLB_eviction;

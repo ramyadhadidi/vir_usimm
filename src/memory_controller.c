@@ -251,7 +251,7 @@ dram_address_t * calc_dram_addr(long long int physical_address, unsigned int CPU
 			this_a->channel = rand() % DEDICATED_CH_NUM;
 		}
 		else
-			if (this_a->channel == 0) {
+			if (this_a->channel < DEDICATED_CH_NUM) {
 				this_a->channel = (rand() % (NUM_CHANNELS-DEDICATED_CH_NUM)) + DEDICATED_CH_NUM;
 				//this_a->channel = 1;
 			}
