@@ -282,12 +282,12 @@ int main(int argc, char * argv[])
   read_config_file(config_file);
 
 
-  	vi_file = fopen("../input/8Gb_x8.vi", "r");
-	chips_per_rank= 8;
+  	vi_file = fopen("/home/ramyad/vir_usim/input/8Gb_x8.vi", "r");
+	  chips_per_rank= 8;
   	printf("Reading vi file: 8Gb_x8.vi\t\n%d Chips per Rank\n",chips_per_rank);
 
   	if (!vi_file) {
- 	  printf("Missing DRAM chip parameter file.  Quitting. \n");
+ 	  printf("Missing DRAM chip parameter file. Line 285 main.c  Quitting. \n");
   	  return -5;
   	}
 
