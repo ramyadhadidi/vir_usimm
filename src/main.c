@@ -282,7 +282,7 @@ int main(int argc, char * argv[])
   read_config_file(config_file);
 
 
-  	vi_file = fopen("/home/ramyad/vir_usim/input/8Gb_x8.vi", "r");
+  	vi_file = fopen("/home/ramyad/vir_usimm/input/8Gb_x8.vi", "r");
 	  chips_per_rank= 8;
   	printf("Reading vi file: 8Gb_x8.vi\t\n%d Chips per Rank\n",chips_per_rank);
 
