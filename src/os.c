@@ -55,21 +55,21 @@ uns os_vpn_to_pfn(OS *os, uns64 vpn, uns tid, Flag *hit)
     assert(vpn>>28 == 0);
     vpn = (tid<<28)+vpn; // embed tid information in high bits
     
-    if( pt->last_xlation[tid].vpn == vpn ){
-	return pt->last_xlation[tid].pfn;
-    }
+    if( pt->last_xlation[tid].vpn == vpn )
+	   return pt->last_xlation[tid].pfn;
+    
     
     pte = (PageTableEntry *) hash_table_access_create(pt->entries, vpn, &first_access);
 
     if(first_access){
-	pte->pfn = os_get_victim_from_ipt(os);
-	ipte = &ipt->entries[ pte->pfn ]; 
-	ipte->valid = TRUE;
-	ipte->dirty = FALSE;
-	ipte->vpn   = vpn;
-	assert( (uns)pt->entries->count <= pt->max_entries);
-	pt->miss_count++;
-	*hit=FALSE;
+    	pte->pfn = os_get_victim_from_ipt(os);
+    	ipte = &ipt->entries[ pte->pfn ]; 
+    	ipte->valid = TRUE;
+    	ipte->dirty = FALSE;
+    	ipte->vpn   = vpn;
+    	assert( (uns)pt->entries->count <= pt->max_entries);
+    	pt->miss_count++;
+    	*hit=FALSE;
     }
 
     ipte = &ipt->entries[ pte->pfn ]; 
@@ -324,7 +324,9 @@ Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
 
     // Tail will be updated in main code
 
-    return pfn;
+    Addr retval = (pfn*os->lines_in_page)+lineid;
+    retval=retval<<6;
+    return retval;
 
 }
 
