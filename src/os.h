@@ -20,7 +20,7 @@
 #define L3_LATENCY 10
 #define HDD_LATENCY 1000
 
-#define TLB_SIZE 128
+#define TLB_SIZE 128 
 #define PTBR 123508959
 //#define PTBR 0
 

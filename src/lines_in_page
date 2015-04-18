@@ -1,0 +1,82 @@
+os.c:7:    os->num_pages      = num_pages;
+os.c:8:    os->num_threads    = num_threads;
+os.c:9:    os->lines_in_page  = OS_PAGESIZE/CACHE_LINE_SIZE;
+os.c:11:    os->pt     = (PageTable *) calloc (1, sizeof (PageTable));
+os.c:12:    os->pt->entries     = (Hash_Table *) calloc (1, sizeof(Hash_Table));
+os.c:13:    init_hash_table(os->pt->entries, "PageTableEntries", 4315027, sizeof( PageTableEntry ));
+os.c:14:    os->pt->max_entries = os->num_pages;
+os.c:16:    os->ipt     = (InvPageTable *) calloc (1, sizeof (InvPageTable));
+os.c:17:    os->ipt->entries = (InvPageTableEntry *) calloc (os->num_pages, sizeof (InvPageTableEntry));
+os.c:18:    os->ipt->num_entries = os->num_pages;
+os.c:20:    assert(os->pt->entries);
+os.c:21:    assert(os->ipt->entries);
+os.c:26:    os->tlb = (TLB *) calloc(1,sizeof (TLB));
+os.c:27:    os->tlb->num_entries = 0;
+os.c:28:    os->tlb->last_vpn = 0;
+os.c:29:    os->tlb->TLB_access = 0;
+os.c:30:    os->tlb->TLB_same_page_hit = 0;
+os.c:31:    os->tlb->TLB_hit = 0;
+os.c:32:    os->tlb->TLB_miss = 0;
+os.c:33:    os->tlb->TLB_eviction = 0;
+os.c:34:    os->tlb->TLB_L3_hit = 0;
+os.c:35:    os->tlb->TLB_Memory_Access = 0;
+os.c:36:    os->tlb->TLB_HDD_Access = 0;
+os.c:48:    PageTable *pt = os->pt;
+os.c:49:    InvPageTable *ipt = os->ipt;
+os.c:90:    PageTable *pt = os->pt;
+os.c:91:    InvPageTable *ipt = os->ipt;
+os.c:142:    printf("%s_PAGE_MISS        \t : %llu",  header, os->pt->miss_count);
+os.c:143:    printf("\n%s_PAGE_EVICTS        \t : %llu",  header, os->pt->total_evicts);
+os.c:144:    printf("\n%s_FOOTPRINT          \t : %llu",  header, (os->pt->miss_count*OS_PAGESIZE)/(1024*1024));
+os.c:145:    printf("\n%s_TLB_ACCESS         \t : %llu", header , os->tlb->TLB_access);
+os.c:146:    printf("\n%s_TLB_SAME_PAGE      \t : %llu", header , os->tlb->TLB_same_page_hit);
+os.c:147:    printf("\n%s_TLB_HIT            \t : %llu", header , os->tlb->TLB_hit);
+os.c:148:    printf("\n%s_TLB_MISS           \t : %llu", header , os->tlb->TLB_miss);
+os.c:149:    printf("\n%s_TLB_EVICTION       \t : %llu", header , os->tlb->TLB_eviction);
+os.c:150:    printf("\n%s_TLB_L3_Hit         \t : %llu", header , os->tlb->TLB_L3_hit);
+os.c:151:    printf("\n%s_TLB_Memory_Access  \t : %llu", header , os->tlb->TLB_Memory_Access);
+os.c:152:    printf("\n%s_TLB_HDD_Access     \t : %llu", header , os->tlb->TLB_HDD_Access);
+os.c:161:  uns vpn = lineaddr/os->lines_in_page;
+os.c:162:  uns lineid = lineaddr%os->lines_in_page;
+os.c:164:  Addr retval = (pfn*os->lines_in_page)+lineid;
+os.c:178:  uns64 vpn = lineaddr/os->lines_in_page;
+os.c:179:  uns64 lineid = lineaddr%os->lines_in_page;
+os.c:190:    uns64 vpn = lineaddr/os->lines_in_page;
+os.c:191:    uns64 lineid = lineaddr%os->lines_in_page;
+os.c:195:    os->tlb->TLB_access++;
+os.c:203:        os->tlb->TLB_hit++;
+os.c:207:        for (int i=0; i<os->tlb->num_entries; i++) {
+os.c:208:            uns LRU = os->tlb->entries[row].LRU_position;
+os.c:209:            if(os->tlb->entries[i].LRU_position < LRU )
+os.c:210:               os->tlb->entries[i].LRU_position++; 
+os.c:212:        os->tlb->entries[row].LRU_position = 0;
+os.c:220:        if (DEDICATED_CH && os->tlb->last_vpn != vpn) {
+os.c:229:        if (DEDICATED_CH && os->tlb->last_vpn == vpn)
+os.c:230:           os->tlb->TLB_same_page_hit++; 
+os.c:232:        os->tlb->last_vpn = vpn;
+os.c:235:        Addr retval = (pfn_tlb_search*os->lines_in_page)+lineid;
+os.c:239:    os->tlb->last_vpn = vpn;
+os.c:251:    os->tlb->TLB_miss++;
+os.c:256:    for (int i=0; i<os->tlb->num_entries; i++)
+os.c:257:            os->tlb->entries[i].LRU_position++;
+os.c:259:    if (os->tlb->num_entries < TLB_SIZE) {
+os.c:261:        os->tlb->entries[os->tlb->num_entries].LRU_position = 0;
+os.c:262:        os->tlb->entries[os->tlb->num_entries].tid = tid;
+os.c:263:        os->tlb->entries[os->tlb->num_entries].pair.vpn = vpn;
+os.c:264:        os->tlb->entries[os->tlb->num_entries].pair.pfn = pfn;
+os.c:266:        os->tlb->num_entries++;
+os.c:270:        os->tlb->TLB_eviction++;
+os.c:272:        for (int i=0; i<os->tlb->num_entries; i++)
+os.c:273:            if(os->tlb->entries[i].LRU_position == os->tlb->num_entries) {
+os.c:277:        os->tlb->entries[oldest].LRU_position = 0;
+os.c:278:        os->tlb->entries[oldest].tid = tid;
+os.c:279:        os->tlb->entries[oldest].pair.vpn = vpn;
+os.c:280:        os->tlb->entries[oldest].pair.pfn = pfn;
+os.c:288:        os->tlb->TLB_L3_hit++;
+os.c:302:        Addr retval = (pfn*os->lines_in_page)+lineid;
+os.c:309:    os->tlb->TLB_Memory_Access++;
+os.c:319:        os->tlb->TLB_HDD_Access++;
+os.c:333:    for (int i=0; i<os->tlb->num_entries; i++) {
+os.c:334:        if (tid == os->tlb->entries[i].tid)
+os.c:335:            if (vpn == os->tlb->entries[i].pair.vpn) {
+os.c:338:                return os->tlb->entries[i].pair.pfn;
