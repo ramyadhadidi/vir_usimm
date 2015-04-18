@@ -188,6 +188,7 @@ uns os_v2p_lineaddr_pfn(OS *os, Addr lineaddr, uns tid, Flag* pagehit, uns* dela
 
 Addr os_v2p_lineaddr_tlb(OS *os, Addr lineaddr, uns tid, uns* delay) {
     uns64 vpn = lineaddr/os->lines_in_page;
+    //printf("%x\n", vpn);
     uns64 lineid = lineaddr%os->lines_in_page;
     *delay = 0;
 
