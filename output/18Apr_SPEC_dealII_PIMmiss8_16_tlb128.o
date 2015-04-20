@@ -81,37 +81,37 @@ Init Cache size=4194304 assoc=8
 Initialized OS for 2097152 pages
 Initialized TLB for 128 entires
 Starting simulation.
-...................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+......................................................................................................................
 Done with loop. Printing stats.
 
 
-Cycles 1156658783
+Cycles 144985828
 
 -------------------------------------- ROB Stats ----------------------------------------------
-Done: Core 0: Fetched 338884183 : Committed 338884183 : At time : 1156658783
+Done: Core 0: Fetched 502015765 : Committed 502015765 : At time : 144985828
 
-USIMM_CYCLES          	 : 1156658783
-USIMM_INST            	 : 338884183
+USIMM_CYCLES          	 : 144985828
+USIMM_INST            	 : 502015765
 USIMM_ROBF_STALLS     	 : 0
 USIMM_ROBN_STALLS     	 : 0
 USIMM_WRQF_STALLS     	 : 0
 USIMM_WRQN_STALLS     	 : 0
-Num reads merged: 8
-Num writes merged: 103
+Num reads merged: 0
+Num writes merged: 7
 
 ==========================================================
 ==========            ROB Timing               ===========
 ==========================================================
 Core 0
-	Total N ops:	   142990714
-	Total R ops:	   1630476
-	Total W ops:	   194262993
-	Waiting N ops:		 958596609
-	Waiting R ops:		 1710417619
-	Waiting W ops:		 1668838788
-	Avg Waiting N:		 6.703908
-	Avg Waiting R:		 1049.029663
-	Avg Waiting W:		 8.590616
+	Total N ops:	   499936205
+	Total R ops:	   1838280
+	Total W ops:	   241280
+	Waiting N ops:		 1031764256
+	Waiting R ops:		 159829307
+	Waiting W ops:		 29088767
+	Avg Waiting N:		 2.063792
+	Avg Waiting R:		 86.945030
+	Avg Waiting W:		 120.560211
 ==========================================================
 ==========            LLC Statistics           ===========
 ==========================================================
@@ -124,261 +124,261 @@ Cache Configuration:
 
 Cache Statistics: 
 
-	1 Accesses: 3594111
-	1 Misses:   3804
-	1 Hits:     3590307
-	1 MissRate 	 : 0.105840
+	1 Accesses: 1882741
+	1 Misses:   215482
+	1 Hits:     1667259
+	1 MissRate 	 : 11.445122
 
-	2 Accesses: 194262993
-	2 Misses:   270669
-	2 Hits:     193992324
-	2 MissRate 	 : 0.139331
+	2 Accesses: 241280
+	2 Misses:   17978
+	2 Hits:     223302
+	2 MissRate 	 : 7.451094
 
 Overall Cache stat:
-Overall_Accesses: 197857104
-Overall_Misses:   274473
-Overall_Hits:     197582631
-Overall_MissRate 	 : 0.138723
+Overall_Accesses: 2124021
+Overall_Misses:   233460
+Overall_Hits:     1890561
+Overall_MissRate 	 : 10.991417
 
 -------- Channel 0 Stats-----------
-Total Reads Serviced :          193    
+Total Reads Serviced :          56     
 Total Writes Serviced :         0      
-Average Read Latency :          118.08808
-Average Read Queue Latency :    48.08808
+Average Read Latency :          250.75000
+Average Read Queue Latency :    180.75000
 Average Write Latency :         0.00000
 Average Write Queue Latency :   0.00000
-Read Page Hit Rate :            0.00000
+Read Page Hit Rate :            0.14286
 Write Page Hit Rate :              -nan
 ------------------------------------
 -------- Channel 1 Stats-----------
-Total Reads Serviced :          180    
+Total Reads Serviced :          65     
 Total Writes Serviced :         0      
-Average Read Latency :          119.84444
-Average Read Queue Latency :    49.84444
+Average Read Latency :          263.03077
+Average Read Queue Latency :    193.03077
 Average Write Latency :         0.00000
 Average Write Queue Latency :   0.00000
-Read Page Hit Rate :            0.00000
+Read Page Hit Rate :            0.20000
 Write Page Hit Rate :              -nan
 ------------------------------------
 -------- Channel 2 Stats-----------
-Total Reads Serviced :          222    
+Total Reads Serviced :          55     
 Total Writes Serviced :         0      
-Average Read Latency :          117.79279
-Average Read Queue Latency :    47.79279
+Average Read Latency :          111.52727
+Average Read Queue Latency :    41.52727
 Average Write Latency :         0.00000
 Average Write Queue Latency :   0.00000
-Read Page Hit Rate :            0.00000
+Read Page Hit Rate :            0.16364
 Write Page Hit Rate :              -nan
 ------------------------------------
 -------- Channel 3 Stats-----------
-Total Reads Serviced :          194    
+Total Reads Serviced :          40     
 Total Writes Serviced :         0      
-Average Read Latency :          118.13918
-Average Read Queue Latency :    48.13918
+Average Read Latency :          110.90000
+Average Read Queue Latency :    40.90000
 Average Write Latency :         0.00000
 Average Write Queue Latency :   0.00000
-Read Page Hit Rate :            0.00000
+Read Page Hit Rate :            0.15000
 Write Page Hit Rate :              -nan
 ------------------------------------
 -------- Channel 4 Stats-----------
-Total Reads Serviced :          203    
+Total Reads Serviced :          60     
 Total Writes Serviced :         0      
-Average Read Latency :          118.13300
-Average Read Queue Latency :    48.13300
+Average Read Latency :          111.13333
+Average Read Queue Latency :    41.13333
 Average Write Latency :         0.00000
 Average Write Queue Latency :   0.00000
-Read Page Hit Rate :            0.00000
+Read Page Hit Rate :            0.21667
 Write Page Hit Rate :              -nan
 ------------------------------------
 -------- Channel 5 Stats-----------
-Total Reads Serviced :          189    
+Total Reads Serviced :          48     
 Total Writes Serviced :         0      
-Average Read Latency :          189.79365
-Average Read Queue Latency :    119.79365
+Average Read Latency :          106.60417
+Average Read Queue Latency :    36.60417
 Average Write Latency :         0.00000
 Average Write Queue Latency :   0.00000
-Read Page Hit Rate :            0.00000
+Read Page Hit Rate :            0.25000
 Write Page Hit Rate :              -nan
 ------------------------------------
 -------- Channel 6 Stats-----------
-Total Reads Serviced :          193    
+Total Reads Serviced :          54     
 Total Writes Serviced :         0      
-Average Read Latency :          261.83420
-Average Read Queue Latency :    191.83420
+Average Read Latency :          117.81481
+Average Read Queue Latency :    47.81481
 Average Write Latency :         0.00000
 Average Write Queue Latency :   0.00000
-Read Page Hit Rate :            0.00000
+Read Page Hit Rate :            0.16667
 Write Page Hit Rate :              -nan
 ------------------------------------
 -------- Channel 7 Stats-----------
-Total Reads Serviced :          215    
+Total Reads Serviced :          59     
 Total Writes Serviced :         0      
-Average Read Latency :          181.10698
-Average Read Queue Latency :    111.10698
+Average Read Latency :          111.25424
+Average Read Queue Latency :    41.25424
 Average Write Latency :         0.00000
 Average Write Queue Latency :   0.00000
-Read Page Hit Rate :            0.00000
+Read Page Hit Rate :            0.15254
 Write Page Hit Rate :              -nan
 ------------------------------------
 -------- Channel 8 Stats-----------
-Total Reads Serviced :          634    
-Total Writes Serviced :         147431 
-Average Read Latency :          144.81861
-Average Read Queue Latency :    74.81861
-Average Write Latency :         253.45959
-Average Write Queue Latency :   189.45959
-Read Page Hit Rate :            0.08044
-Write Page Hit Rate :           0.17205
+Total Reads Serviced :          21220  
+Total Writes Serviced :         6182   
+Average Read Latency :          161.80377
+Average Read Queue Latency :    91.80377
+Average Write Latency :         283.44969
+Average Write Queue Latency :   219.44969
+Read Page Hit Rate :            0.20401
+Write Page Hit Rate :           0.05548
 ------------------------------------
 -------- Channel 9 Stats-----------
-Total Reads Serviced :          68     
-Total Writes Serviced :         16345  
-Average Read Latency :          135.27941
-Average Read Queue Latency :    65.27941
-Average Write Latency :         163.82808
-Average Write Queue Latency :   99.82808
-Read Page Hit Rate :            0.01471
-Write Page Hit Rate :           0.05953
+Total Reads Serviced :          20307  
+Total Writes Serviced :         6020   
+Average Read Latency :          168.87526
+Average Read Queue Latency :    98.87526
+Average Write Latency :         301.11130
+Average Write Queue Latency :   237.11130
+Read Page Hit Rate :            0.19781
+Write Page Hit Rate :           0.05565
 ------------------------------------
 -------- Channel 10 Stats-----------
-Total Reads Serviced :          58     
-Total Writes Serviced :         16261  
-Average Read Latency :          131.82759
-Average Read Queue Latency :    61.82759
-Average Write Latency :         159.24224
-Average Write Queue Latency :   95.24224
-Read Page Hit Rate :            0.01724
-Write Page Hit Rate :           0.05387
+Total Reads Serviced :          20272  
+Total Writes Serviced :         6076   
+Average Read Latency :          162.96221
+Average Read Queue Latency :    92.96221
+Average Write Latency :         273.86998
+Average Write Queue Latency :   209.86998
+Read Page Hit Rate :            0.20116
+Write Page Hit Rate :           0.05201
 ------------------------------------
 -------- Channel 11 Stats-----------
-Total Reads Serviced :          70     
-Total Writes Serviced :         16478  
-Average Read Latency :          133.90000
-Average Read Queue Latency :    63.90000
-Average Write Latency :         161.78268
-Average Write Queue Latency :   97.78268
-Read Page Hit Rate :            0.04286
-Write Page Hit Rate :           0.06154
+Total Reads Serviced :          20123  
+Total Writes Serviced :         6262   
+Average Read Latency :          169.01521
+Average Read Queue Latency :    99.01521
+Average Write Latency :         283.22645
+Average Write Queue Latency :   219.22645
+Read Page Hit Rate :            0.19495
+Write Page Hit Rate :           0.05142
 ------------------------------------
 -------- Channel 12 Stats-----------
-Total Reads Serviced :          620    
-Total Writes Serviced :         147861 
-Average Read Latency :          166.76935
-Average Read Queue Latency :    96.76935
-Average Write Latency :         250.08043
-Average Write Queue Latency :   186.08043
-Read Page Hit Rate :            0.08065
-Write Page Hit Rate :           0.16286
+Total Reads Serviced :          20281  
+Total Writes Serviced :         6189   
+Average Read Latency :          166.88866
+Average Read Queue Latency :    96.88866
+Average Write Latency :         290.36290
+Average Write Queue Latency :   226.36290
+Read Page Hit Rate :            0.19289
+Write Page Hit Rate :           0.04104
 ------------------------------------
 -------- Channel 13 Stats-----------
-Total Reads Serviced :          70     
-Total Writes Serviced :         16379  
-Average Read Latency :          131.00000
-Average Read Queue Latency :    61.00000
-Average Write Latency :         155.52366
-Average Write Queue Latency :   91.52366
-Read Page Hit Rate :            0.05714
-Write Page Hit Rate :           0.05886
+Total Reads Serviced :          19642  
+Total Writes Serviced :         6158   
+Average Read Latency :          167.28607
+Average Read Queue Latency :    97.28607
+Average Write Latency :         287.87480
+Average Write Queue Latency :   223.87480
+Read Page Hit Rate :            0.20314
+Write Page Hit Rate :           0.05294
 ------------------------------------
 -------- Channel 14 Stats-----------
-Total Reads Serviced :          57     
-Total Writes Serviced :         16762  
-Average Read Latency :          129.70175
-Average Read Queue Latency :    59.70175
-Average Write Latency :         151.21447
-Average Write Queue Latency :   87.21447
-Read Page Hit Rate :            0.01754
-Write Page Hit Rate :           0.06014
+Total Reads Serviced :          19675  
+Total Writes Serviced :         5861   
+Average Read Latency :          165.00351
+Average Read Queue Latency :    95.00351
+Average Write Latency :         301.29347
+Average Write Queue Latency :   237.29347
+Read Page Hit Rate :            0.19710
+Write Page Hit Rate :           0.05050
 ------------------------------------
 -------- Channel 15 Stats-----------
-Total Reads Serviced :          73     
-Total Writes Serviced :         16543  
-Average Read Latency :          135.20548
-Average Read Queue Latency :    65.20548
-Average Write Latency :         164.76709
-Average Write Queue Latency :   100.76709
-Read Page Hit Rate :            0.01370
-Write Page Hit Rate :           0.05821
+Total Reads Serviced :          19810  
+Total Writes Serviced :         5931   
+Average Read Latency :          167.38733
+Average Read Queue Latency :    97.38733
+Average Write Latency :         307.87658
+Average Write Queue Latency :   243.87658
+Read Page Hit Rate :            0.19515
+Write Page Hit Rate :           0.04299
 ------------------------------------
 -------- Channel 16 Stats-----------
-Total Reads Serviced :          75     
-Total Writes Serviced :         16357  
-Average Read Latency :          131.68000
-Average Read Queue Latency :    61.68000
-Average Write Latency :         164.63563
-Average Write Queue Latency :   100.63563
-Read Page Hit Rate :            0.05333
-Write Page Hit Rate :           0.06059
+Total Reads Serviced :          6742   
+Total Writes Serviced :         2045   
+Average Read Latency :          157.21136
+Average Read Queue Latency :    87.21136
+Average Write Latency :         194.48068
+Average Write Queue Latency :   130.48068
+Read Page Hit Rate :            0.12637
+Write Page Hit Rate :           0.09731
 ------------------------------------
 -------- Channel 17 Stats-----------
-Total Reads Serviced :          76     
-Total Writes Serviced :         16585  
-Average Read Latency :          141.23684
-Average Read Queue Latency :    71.23684
-Average Write Latency :         158.77088
-Average Write Queue Latency :   94.77088
-Read Page Hit Rate :            0.00000
-Write Page Hit Rate :           0.05800
+Total Reads Serviced :          6680   
+Total Writes Serviced :         2010   
+Average Read Latency :          164.96961
+Average Read Queue Latency :    94.96961
+Average Write Latency :         204.50547
+Average Write Queue Latency :   140.50547
+Read Page Hit Rate :            0.12275
+Write Page Hit Rate :           0.08856
 ------------------------------------
 -------- Channel 18 Stats-----------
-Total Reads Serviced :          68     
-Total Writes Serviced :         16326  
-Average Read Latency :          339.52941
-Average Read Queue Latency :    269.52941
-Average Write Latency :         176.16477
-Average Write Queue Latency :   112.16477
-Read Page Hit Rate :            0.00000
-Write Page Hit Rate :           0.05690
+Total Reads Serviced :          6739   
+Total Writes Serviced :         1989   
+Average Read Latency :          169.00000
+Average Read Queue Latency :    99.00000
+Average Write Latency :         233.30970
+Average Write Queue Latency :   169.30970
+Read Page Hit Rate :            0.12034
+Write Page Hit Rate :           0.09553
 ------------------------------------
 -------- Channel 19 Stats-----------
-Total Reads Serviced :          59     
-Total Writes Serviced :         16442  
-Average Read Latency :          134.20339
-Average Read Queue Latency :    64.20339
-Average Write Latency :         155.96247
-Average Write Queue Latency :   91.96247
-Read Page Hit Rate :            0.03390
-Write Page Hit Rate :           0.05711
+Total Reads Serviced :          6805   
+Total Writes Serviced :         2094   
+Average Read Latency :          164.75797
+Average Read Queue Latency :    94.75797
+Average Write Latency :         188.03868
+Average Write Queue Latency :   124.03868
+Read Page Hit Rate :            0.12197
+Write Page Hit Rate :           0.09265
 ------------------------------------
 -------- Channel 20 Stats-----------
-Total Reads Serviced :          69     
-Total Writes Serviced :         16533  
-Average Read Latency :          133.50725
-Average Read Queue Latency :    63.50725
-Average Write Latency :         175.22392
-Average Write Queue Latency :   111.22392
-Read Page Hit Rate :            0.01449
-Write Page Hit Rate :           0.05752
+Total Reads Serviced :          6638   
+Total Writes Serviced :         2037   
+Average Read Latency :          172.31214
+Average Read Queue Latency :    102.31214
+Average Write Latency :         192.74472
+Average Write Queue Latency :   128.74472
+Read Page Hit Rate :            0.12142
+Write Page Hit Rate :           0.08886
 ------------------------------------
 -------- Channel 21 Stats-----------
-Total Reads Serviced :          73     
-Total Writes Serviced :         16473  
-Average Read Latency :          326.73973
-Average Read Queue Latency :    256.73973
-Average Write Latency :         167.91914
-Average Write Queue Latency :   103.91914
-Read Page Hit Rate :            0.00000
-Write Page Hit Rate :           0.05955
+Total Reads Serviced :          6595   
+Total Writes Serviced :         2059   
+Average Read Latency :          167.63351
+Average Read Queue Latency :    97.63351
+Average Write Latency :         204.54104
+Average Write Queue Latency :   140.54104
+Read Page Hit Rate :            0.11524
+Write Page Hit Rate :           0.08256
 ------------------------------------
 -------- Channel 22 Stats-----------
-Total Reads Serviced :          73     
-Total Writes Serviced :         16352  
-Average Read Latency :          133.32877
-Average Read Queue Latency :    63.32877
-Average Write Latency :         164.08274
-Average Write Queue Latency :   100.08274
-Read Page Hit Rate :            0.02740
-Write Page Hit Rate :           0.05687
+Total Reads Serviced :          6749   
+Total Writes Serviced :         2017   
+Average Read Latency :          168.55682
+Average Read Queue Latency :    98.55682
+Average Write Latency :         175.63907
+Average Write Queue Latency :   111.63907
+Read Page Hit Rate :            0.11676
+Write Page Hit Rate :           0.09271
 ------------------------------------
 -------- Channel 23 Stats-----------
-Total Reads Serviced :          72     
-Total Writes Serviced :         16354  
-Average Read Latency :          131.34722
-Average Read Queue Latency :    61.34722
-Average Write Latency :         165.01614
-Average Write Queue Latency :   101.01614
-Read Page Hit Rate :            0.05556
-Write Page Hit Rate :           0.05595
+Total Reads Serviced :          6767   
+Total Writes Serviced :         2048   
+Average Read Latency :          166.05778
+Average Read Queue Latency :    96.05778
+Average Write Latency :         201.06055
+Average Write Queue Latency :   137.06055
+Read Page Hit Rate :            0.11719
+Write Page Hit Rate :           0.09814
 ------------------------------------
 
 #-----------------------------Simulated Cycles Break-Up-------------------------------------------
@@ -387,7 +387,7 @@ Note:  1.(Read Cycles + Write Cycles + Read Other + Write Other) should add up t
        2.(PRE_PDN_FAST + PRE_PDN_SLOW + ACT_PDN + ACT_STBY + PRE_STBY) should add up to 100%
        3.Power Down means Clock Enable, CKE = 0. In Standby mode, CKE = 1
 #-------------------------------------------------------------------------------------------------
-Total Simulation Cycles                       1156658783
+Total Simulation Cycles                        144985828
 ---------------------------------------------------------------
 
 Channel 0 Rank 0 Read Cycles(%)                0.00 # % cycles the Rank performed a Read
@@ -397,8 +397,8 @@ Channel 0 Rank 0 Write Other(%)                0.00 # % cycles other Ranks on th
 Channel 0 Rank 0 PRE_PDN_FAST(%)               0.00 # % cycles the Rank was in Fast Power Down and all Banks were Precharged
 Channel 0 Rank 0 PRE_PDN_SLOW(%)               0.00 # % cycles the Rank was in Slow Power Down and all Banks were Precharged
 Channel 0 Rank 0 ACT_PDN(%)                    0.00 # % cycles the Rank was in Active Power Down and atleast one Bank was Active
-Channel 0 Rank 0 ACT_STBY(%)                   0.01 # % cycles the Rank was in Standby and atleast one bank was Active
-Channel 0 Rank 0 PRE_STBY(%)                   0.99 # % cycles the Rank was in Standby and all Banks were Precharged
+Channel 0 Rank 0 ACT_STBY(%)                   0.02 # % cycles the Rank was in Standby and atleast one bank was Active
+Channel 0 Rank 0 PRE_STBY(%)                   0.98 # % cycles the Rank was in Standby and all Banks were Precharged
 ---------------------------------------------------------------
 
 Channel 1 Rank 0 Read Cycles(%)                0.00 # % cycles the Rank performed a Read
@@ -408,8 +408,8 @@ Channel 1 Rank 0 Write Other(%)                0.00 # % cycles other Ranks on th
 Channel 1 Rank 0 PRE_PDN_FAST(%)               0.00 # % cycles the Rank was in Fast Power Down and all Banks were Precharged
 Channel 1 Rank 0 PRE_PDN_SLOW(%)               0.00 # % cycles the Rank was in Slow Power Down and all Banks were Precharged
 Channel 1 Rank 0 ACT_PDN(%)                    0.00 # % cycles the Rank was in Active Power Down and atleast one Bank was Active
-Channel 1 Rank 0 ACT_STBY(%)                   0.01 # % cycles the Rank was in Standby and atleast one bank was Active
-Channel 1 Rank 0 PRE_STBY(%)                   0.99 # % cycles the Rank was in Standby and all Banks were Precharged
+Channel 1 Rank 0 ACT_STBY(%)                   0.02 # % cycles the Rank was in Standby and atleast one bank was Active
+Channel 1 Rank 0 PRE_STBY(%)                   0.98 # % cycles the Rank was in Standby and all Banks were Precharged
 ---------------------------------------------------------------
 
 Channel 2 Rank 0 Read Cycles(%)                0.00 # % cycles the Rank performed a Read
@@ -419,8 +419,8 @@ Channel 2 Rank 0 Write Other(%)                0.00 # % cycles other Ranks on th
 Channel 2 Rank 0 PRE_PDN_FAST(%)               0.00 # % cycles the Rank was in Fast Power Down and all Banks were Precharged
 Channel 2 Rank 0 PRE_PDN_SLOW(%)               0.00 # % cycles the Rank was in Slow Power Down and all Banks were Precharged
 Channel 2 Rank 0 ACT_PDN(%)                    0.00 # % cycles the Rank was in Active Power Down and atleast one Bank was Active
-Channel 2 Rank 0 ACT_STBY(%)                   0.02 # % cycles the Rank was in Standby and atleast one bank was Active
-Channel 2 Rank 0 PRE_STBY(%)                   0.98 # % cycles the Rank was in Standby and all Banks were Precharged
+Channel 2 Rank 0 ACT_STBY(%)                   0.03 # % cycles the Rank was in Standby and atleast one bank was Active
+Channel 2 Rank 0 PRE_STBY(%)                   0.97 # % cycles the Rank was in Standby and all Banks were Precharged
 ---------------------------------------------------------------
 
 Channel 3 Rank 0 Read Cycles(%)                0.00 # % cycles the Rank performed a Read
@@ -441,8 +441,8 @@ Channel 4 Rank 0 Write Other(%)                0.00 # % cycles other Ranks on th
 Channel 4 Rank 0 PRE_PDN_FAST(%)               0.00 # % cycles the Rank was in Fast Power Down and all Banks were Precharged
 Channel 4 Rank 0 PRE_PDN_SLOW(%)               0.00 # % cycles the Rank was in Slow Power Down and all Banks were Precharged
 Channel 4 Rank 0 ACT_PDN(%)                    0.00 # % cycles the Rank was in Active Power Down and atleast one Bank was Active
-Channel 4 Rank 0 ACT_STBY(%)                   0.02 # % cycles the Rank was in Standby and atleast one bank was Active
-Channel 4 Rank 0 PRE_STBY(%)                   0.98 # % cycles the Rank was in Standby and all Banks were Precharged
+Channel 4 Rank 0 ACT_STBY(%)                   0.03 # % cycles the Rank was in Standby and atleast one bank was Active
+Channel 4 Rank 0 PRE_STBY(%)                   0.97 # % cycles the Rank was in Standby and all Banks were Precharged
 ---------------------------------------------------------------
 
 Channel 5 Rank 0 Read Cycles(%)                0.00 # % cycles the Rank performed a Read
@@ -452,8 +452,8 @@ Channel 5 Rank 0 Write Other(%)                0.00 # % cycles other Ranks on th
 Channel 5 Rank 0 PRE_PDN_FAST(%)               0.00 # % cycles the Rank was in Fast Power Down and all Banks were Precharged
 Channel 5 Rank 0 PRE_PDN_SLOW(%)               0.00 # % cycles the Rank was in Slow Power Down and all Banks were Precharged
 Channel 5 Rank 0 ACT_PDN(%)                    0.00 # % cycles the Rank was in Active Power Down and atleast one Bank was Active
-Channel 5 Rank 0 ACT_STBY(%)                   0.02 # % cycles the Rank was in Standby and atleast one bank was Active
-Channel 5 Rank 0 PRE_STBY(%)                   0.98 # % cycles the Rank was in Standby and all Banks were Precharged
+Channel 5 Rank 0 ACT_STBY(%)                   0.03 # % cycles the Rank was in Standby and atleast one bank was Active
+Channel 5 Rank 0 PRE_STBY(%)                   0.97 # % cycles the Rank was in Standby and all Banks were Precharged
 ---------------------------------------------------------------
 
 Channel 6 Rank 0 Read Cycles(%)                0.00 # % cycles the Rank performed a Read
@@ -485,8 +485,8 @@ Channel 8 Rank 0 Write Other(%)                0.00 # % cycles other Ranks on th
 Channel 8 Rank 0 PRE_PDN_FAST(%)               0.00 # % cycles the Rank was in Fast Power Down and all Banks were Precharged
 Channel 8 Rank 0 PRE_PDN_SLOW(%)               0.00 # % cycles the Rank was in Slow Power Down and all Banks were Precharged
 Channel 8 Rank 0 ACT_PDN(%)                    0.00 # % cycles the Rank was in Active Power Down and atleast one Bank was Active
-Channel 8 Rank 0 ACT_STBY(%)                   0.84 # % cycles the Rank was in Standby and atleast one bank was Active
-Channel 8 Rank 0 PRE_STBY(%)                   0.16 # % cycles the Rank was in Standby and all Banks were Precharged
+Channel 8 Rank 0 ACT_STBY(%)                   0.60 # % cycles the Rank was in Standby and atleast one bank was Active
+Channel 8 Rank 0 PRE_STBY(%)                   0.40 # % cycles the Rank was in Standby and all Banks were Precharged
 ---------------------------------------------------------------
 
 Channel 9 Rank 0 Read Cycles(%)                0.00 # % cycles the Rank performed a Read
@@ -529,8 +529,8 @@ Channel 12 Rank 0 Write Other(%)                0.00 # % cycles other Ranks on t
 Channel 12 Rank 0 PRE_PDN_FAST(%)               0.00 # % cycles the Rank was in Fast Power Down and all Banks were Precharged
 Channel 12 Rank 0 PRE_PDN_SLOW(%)               0.00 # % cycles the Rank was in Slow Power Down and all Banks were Precharged
 Channel 12 Rank 0 ACT_PDN(%)                    0.00 # % cycles the Rank was in Active Power Down and atleast one Bank was Active
-Channel 12 Rank 0 ACT_STBY(%)                   0.85 # % cycles the Rank was in Standby and atleast one bank was Active
-Channel 12 Rank 0 PRE_STBY(%)                   0.15 # % cycles the Rank was in Standby and all Banks were Precharged
+Channel 12 Rank 0 ACT_STBY(%)                   0.60 # % cycles the Rank was in Standby and atleast one bank was Active
+Channel 12 Rank 0 PRE_STBY(%)                   0.40 # % cycles the Rank was in Standby and all Banks were Precharged
 ---------------------------------------------------------------
 
 Channel 13 Rank 0 Read Cycles(%)                0.00 # % cycles the Rank performed a Read
@@ -540,8 +540,8 @@ Channel 13 Rank 0 Write Other(%)                0.00 # % cycles other Ranks on t
 Channel 13 Rank 0 PRE_PDN_FAST(%)               0.00 # % cycles the Rank was in Fast Power Down and all Banks were Precharged
 Channel 13 Rank 0 PRE_PDN_SLOW(%)               0.00 # % cycles the Rank was in Slow Power Down and all Banks were Precharged
 Channel 13 Rank 0 ACT_PDN(%)                    0.00 # % cycles the Rank was in Active Power Down and atleast one Bank was Active
-Channel 13 Rank 0 ACT_STBY(%)                   0.60 # % cycles the Rank was in Standby and atleast one bank was Active
-Channel 13 Rank 0 PRE_STBY(%)                   0.40 # % cycles the Rank was in Standby and all Banks were Precharged
+Channel 13 Rank 0 ACT_STBY(%)                   0.61 # % cycles the Rank was in Standby and atleast one bank was Active
+Channel 13 Rank 0 PRE_STBY(%)                   0.39 # % cycles the Rank was in Standby and all Banks were Precharged
 ---------------------------------------------------------------
 
 Channel 14 Rank 0 Read Cycles(%)                0.00 # % cycles the Rank performed a Read
@@ -551,8 +551,8 @@ Channel 14 Rank 0 Write Other(%)                0.00 # % cycles other Ranks on t
 Channel 14 Rank 0 PRE_PDN_FAST(%)               0.00 # % cycles the Rank was in Fast Power Down and all Banks were Precharged
 Channel 14 Rank 0 PRE_PDN_SLOW(%)               0.00 # % cycles the Rank was in Slow Power Down and all Banks were Precharged
 Channel 14 Rank 0 ACT_PDN(%)                    0.00 # % cycles the Rank was in Active Power Down and atleast one Bank was Active
-Channel 14 Rank 0 ACT_STBY(%)                   0.61 # % cycles the Rank was in Standby and atleast one bank was Active
-Channel 14 Rank 0 PRE_STBY(%)                   0.39 # % cycles the Rank was in Standby and all Banks were Precharged
+Channel 14 Rank 0 ACT_STBY(%)                   0.60 # % cycles the Rank was in Standby and atleast one bank was Active
+Channel 14 Rank 0 PRE_STBY(%)                   0.40 # % cycles the Rank was in Standby and all Banks were Precharged
 ---------------------------------------------------------------
 
 Channel 15 Rank 0 Read Cycles(%)                0.00 # % cycles the Rank performed a Read
@@ -562,8 +562,8 @@ Channel 15 Rank 0 Write Other(%)                0.00 # % cycles other Ranks on t
 Channel 15 Rank 0 PRE_PDN_FAST(%)               0.00 # % cycles the Rank was in Fast Power Down and all Banks were Precharged
 Channel 15 Rank 0 PRE_PDN_SLOW(%)               0.00 # % cycles the Rank was in Slow Power Down and all Banks were Precharged
 Channel 15 Rank 0 ACT_PDN(%)                    0.00 # % cycles the Rank was in Active Power Down and atleast one Bank was Active
-Channel 15 Rank 0 ACT_STBY(%)                   0.61 # % cycles the Rank was in Standby and atleast one bank was Active
-Channel 15 Rank 0 PRE_STBY(%)                   0.39 # % cycles the Rank was in Standby and all Banks were Precharged
+Channel 15 Rank 0 ACT_STBY(%)                   0.59 # % cycles the Rank was in Standby and atleast one bank was Active
+Channel 15 Rank 0 PRE_STBY(%)                   0.41 # % cycles the Rank was in Standby and all Banks were Precharged
 ---------------------------------------------------------------
 
 Channel 16 Rank 0 Read Cycles(%)                0.00 # % cycles the Rank performed a Read
@@ -573,8 +573,8 @@ Channel 16 Rank 0 Write Other(%)                0.00 # % cycles other Ranks on t
 Channel 16 Rank 0 PRE_PDN_FAST(%)               0.00 # % cycles the Rank was in Fast Power Down and all Banks were Precharged
 Channel 16 Rank 0 PRE_PDN_SLOW(%)               0.00 # % cycles the Rank was in Slow Power Down and all Banks were Precharged
 Channel 16 Rank 0 ACT_PDN(%)                    0.00 # % cycles the Rank was in Active Power Down and atleast one Bank was Active
-Channel 16 Rank 0 ACT_STBY(%)                   0.60 # % cycles the Rank was in Standby and atleast one bank was Active
-Channel 16 Rank 0 PRE_STBY(%)                   0.40 # % cycles the Rank was in Standby and all Banks were Precharged
+Channel 16 Rank 0 ACT_STBY(%)                   0.48 # % cycles the Rank was in Standby and atleast one bank was Active
+Channel 16 Rank 0 PRE_STBY(%)                   0.52 # % cycles the Rank was in Standby and all Banks were Precharged
 ---------------------------------------------------------------
 
 Channel 17 Rank 0 Read Cycles(%)                0.00 # % cycles the Rank performed a Read
@@ -584,8 +584,8 @@ Channel 17 Rank 0 Write Other(%)                0.00 # % cycles other Ranks on t
 Channel 17 Rank 0 PRE_PDN_FAST(%)               0.00 # % cycles the Rank was in Fast Power Down and all Banks were Precharged
 Channel 17 Rank 0 PRE_PDN_SLOW(%)               0.00 # % cycles the Rank was in Slow Power Down and all Banks were Precharged
 Channel 17 Rank 0 ACT_PDN(%)                    0.00 # % cycles the Rank was in Active Power Down and atleast one Bank was Active
-Channel 17 Rank 0 ACT_STBY(%)                   0.61 # % cycles the Rank was in Standby and atleast one bank was Active
-Channel 17 Rank 0 PRE_STBY(%)                   0.39 # % cycles the Rank was in Standby and all Banks were Precharged
+Channel 17 Rank 0 ACT_STBY(%)                   0.48 # % cycles the Rank was in Standby and atleast one bank was Active
+Channel 17 Rank 0 PRE_STBY(%)                   0.52 # % cycles the Rank was in Standby and all Banks were Precharged
 ---------------------------------------------------------------
 
 Channel 18 Rank 0 Read Cycles(%)                0.00 # % cycles the Rank performed a Read
@@ -595,8 +595,8 @@ Channel 18 Rank 0 Write Other(%)                0.00 # % cycles other Ranks on t
 Channel 18 Rank 0 PRE_PDN_FAST(%)               0.00 # % cycles the Rank was in Fast Power Down and all Banks were Precharged
 Channel 18 Rank 0 PRE_PDN_SLOW(%)               0.00 # % cycles the Rank was in Slow Power Down and all Banks were Precharged
 Channel 18 Rank 0 ACT_PDN(%)                    0.00 # % cycles the Rank was in Active Power Down and atleast one Bank was Active
-Channel 18 Rank 0 ACT_STBY(%)                   0.60 # % cycles the Rank was in Standby and atleast one bank was Active
-Channel 18 Rank 0 PRE_STBY(%)                   0.40 # % cycles the Rank was in Standby and all Banks were Precharged
+Channel 18 Rank 0 ACT_STBY(%)                   0.48 # % cycles the Rank was in Standby and atleast one bank was Active
+Channel 18 Rank 0 PRE_STBY(%)                   0.52 # % cycles the Rank was in Standby and all Banks were Precharged
 ---------------------------------------------------------------
 
 Channel 19 Rank 0 Read Cycles(%)                0.00 # % cycles the Rank performed a Read
@@ -606,8 +606,8 @@ Channel 19 Rank 0 Write Other(%)                0.00 # % cycles other Ranks on t
 Channel 19 Rank 0 PRE_PDN_FAST(%)               0.00 # % cycles the Rank was in Fast Power Down and all Banks were Precharged
 Channel 19 Rank 0 PRE_PDN_SLOW(%)               0.00 # % cycles the Rank was in Slow Power Down and all Banks were Precharged
 Channel 19 Rank 0 ACT_PDN(%)                    0.00 # % cycles the Rank was in Active Power Down and atleast one Bank was Active
-Channel 19 Rank 0 ACT_STBY(%)                   0.60 # % cycles the Rank was in Standby and atleast one bank was Active
-Channel 19 Rank 0 PRE_STBY(%)                   0.40 # % cycles the Rank was in Standby and all Banks were Precharged
+Channel 19 Rank 0 ACT_STBY(%)                   0.49 # % cycles the Rank was in Standby and atleast one bank was Active
+Channel 19 Rank 0 PRE_STBY(%)                   0.51 # % cycles the Rank was in Standby and all Banks were Precharged
 ---------------------------------------------------------------
 
 Channel 20 Rank 0 Read Cycles(%)                0.00 # % cycles the Rank performed a Read
@@ -617,8 +617,8 @@ Channel 20 Rank 0 Write Other(%)                0.00 # % cycles other Ranks on t
 Channel 20 Rank 0 PRE_PDN_FAST(%)               0.00 # % cycles the Rank was in Fast Power Down and all Banks were Precharged
 Channel 20 Rank 0 PRE_PDN_SLOW(%)               0.00 # % cycles the Rank was in Slow Power Down and all Banks were Precharged
 Channel 20 Rank 0 ACT_PDN(%)                    0.00 # % cycles the Rank was in Active Power Down and atleast one Bank was Active
-Channel 20 Rank 0 ACT_STBY(%)                   0.61 # % cycles the Rank was in Standby and atleast one bank was Active
-Channel 20 Rank 0 PRE_STBY(%)                   0.39 # % cycles the Rank was in Standby and all Banks were Precharged
+Channel 20 Rank 0 ACT_STBY(%)                   0.48 # % cycles the Rank was in Standby and atleast one bank was Active
+Channel 20 Rank 0 PRE_STBY(%)                   0.52 # % cycles the Rank was in Standby and all Banks were Precharged
 ---------------------------------------------------------------
 
 Channel 21 Rank 0 Read Cycles(%)                0.00 # % cycles the Rank performed a Read
@@ -628,8 +628,8 @@ Channel 21 Rank 0 Write Other(%)                0.00 # % cycles other Ranks on t
 Channel 21 Rank 0 PRE_PDN_FAST(%)               0.00 # % cycles the Rank was in Fast Power Down and all Banks were Precharged
 Channel 21 Rank 0 PRE_PDN_SLOW(%)               0.00 # % cycles the Rank was in Slow Power Down and all Banks were Precharged
 Channel 21 Rank 0 ACT_PDN(%)                    0.00 # % cycles the Rank was in Active Power Down and atleast one Bank was Active
-Channel 21 Rank 0 ACT_STBY(%)                   0.61 # % cycles the Rank was in Standby and atleast one bank was Active
-Channel 21 Rank 0 PRE_STBY(%)                   0.39 # % cycles the Rank was in Standby and all Banks were Precharged
+Channel 21 Rank 0 ACT_STBY(%)                   0.49 # % cycles the Rank was in Standby and atleast one bank was Active
+Channel 21 Rank 0 PRE_STBY(%)                   0.51 # % cycles the Rank was in Standby and all Banks were Precharged
 ---------------------------------------------------------------
 
 Channel 22 Rank 0 Read Cycles(%)                0.00 # % cycles the Rank performed a Read
@@ -639,8 +639,8 @@ Channel 22 Rank 0 Write Other(%)                0.00 # % cycles other Ranks on t
 Channel 22 Rank 0 PRE_PDN_FAST(%)               0.00 # % cycles the Rank was in Fast Power Down and all Banks were Precharged
 Channel 22 Rank 0 PRE_PDN_SLOW(%)               0.00 # % cycles the Rank was in Slow Power Down and all Banks were Precharged
 Channel 22 Rank 0 ACT_PDN(%)                    0.00 # % cycles the Rank was in Active Power Down and atleast one Bank was Active
-Channel 22 Rank 0 ACT_STBY(%)                   0.60 # % cycles the Rank was in Standby and atleast one bank was Active
-Channel 22 Rank 0 PRE_STBY(%)                   0.40 # % cycles the Rank was in Standby and all Banks were Precharged
+Channel 22 Rank 0 ACT_STBY(%)                   0.48 # % cycles the Rank was in Standby and atleast one bank was Active
+Channel 22 Rank 0 PRE_STBY(%)                   0.52 # % cycles the Rank was in Standby and all Banks were Precharged
 ---------------------------------------------------------------
 
 Channel 23 Rank 0 Read Cycles(%)                0.00 # % cycles the Rank performed a Read
@@ -650,8 +650,8 @@ Channel 23 Rank 0 Write Other(%)                0.00 # % cycles other Ranks on t
 Channel 23 Rank 0 PRE_PDN_FAST(%)               0.00 # % cycles the Rank was in Fast Power Down and all Banks were Precharged
 Channel 23 Rank 0 PRE_PDN_SLOW(%)               0.00 # % cycles the Rank was in Slow Power Down and all Banks were Precharged
 Channel 23 Rank 0 ACT_PDN(%)                    0.00 # % cycles the Rank was in Active Power Down and atleast one Bank was Active
-Channel 23 Rank 0 ACT_STBY(%)                   0.60 # % cycles the Rank was in Standby and atleast one bank was Active
-Channel 23 Rank 0 PRE_STBY(%)                   0.40 # % cycles the Rank was in Standby and all Banks were Precharged
+Channel 23 Rank 0 ACT_STBY(%)                   0.50 # % cycles the Rank was in Standby and atleast one bank was Active
+Channel 23 Rank 0 PRE_STBY(%)                   0.50 # % cycles the Rank was in Standby and all Banks were Precharged
 ---------------------------------------------------------------
 
 
@@ -660,7 +660,7 @@ Note:  1. termRoth/termWoth is the power dissipated in the ODT resistors when Re
           in other ranks on the same channel
 #-------------------------------------------------------------------------------------------------
 
-Channel 0 Rank 0 Background(mw)              42.22 # depends only on Power Down time and time all banks were precharged
+Channel 0 Rank 0 Background(mw)              42.37 # depends only on Power Down time and time all banks were precharged
 Channel 0 Rank 0 Act(mW)                      0.00 # power spend bringing data to the row buffer
 Channel 0 Rank 0 Read(mW)                     0.00 # power spent doing a Read  after the Row Buffer is open
 Channel 0 Rank 0 Write(mW)                    0.00 # power spent doing a Write after the Row Buffer is open
@@ -670,10 +670,10 @@ Channel 0 Rank 0 termRoth(mW)                 0.00 # power dissipated in ODT res
 Channel 0 Rank 0 termWoth(mW)                 0.00 # power dissipated in ODT resistors during Writes in other ranks
 Channel 0 Rank 0 Refresh(mW)                 12.38 # depends on frequency of Refresh (tREFI)
 ---------------------------------------------------------------
-Channel 0 Rank 0 Total Rank Power(mW)       436.78 # (Sum of above components)*(num chips in each Rank)
+Channel 0 Rank 0 Total Rank Power(mW)       437.97 # (Sum of above components)*(num chips in each Rank)
 ---------------------------------------------------------------
 
-Channel 1 Rank 0 Background(mw)              42.21 # depends only on Power Down time and time all banks were precharged
+Channel 1 Rank 0 Background(mw)              42.35 # depends only on Power Down time and time all banks were precharged
 Channel 1 Rank 0 Act(mW)                      0.00 # power spend bringing data to the row buffer
 Channel 1 Rank 0 Read(mW)                     0.00 # power spent doing a Read  after the Row Buffer is open
 Channel 1 Rank 0 Write(mW)                    0.00 # power spent doing a Write after the Row Buffer is open
@@ -683,10 +683,10 @@ Channel 1 Rank 0 termRoth(mW)                 0.00 # power dissipated in ODT res
 Channel 1 Rank 0 termWoth(mW)                 0.00 # power dissipated in ODT resistors during Writes in other ranks
 Channel 1 Rank 0 Refresh(mW)                 12.38 # depends on frequency of Refresh (tREFI)
 ---------------------------------------------------------------
-Channel 1 Rank 0 Total Rank Power(mW)       436.70 # (Sum of above components)*(num chips in each Rank)
+Channel 1 Rank 0 Total Rank Power(mW)       437.86 # (Sum of above components)*(num chips in each Rank)
 ---------------------------------------------------------------
 
-Channel 2 Rank 0 Background(mw)              42.28 # depends only on Power Down time and time all banks were precharged
+Channel 2 Rank 0 Background(mw)              42.38 # depends only on Power Down time and time all banks were precharged
 Channel 2 Rank 0 Act(mW)                      0.00 # power spend bringing data to the row buffer
 Channel 2 Rank 0 Read(mW)                     0.00 # power spent doing a Read  after the Row Buffer is open
 Channel 2 Rank 0 Write(mW)                    0.00 # power spent doing a Write after the Row Buffer is open
@@ -696,10 +696,10 @@ Channel 2 Rank 0 termRoth(mW)                 0.00 # power dissipated in ODT res
 Channel 2 Rank 0 termWoth(mW)                 0.00 # power dissipated in ODT resistors during Writes in other ranks
 Channel 2 Rank 0 Refresh(mW)                 12.38 # depends on frequency of Refresh (tREFI)
 ---------------------------------------------------------------
-Channel 2 Rank 0 Total Rank Power(mW)       437.22 # (Sum of above components)*(num chips in each Rank)
+Channel 2 Rank 0 Total Rank Power(mW)       438.08 # (Sum of above components)*(num chips in each Rank)
 ---------------------------------------------------------------
 
-Channel 3 Rank 0 Background(mw)              42.23 # depends only on Power Down time and time all banks were precharged
+Channel 3 Rank 0 Background(mw)              42.25 # depends only on Power Down time and time all banks were precharged
 Channel 3 Rank 0 Act(mW)                      0.00 # power spend bringing data to the row buffer
 Channel 3 Rank 0 Read(mW)                     0.00 # power spent doing a Read  after the Row Buffer is open
 Channel 3 Rank 0 Write(mW)                    0.00 # power spent doing a Write after the Row Buffer is open
@@ -709,10 +709,10 @@ Channel 3 Rank 0 termRoth(mW)                 0.00 # power dissipated in ODT res
 Channel 3 Rank 0 termWoth(mW)                 0.00 # power dissipated in ODT resistors during Writes in other ranks
 Channel 3 Rank 0 Refresh(mW)                 12.38 # depends on frequency of Refresh (tREFI)
 ---------------------------------------------------------------
-Channel 3 Rank 0 Total Rank Power(mW)       436.86 # (Sum of above components)*(num chips in each Rank)
+Channel 3 Rank 0 Total Rank Power(mW)       437.04 # (Sum of above components)*(num chips in each Rank)
 ---------------------------------------------------------------
 
-Channel 4 Rank 0 Background(mw)              42.23 # depends only on Power Down time and time all banks were precharged
+Channel 4 Rank 0 Background(mw)              42.40 # depends only on Power Down time and time all banks were precharged
 Channel 4 Rank 0 Act(mW)                      0.00 # power spend bringing data to the row buffer
 Channel 4 Rank 0 Read(mW)                     0.00 # power spent doing a Read  after the Row Buffer is open
 Channel 4 Rank 0 Write(mW)                    0.00 # power spent doing a Write after the Row Buffer is open
@@ -722,10 +722,10 @@ Channel 4 Rank 0 termRoth(mW)                 0.00 # power dissipated in ODT res
 Channel 4 Rank 0 termWoth(mW)                 0.00 # power dissipated in ODT resistors during Writes in other ranks
 Channel 4 Rank 0 Refresh(mW)                 12.38 # depends on frequency of Refresh (tREFI)
 ---------------------------------------------------------------
-Channel 4 Rank 0 Total Rank Power(mW)       436.86 # (Sum of above components)*(num chips in each Rank)
+Channel 4 Rank 0 Total Rank Power(mW)       438.20 # (Sum of above components)*(num chips in each Rank)
 ---------------------------------------------------------------
 
-Channel 5 Rank 0 Background(mw)              42.23 # depends only on Power Down time and time all banks were precharged
+Channel 5 Rank 0 Background(mw)              42.38 # depends only on Power Down time and time all banks were precharged
 Channel 5 Rank 0 Act(mW)                      0.00 # power spend bringing data to the row buffer
 Channel 5 Rank 0 Read(mW)                     0.00 # power spent doing a Read  after the Row Buffer is open
 Channel 5 Rank 0 Write(mW)                    0.00 # power spent doing a Write after the Row Buffer is open
@@ -735,10 +735,10 @@ Channel 5 Rank 0 termRoth(mW)                 0.00 # power dissipated in ODT res
 Channel 5 Rank 0 termWoth(mW)                 0.00 # power dissipated in ODT resistors during Writes in other ranks
 Channel 5 Rank 0 Refresh(mW)                 12.38 # depends on frequency of Refresh (tREFI)
 ---------------------------------------------------------------
-Channel 5 Rank 0 Total Rank Power(mW)       436.87 # (Sum of above components)*(num chips in each Rank)
+Channel 5 Rank 0 Total Rank Power(mW)       438.04 # (Sum of above components)*(num chips in each Rank)
 ---------------------------------------------------------------
 
-Channel 6 Rank 0 Background(mw)              42.23 # depends only on Power Down time and time all banks were precharged
+Channel 6 Rank 0 Background(mw)              42.35 # depends only on Power Down time and time all banks were precharged
 Channel 6 Rank 0 Act(mW)                      0.00 # power spend bringing data to the row buffer
 Channel 6 Rank 0 Read(mW)                     0.00 # power spent doing a Read  after the Row Buffer is open
 Channel 6 Rank 0 Write(mW)                    0.00 # power spent doing a Write after the Row Buffer is open
@@ -748,10 +748,10 @@ Channel 6 Rank 0 termRoth(mW)                 0.00 # power dissipated in ODT res
 Channel 6 Rank 0 termWoth(mW)                 0.00 # power dissipated in ODT resistors during Writes in other ranks
 Channel 6 Rank 0 Refresh(mW)                 12.38 # depends on frequency of Refresh (tREFI)
 ---------------------------------------------------------------
-Channel 6 Rank 0 Total Rank Power(mW)       436.87 # (Sum of above components)*(num chips in each Rank)
+Channel 6 Rank 0 Total Rank Power(mW)       437.85 # (Sum of above components)*(num chips in each Rank)
 ---------------------------------------------------------------
 
-Channel 7 Rank 0 Background(mw)              42.26 # depends only on Power Down time and time all banks were precharged
+Channel 7 Rank 0 Background(mw)              42.37 # depends only on Power Down time and time all banks were precharged
 Channel 7 Rank 0 Act(mW)                      0.00 # power spend bringing data to the row buffer
 Channel 7 Rank 0 Read(mW)                     0.00 # power spent doing a Read  after the Row Buffer is open
 Channel 7 Rank 0 Write(mW)                    0.00 # power spent doing a Write after the Row Buffer is open
@@ -761,234 +761,234 @@ Channel 7 Rank 0 termRoth(mW)                 0.00 # power dissipated in ODT res
 Channel 7 Rank 0 termWoth(mW)                 0.00 # power dissipated in ODT resistors during Writes in other ranks
 Channel 7 Rank 0 Refresh(mW)                 12.38 # depends on frequency of Refresh (tREFI)
 ---------------------------------------------------------------
-Channel 7 Rank 0 Total Rank Power(mW)       437.13 # (Sum of above components)*(num chips in each Rank)
+Channel 7 Rank 0 Total Rank Power(mW)       437.97 # (Sum of above components)*(num chips in each Rank)
 ---------------------------------------------------------------
 
-Channel 8 Rank 0 Background(mw)              54.67 # depends only on Power Down time and time all banks were precharged
-Channel 8 Rank 0 Act(mW)                      0.49 # power spend bringing data to the row buffer
-Channel 8 Rank 0 Read(mW)                     0.00 # power spent doing a Read  after the Row Buffer is open
-Channel 8 Rank 0 Write(mW)                    0.24 # power spent doing a Write after the Row Buffer is open
-Channel 8 Rank 0 Read Terminate(mW)           0.00 # power dissipated in ODT resistors during Read
+Channel 8 Rank 0 Background(mw)              51.00 # depends only on Power Down time and time all banks were precharged
+Channel 8 Rank 0 Act(mW)                      0.73 # power spend bringing data to the row buffer
+Channel 8 Rank 0 Read(mW)                     0.38 # power spent doing a Read  after the Row Buffer is open
+Channel 8 Rank 0 Write(mW)                    0.08 # power spent doing a Write after the Row Buffer is open
+Channel 8 Rank 0 Read Terminate(mW)           0.07 # power dissipated in ODT resistors during Read
 Channel 8 Rank 0 Write Terminate(mW)          0.00 # power dissipated in ODT resistors during Write
 Channel 8 Rank 0 termRoth(mW)                 0.00 # power dissipated in ODT resistors during Reads  in other ranks
 Channel 8 Rank 0 termWoth(mW)                 0.00 # power dissipated in ODT resistors during Writes in other ranks
 Channel 8 Rank 0 Refresh(mW)                 12.38 # depends on frequency of Refresh (tREFI)
 ---------------------------------------------------------------
-Channel 8 Rank 0 Total Rank Power(mW)       542.28 # (Sum of above components)*(num chips in each Rank)
+Channel 8 Rank 0 Total Rank Power(mW)       517.13 # (Sum of above components)*(num chips in each Rank)
 ---------------------------------------------------------------
 
-Channel 9 Rank 0 Background(mw)              51.02 # depends only on Power Down time and time all banks were precharged
-Channel 9 Rank 0 Act(mW)                      0.06 # power spend bringing data to the row buffer
-Channel 9 Rank 0 Read(mW)                     0.00 # power spent doing a Read  after the Row Buffer is open
-Channel 9 Rank 0 Write(mW)                    0.03 # power spent doing a Write after the Row Buffer is open
-Channel 9 Rank 0 Read Terminate(mW)           0.00 # power dissipated in ODT resistors during Read
+Channel 9 Rank 0 Background(mw)              50.98 # depends only on Power Down time and time all banks were precharged
+Channel 9 Rank 0 Act(mW)                      0.70 # power spend bringing data to the row buffer
+Channel 9 Rank 0 Read(mW)                     0.37 # power spent doing a Read  after the Row Buffer is open
+Channel 9 Rank 0 Write(mW)                    0.08 # power spent doing a Write after the Row Buffer is open
+Channel 9 Rank 0 Read Terminate(mW)           0.07 # power dissipated in ODT resistors during Read
 Channel 9 Rank 0 Write Terminate(mW)          0.00 # power dissipated in ODT resistors during Write
 Channel 9 Rank 0 termRoth(mW)                 0.00 # power dissipated in ODT resistors during Reads  in other ranks
 Channel 9 Rank 0 termWoth(mW)                 0.00 # power dissipated in ODT resistors during Writes in other ranks
 Channel 9 Rank 0 Refresh(mW)                 12.38 # depends on frequency of Refresh (tREFI)
 ---------------------------------------------------------------
-Channel 9 Rank 0 Total Rank Power(mW)       507.88 # (Sum of above components)*(num chips in each Rank)
+Channel 9 Rank 0 Total Rank Power(mW)       516.61 # (Sum of above components)*(num chips in each Rank)
 ---------------------------------------------------------------
 
-Channel 10 Rank 0 Background(mw)              50.99 # depends only on Power Down time and time all banks were precharged
-Channel 10 Rank 0 Act(mW)                      0.06 # power spend bringing data to the row buffer
-Channel 10 Rank 0 Read(mW)                     0.00 # power spent doing a Read  after the Row Buffer is open
-Channel 10 Rank 0 Write(mW)                    0.03 # power spent doing a Write after the Row Buffer is open
-Channel 10 Rank 0 Read Terminate(mW)           0.00 # power dissipated in ODT resistors during Read
+Channel 10 Rank 0 Background(mw)              51.00 # depends only on Power Down time and time all banks were precharged
+Channel 10 Rank 0 Act(mW)                      0.70 # power spend bringing data to the row buffer
+Channel 10 Rank 0 Read(mW)                     0.37 # power spent doing a Read  after the Row Buffer is open
+Channel 10 Rank 0 Write(mW)                    0.08 # power spent doing a Write after the Row Buffer is open
+Channel 10 Rank 0 Read Terminate(mW)           0.07 # power dissipated in ODT resistors during Read
 Channel 10 Rank 0 Write Terminate(mW)          0.00 # power dissipated in ODT resistors during Write
 Channel 10 Rank 0 termRoth(mW)                 0.00 # power dissipated in ODT resistors during Reads  in other ranks
 Channel 10 Rank 0 termWoth(mW)                 0.00 # power dissipated in ODT resistors during Writes in other ranks
 Channel 10 Rank 0 Refresh(mW)                 12.38 # depends on frequency of Refresh (tREFI)
 ---------------------------------------------------------------
-Channel 10 Rank 0 Total Rank Power(mW)       507.64 # (Sum of above components)*(num chips in each Rank)
+Channel 10 Rank 0 Total Rank Power(mW)       516.75 # (Sum of above components)*(num chips in each Rank)
 ---------------------------------------------------------------
 
-Channel 11 Rank 0 Background(mw)              51.06 # depends only on Power Down time and time all banks were precharged
-Channel 11 Rank 0 Act(mW)                      0.06 # power spend bringing data to the row buffer
-Channel 11 Rank 0 Read(mW)                     0.00 # power spent doing a Read  after the Row Buffer is open
-Channel 11 Rank 0 Write(mW)                    0.03 # power spent doing a Write after the Row Buffer is open
-Channel 11 Rank 0 Read Terminate(mW)           0.00 # power dissipated in ODT resistors during Read
+Channel 11 Rank 0 Background(mw)              51.03 # depends only on Power Down time and time all banks were precharged
+Channel 11 Rank 0 Act(mW)                      0.71 # power spend bringing data to the row buffer
+Channel 11 Rank 0 Read(mW)                     0.36 # power spent doing a Read  after the Row Buffer is open
+Channel 11 Rank 0 Write(mW)                    0.08 # power spent doing a Write after the Row Buffer is open
+Channel 11 Rank 0 Read Terminate(mW)           0.07 # power dissipated in ODT resistors during Read
 Channel 11 Rank 0 Write Terminate(mW)          0.00 # power dissipated in ODT resistors during Write
 Channel 11 Rank 0 termRoth(mW)                 0.00 # power dissipated in ODT resistors during Reads  in other ranks
 Channel 11 Rank 0 termWoth(mW)                 0.00 # power dissipated in ODT resistors during Writes in other ranks
 Channel 11 Rank 0 Refresh(mW)                 12.38 # depends on frequency of Refresh (tREFI)
 ---------------------------------------------------------------
-Channel 11 Rank 0 Total Rank Power(mW)       508.19 # (Sum of above components)*(num chips in each Rank)
+Channel 11 Rank 0 Total Rank Power(mW)       517.08 # (Sum of above components)*(num chips in each Rank)
 ---------------------------------------------------------------
 
-Channel 12 Rank 0 Background(mw)              54.69 # depends only on Power Down time and time all banks were precharged
-Channel 12 Rank 0 Act(mW)                      0.50 # power spend bringing data to the row buffer
-Channel 12 Rank 0 Read(mW)                     0.00 # power spent doing a Read  after the Row Buffer is open
-Channel 12 Rank 0 Write(mW)                    0.25 # power spent doing a Write after the Row Buffer is open
-Channel 12 Rank 0 Read Terminate(mW)           0.00 # power dissipated in ODT resistors during Read
+Channel 12 Rank 0 Background(mw)              51.02 # depends only on Power Down time and time all banks were precharged
+Channel 12 Rank 0 Act(mW)                      0.71 # power spend bringing data to the row buffer
+Channel 12 Rank 0 Read(mW)                     0.37 # power spent doing a Read  after the Row Buffer is open
+Channel 12 Rank 0 Write(mW)                    0.08 # power spent doing a Write after the Row Buffer is open
+Channel 12 Rank 0 Read Terminate(mW)           0.07 # power dissipated in ODT resistors during Read
 Channel 12 Rank 0 Write Terminate(mW)          0.00 # power dissipated in ODT resistors during Write
 Channel 12 Rank 0 termRoth(mW)                 0.00 # power dissipated in ODT resistors during Reads  in other ranks
 Channel 12 Rank 0 termWoth(mW)                 0.00 # power dissipated in ODT resistors during Writes in other ranks
 Channel 12 Rank 0 Refresh(mW)                 12.38 # depends on frequency of Refresh (tREFI)
 ---------------------------------------------------------------
-Channel 12 Rank 0 Total Rank Power(mW)       542.47 # (Sum of above components)*(num chips in each Rank)
+Channel 12 Rank 0 Total Rank Power(mW)       517.00 # (Sum of above components)*(num chips in each Rank)
 ---------------------------------------------------------------
 
-Channel 13 Rank 0 Background(mw)              51.04 # depends only on Power Down time and time all banks were precharged
-Channel 13 Rank 0 Act(mW)                      0.06 # power spend bringing data to the row buffer
-Channel 13 Rank 0 Read(mW)                     0.00 # power spent doing a Read  after the Row Buffer is open
-Channel 13 Rank 0 Write(mW)                    0.03 # power spent doing a Write after the Row Buffer is open
-Channel 13 Rank 0 Read Terminate(mW)           0.00 # power dissipated in ODT resistors during Read
+Channel 13 Rank 0 Background(mw)              51.12 # depends only on Power Down time and time all banks were precharged
+Channel 13 Rank 0 Act(mW)                      0.69 # power spend bringing data to the row buffer
+Channel 13 Rank 0 Read(mW)                     0.35 # power spent doing a Read  after the Row Buffer is open
+Channel 13 Rank 0 Write(mW)                    0.08 # power spent doing a Write after the Row Buffer is open
+Channel 13 Rank 0 Read Terminate(mW)           0.07 # power dissipated in ODT resistors during Read
 Channel 13 Rank 0 Write Terminate(mW)          0.00 # power dissipated in ODT resistors during Write
 Channel 13 Rank 0 termRoth(mW)                 0.00 # power dissipated in ODT resistors during Reads  in other ranks
 Channel 13 Rank 0 termWoth(mW)                 0.00 # power dissipated in ODT resistors during Writes in other ranks
 Channel 13 Rank 0 Refresh(mW)                 12.38 # depends on frequency of Refresh (tREFI)
 ---------------------------------------------------------------
-Channel 13 Rank 0 Total Rank Power(mW)       508.02 # (Sum of above components)*(num chips in each Rank)
+Channel 13 Rank 0 Total Rank Power(mW)       517.49 # (Sum of above components)*(num chips in each Rank)
 ---------------------------------------------------------------
 
-Channel 14 Rank 0 Background(mw)              51.13 # depends only on Power Down time and time all banks were precharged
-Channel 14 Rank 0 Act(mW)                      0.06 # power spend bringing data to the row buffer
-Channel 14 Rank 0 Read(mW)                     0.00 # power spent doing a Read  after the Row Buffer is open
-Channel 14 Rank 0 Write(mW)                    0.03 # power spent doing a Write after the Row Buffer is open
-Channel 14 Rank 0 Read Terminate(mW)           0.00 # power dissipated in ODT resistors during Read
+Channel 14 Rank 0 Background(mw)              50.96 # depends only on Power Down time and time all banks were precharged
+Channel 14 Rank 0 Act(mW)                      0.68 # power spend bringing data to the row buffer
+Channel 14 Rank 0 Read(mW)                     0.35 # power spent doing a Read  after the Row Buffer is open
+Channel 14 Rank 0 Write(mW)                    0.08 # power spent doing a Write after the Row Buffer is open
+Channel 14 Rank 0 Read Terminate(mW)           0.07 # power dissipated in ODT resistors during Read
 Channel 14 Rank 0 Write Terminate(mW)          0.00 # power dissipated in ODT resistors during Write
 Channel 14 Rank 0 termRoth(mW)                 0.00 # power dissipated in ODT resistors during Reads  in other ranks
 Channel 14 Rank 0 termWoth(mW)                 0.00 # power dissipated in ODT resistors during Writes in other ranks
 Channel 14 Rank 0 Refresh(mW)                 12.38 # depends on frequency of Refresh (tREFI)
 ---------------------------------------------------------------
-Channel 14 Rank 0 Total Rank Power(mW)       508.76 # (Sum of above components)*(num chips in each Rank)
+Channel 14 Rank 0 Total Rank Power(mW)       516.18 # (Sum of above components)*(num chips in each Rank)
 ---------------------------------------------------------------
 
-Channel 15 Rank 0 Background(mw)              51.08 # depends only on Power Down time and time all banks were precharged
-Channel 15 Rank 0 Act(mW)                      0.06 # power spend bringing data to the row buffer
-Channel 15 Rank 0 Read(mW)                     0.00 # power spent doing a Read  after the Row Buffer is open
-Channel 15 Rank 0 Write(mW)                    0.03 # power spent doing a Write after the Row Buffer is open
-Channel 15 Rank 0 Read Terminate(mW)           0.00 # power dissipated in ODT resistors during Read
+Channel 15 Rank 0 Background(mw)              50.86 # depends only on Power Down time and time all banks were precharged
+Channel 15 Rank 0 Act(mW)                      0.69 # power spend bringing data to the row buffer
+Channel 15 Rank 0 Read(mW)                     0.36 # power spent doing a Read  after the Row Buffer is open
+Channel 15 Rank 0 Write(mW)                    0.08 # power spent doing a Write after the Row Buffer is open
+Channel 15 Rank 0 Read Terminate(mW)           0.07 # power dissipated in ODT resistors during Read
 Channel 15 Rank 0 Write Terminate(mW)          0.00 # power dissipated in ODT resistors during Write
 Channel 15 Rank 0 termRoth(mW)                 0.00 # power dissipated in ODT resistors during Reads  in other ranks
 Channel 15 Rank 0 termWoth(mW)                 0.00 # power dissipated in ODT resistors during Writes in other ranks
 Channel 15 Rank 0 Refresh(mW)                 12.38 # depends on frequency of Refresh (tREFI)
 ---------------------------------------------------------------
-Channel 15 Rank 0 Total Rank Power(mW)       508.33 # (Sum of above components)*(num chips in each Rank)
+Channel 15 Rank 0 Total Rank Power(mW)       515.47 # (Sum of above components)*(num chips in each Rank)
 ---------------------------------------------------------------
 
-Channel 16 Rank 0 Background(mw)              50.98 # depends only on Power Down time and time all banks were precharged
-Channel 16 Rank 0 Act(mW)                      0.06 # power spend bringing data to the row buffer
-Channel 16 Rank 0 Read(mW)                     0.00 # power spent doing a Read  after the Row Buffer is open
+Channel 16 Rank 0 Background(mw)              49.26 # depends only on Power Down time and time all banks were precharged
+Channel 16 Rank 0 Act(mW)                      0.25 # power spend bringing data to the row buffer
+Channel 16 Rank 0 Read(mW)                     0.12 # power spent doing a Read  after the Row Buffer is open
 Channel 16 Rank 0 Write(mW)                    0.03 # power spent doing a Write after the Row Buffer is open
-Channel 16 Rank 0 Read Terminate(mW)           0.00 # power dissipated in ODT resistors during Read
+Channel 16 Rank 0 Read Terminate(mW)           0.02 # power dissipated in ODT resistors during Read
 Channel 16 Rank 0 Write Terminate(mW)          0.00 # power dissipated in ODT resistors during Write
 Channel 16 Rank 0 termRoth(mW)                 0.00 # power dissipated in ODT resistors during Reads  in other ranks
 Channel 16 Rank 0 termWoth(mW)                 0.00 # power dissipated in ODT resistors during Writes in other ranks
 Channel 16 Rank 0 Refresh(mW)                 12.38 # depends on frequency of Refresh (tREFI)
 ---------------------------------------------------------------
-Channel 16 Rank 0 Total Rank Power(mW)       507.53 # (Sum of above components)*(num chips in each Rank)
+Channel 16 Rank 0 Total Rank Power(mW)       496.42 # (Sum of above components)*(num chips in each Rank)
 ---------------------------------------------------------------
 
-Channel 17 Rank 0 Background(mw)              51.12 # depends only on Power Down time and time all banks were precharged
-Channel 17 Rank 0 Act(mW)                      0.06 # power spend bringing data to the row buffer
-Channel 17 Rank 0 Read(mW)                     0.00 # power spent doing a Read  after the Row Buffer is open
+Channel 17 Rank 0 Background(mw)              49.17 # depends only on Power Down time and time all banks were precharged
+Channel 17 Rank 0 Act(mW)                      0.25 # power spend bringing data to the row buffer
+Channel 17 Rank 0 Read(mW)                     0.12 # power spent doing a Read  after the Row Buffer is open
 Channel 17 Rank 0 Write(mW)                    0.03 # power spent doing a Write after the Row Buffer is open
-Channel 17 Rank 0 Read Terminate(mW)           0.00 # power dissipated in ODT resistors during Read
+Channel 17 Rank 0 Read Terminate(mW)           0.02 # power dissipated in ODT resistors during Read
 Channel 17 Rank 0 Write Terminate(mW)          0.00 # power dissipated in ODT resistors during Write
 Channel 17 Rank 0 termRoth(mW)                 0.00 # power dissipated in ODT resistors during Reads  in other ranks
 Channel 17 Rank 0 termWoth(mW)                 0.00 # power dissipated in ODT resistors during Writes in other ranks
 Channel 17 Rank 0 Refresh(mW)                 12.38 # depends on frequency of Refresh (tREFI)
 ---------------------------------------------------------------
-Channel 17 Rank 0 Total Rank Power(mW)       508.67 # (Sum of above components)*(num chips in each Rank)
+Channel 17 Rank 0 Total Rank Power(mW)       495.71 # (Sum of above components)*(num chips in each Rank)
 ---------------------------------------------------------------
 
-Channel 18 Rank 0 Background(mw)              51.05 # depends only on Power Down time and time all banks were precharged
-Channel 18 Rank 0 Act(mW)                      0.06 # power spend bringing data to the row buffer
-Channel 18 Rank 0 Read(mW)                     0.00 # power spent doing a Read  after the Row Buffer is open
+Channel 18 Rank 0 Background(mw)              49.21 # depends only on Power Down time and time all banks were precharged
+Channel 18 Rank 0 Act(mW)                      0.25 # power spend bringing data to the row buffer
+Channel 18 Rank 0 Read(mW)                     0.12 # power spent doing a Read  after the Row Buffer is open
 Channel 18 Rank 0 Write(mW)                    0.03 # power spent doing a Write after the Row Buffer is open
-Channel 18 Rank 0 Read Terminate(mW)           0.00 # power dissipated in ODT resistors during Read
+Channel 18 Rank 0 Read Terminate(mW)           0.02 # power dissipated in ODT resistors during Read
 Channel 18 Rank 0 Write Terminate(mW)          0.00 # power dissipated in ODT resistors during Write
 Channel 18 Rank 0 termRoth(mW)                 0.00 # power dissipated in ODT resistors during Reads  in other ranks
 Channel 18 Rank 0 termWoth(mW)                 0.00 # power dissipated in ODT resistors during Writes in other ranks
 Channel 18 Rank 0 Refresh(mW)                 12.38 # depends on frequency of Refresh (tREFI)
 ---------------------------------------------------------------
-Channel 18 Rank 0 Total Rank Power(mW)       508.08 # (Sum of above components)*(num chips in each Rank)
+Channel 18 Rank 0 Total Rank Power(mW)       496.02 # (Sum of above components)*(num chips in each Rank)
 ---------------------------------------------------------------
 
-Channel 19 Rank 0 Background(mw)              51.04 # depends only on Power Down time and time all banks were precharged
-Channel 19 Rank 0 Act(mW)                      0.06 # power spend bringing data to the row buffer
-Channel 19 Rank 0 Read(mW)                     0.00 # power spent doing a Read  after the Row Buffer is open
+Channel 19 Rank 0 Background(mw)              49.31 # depends only on Power Down time and time all banks were precharged
+Channel 19 Rank 0 Act(mW)                      0.25 # power spend bringing data to the row buffer
+Channel 19 Rank 0 Read(mW)                     0.12 # power spent doing a Read  after the Row Buffer is open
 Channel 19 Rank 0 Write(mW)                    0.03 # power spent doing a Write after the Row Buffer is open
-Channel 19 Rank 0 Read Terminate(mW)           0.00 # power dissipated in ODT resistors during Read
+Channel 19 Rank 0 Read Terminate(mW)           0.02 # power dissipated in ODT resistors during Read
 Channel 19 Rank 0 Write Terminate(mW)          0.00 # power dissipated in ODT resistors during Write
 Channel 19 Rank 0 termRoth(mW)                 0.00 # power dissipated in ODT resistors during Reads  in other ranks
 Channel 19 Rank 0 termWoth(mW)                 0.00 # power dissipated in ODT resistors during Writes in other ranks
 Channel 19 Rank 0 Refresh(mW)                 12.38 # depends on frequency of Refresh (tREFI)
 ---------------------------------------------------------------
-Channel 19 Rank 0 Total Rank Power(mW)       508.02 # (Sum of above components)*(num chips in each Rank)
+Channel 19 Rank 0 Total Rank Power(mW)       496.91 # (Sum of above components)*(num chips in each Rank)
 ---------------------------------------------------------------
 
-Channel 20 Rank 0 Background(mw)              51.08 # depends only on Power Down time and time all banks were precharged
-Channel 20 Rank 0 Act(mW)                      0.06 # power spend bringing data to the row buffer
-Channel 20 Rank 0 Read(mW)                     0.00 # power spent doing a Read  after the Row Buffer is open
+Channel 20 Rank 0 Background(mw)              49.14 # depends only on Power Down time and time all banks were precharged
+Channel 20 Rank 0 Act(mW)                      0.25 # power spend bringing data to the row buffer
+Channel 20 Rank 0 Read(mW)                     0.12 # power spent doing a Read  after the Row Buffer is open
 Channel 20 Rank 0 Write(mW)                    0.03 # power spent doing a Write after the Row Buffer is open
-Channel 20 Rank 0 Read Terminate(mW)           0.00 # power dissipated in ODT resistors during Read
+Channel 20 Rank 0 Read Terminate(mW)           0.02 # power dissipated in ODT resistors during Read
 Channel 20 Rank 0 Write Terminate(mW)          0.00 # power dissipated in ODT resistors during Write
 Channel 20 Rank 0 termRoth(mW)                 0.00 # power dissipated in ODT resistors during Reads  in other ranks
 Channel 20 Rank 0 termWoth(mW)                 0.00 # power dissipated in ODT resistors during Writes in other ranks
 Channel 20 Rank 0 Refresh(mW)                 12.38 # depends on frequency of Refresh (tREFI)
 ---------------------------------------------------------------
-Channel 20 Rank 0 Total Rank Power(mW)       508.38 # (Sum of above components)*(num chips in each Rank)
+Channel 20 Rank 0 Total Rank Power(mW)       495.42 # (Sum of above components)*(num chips in each Rank)
 ---------------------------------------------------------------
 
-Channel 21 Rank 0 Background(mw)              51.10 # depends only on Power Down time and time all banks were precharged
-Channel 21 Rank 0 Act(mW)                      0.06 # power spend bringing data to the row buffer
-Channel 21 Rank 0 Read(mW)                     0.00 # power spent doing a Read  after the Row Buffer is open
+Channel 21 Rank 0 Background(mw)              49.40 # depends only on Power Down time and time all banks were precharged
+Channel 21 Rank 0 Act(mW)                      0.25 # power spend bringing data to the row buffer
+Channel 21 Rank 0 Read(mW)                     0.12 # power spent doing a Read  after the Row Buffer is open
 Channel 21 Rank 0 Write(mW)                    0.03 # power spent doing a Write after the Row Buffer is open
-Channel 21 Rank 0 Read Terminate(mW)           0.00 # power dissipated in ODT resistors during Read
+Channel 21 Rank 0 Read Terminate(mW)           0.02 # power dissipated in ODT resistors during Read
 Channel 21 Rank 0 Write Terminate(mW)          0.00 # power dissipated in ODT resistors during Write
 Channel 21 Rank 0 termRoth(mW)                 0.00 # power dissipated in ODT resistors during Reads  in other ranks
 Channel 21 Rank 0 termWoth(mW)                 0.00 # power dissipated in ODT resistors during Writes in other ranks
 Channel 21 Rank 0 Refresh(mW)                 12.38 # depends on frequency of Refresh (tREFI)
 ---------------------------------------------------------------
-Channel 21 Rank 0 Total Rank Power(mW)       508.49 # (Sum of above components)*(num chips in each Rank)
+Channel 21 Rank 0 Total Rank Power(mW)       497.52 # (Sum of above components)*(num chips in each Rank)
 ---------------------------------------------------------------
 
-Channel 22 Rank 0 Background(mw)              51.07 # depends only on Power Down time and time all banks were precharged
-Channel 22 Rank 0 Act(mW)                      0.06 # power spend bringing data to the row buffer
-Channel 22 Rank 0 Read(mW)                     0.00 # power spent doing a Read  after the Row Buffer is open
+Channel 22 Rank 0 Background(mw)              49.26 # depends only on Power Down time and time all banks were precharged
+Channel 22 Rank 0 Act(mW)                      0.25 # power spend bringing data to the row buffer
+Channel 22 Rank 0 Read(mW)                     0.12 # power spent doing a Read  after the Row Buffer is open
 Channel 22 Rank 0 Write(mW)                    0.03 # power spent doing a Write after the Row Buffer is open
-Channel 22 Rank 0 Read Terminate(mW)           0.00 # power dissipated in ODT resistors during Read
+Channel 22 Rank 0 Read Terminate(mW)           0.02 # power dissipated in ODT resistors during Read
 Channel 22 Rank 0 Write Terminate(mW)          0.00 # power dissipated in ODT resistors during Write
 Channel 22 Rank 0 termRoth(mW)                 0.00 # power dissipated in ODT resistors during Reads  in other ranks
 Channel 22 Rank 0 termWoth(mW)                 0.00 # power dissipated in ODT resistors during Writes in other ranks
 Channel 22 Rank 0 Refresh(mW)                 12.38 # depends on frequency of Refresh (tREFI)
 ---------------------------------------------------------------
-Channel 22 Rank 0 Total Rank Power(mW)       508.27 # (Sum of above components)*(num chips in each Rank)
+Channel 22 Rank 0 Total Rank Power(mW)       496.47 # (Sum of above components)*(num chips in each Rank)
 ---------------------------------------------------------------
 
-Channel 23 Rank 0 Background(mw)              50.99 # depends only on Power Down time and time all banks were precharged
-Channel 23 Rank 0 Act(mW)                      0.06 # power spend bringing data to the row buffer
-Channel 23 Rank 0 Read(mW)                     0.00 # power spent doing a Read  after the Row Buffer is open
+Channel 23 Rank 0 Background(mw)              49.44 # depends only on Power Down time and time all banks were precharged
+Channel 23 Rank 0 Act(mW)                      0.25 # power spend bringing data to the row buffer
+Channel 23 Rank 0 Read(mW)                     0.12 # power spent doing a Read  after the Row Buffer is open
 Channel 23 Rank 0 Write(mW)                    0.03 # power spent doing a Write after the Row Buffer is open
-Channel 23 Rank 0 Read Terminate(mW)           0.00 # power dissipated in ODT resistors during Read
+Channel 23 Rank 0 Read Terminate(mW)           0.02 # power dissipated in ODT resistors during Read
 Channel 23 Rank 0 Write Terminate(mW)          0.00 # power dissipated in ODT resistors during Write
 Channel 23 Rank 0 termRoth(mW)                 0.00 # power dissipated in ODT resistors during Reads  in other ranks
 Channel 23 Rank 0 termWoth(mW)                 0.00 # power dissipated in ODT resistors during Writes in other ranks
 Channel 23 Rank 0 Refresh(mW)                 12.38 # depends on frequency of Refresh (tREFI)
 ---------------------------------------------------------------
-Channel 23 Rank 0 Total Rank Power(mW)       507.67 # (Sum of above components)*(num chips in each Rank)
+Channel 23 Rank 0 Total Rank Power(mW)       497.91 # (Sum of above components)*(num chips in each Rank)
 ---------------------------------------------------------------
 
 
 #-------------------------------------------------------------------------------------------------
-Total memory system power = 11.693961 W
+Total memory system power = 11.609092 W
 Miscellaneous system power = 10 W  # Processor uncore power, disk, I/O, cooling, etc.
 Processor core power = 10.000000 W  # Assuming that each core consumes 5 W
-Total system power = 31.693962 W # Sum of the previous three lines
-Energy Delay product (EDP) = 4.140826702 J.s
+Total system power = 31.609093 W # Sum of the previous three lines
+Energy Delay product (EDP) = 0.064887822 J.s
 
 #-------------------------------------- Our Stat ----------------------------------------------
-OS_PAGE_MISS        	 : 10292
+OS_PAGE_MISS        	 : 1665
 OS_PAGE_EVICTS        	 : 0
-OS_FOOTPRINT          	 : 40
-OS_TLB_ACCESS         	 : 195893469
-OS_TLB_SAME_PAGE      	 : 103988936
-OS_TLB_HIT            	 : 193929834
-OS_TLB_MISS           	 : 1963635
-OS_TLB_EVICTION       	 : 1963507
-OS_TLB_L3_Hit         	 : 1962046
-OS_TLB_Memory_Access  	 : 1589
-OS_TLB_HDD_Access     	 : 1582
+OS_FOOTPRINT          	 : 6
+OS_TLB_ACCESS         	 : 2079560
+OS_TLB_SAME_PAGE      	 : 0
+OS_TLB_HIT            	 : 2035099
+OS_TLB_MISS           	 : 44461
+OS_TLB_EVICTION       	 : 44333
+OS_TLB_L3_Hit         	 : 44024
+OS_TLB_Memory_Access  	 : 437
+OS_TLB_HDD_Access     	 : 82
